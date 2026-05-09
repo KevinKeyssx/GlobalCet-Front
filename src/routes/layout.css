@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+/* ─── Dark mode: class-based (Tailwind v4) ───────────────────────────────────── */
+@variant dark (&:where(.dark, .dark *));
+
+/* ─── Custom Theme Tokens (Tailwind v4 CSS-first config) ─────────────────────── */
+@theme {
+	/* Brand palette — extraída del logo GlobalCET */
+	--color-brand        : #00b564;
+	--color-brand-bright : #15c973;
+	--color-brand-muted  : #00773d;
+	--color-brand-dark   : #004d26;
+
+	/* Light mode surfaces */
+	--color-surface      : #f0faf0;
+	--color-surface-dark : #0d1f15;
+	--color-sidebar      : #e2f3e2;
+	--color-card         : #ffffff;
+	--color-input        : #f7fcf7;
+
+	/* Text */
+	--color-text         : #0f2d1a;
+	--color-text-muted   : #4a7a5a;
+
+	/* Font */
+	--font-sans          : 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ─── Dark Mode Override (class-based) ────────────────────────────────────────── */
+.dark {
+	--color-surface   : #0d1f15;
+	--color-sidebar   : #111f18;
+	--color-card      : #162d20;
+	--color-input     : #0f2519;
+	--color-text      : #e8f5e9;
+	--color-text-muted: #6aad82;
+}
+
+/* ─── Base Styles ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+	box-sizing : border-box;
+}
+
+body {
+	font-family        : var( --font-sans );
+	background-color   : var( --color-surface );
+	background-image   : 
+		radial-gradient(at 0% 0%, color-mix(in srgb, var(--color-brand) 10%, transparent) 0px, transparent 40%),
+		radial-gradient(at 100% 100%, color-mix(in srgb, var(--color-brand) 10%, transparent) 0px, transparent 40%);
+	background-attachment: fixed;
+	color              : var( --color-text );
+	-webkit-font-smoothing  : antialiased;
+	-moz-osx-font-smoothing : grayscale;
+}
+
+/* ─── Scrollbar styling ───────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+	width : 6px;
+}
+
+::-webkit-scrollbar-track {
+	background : transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background    : color-mix( in srgb, var( --color-brand ) 30%, transparent );
+	border-radius : 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background : color-mix( in srgb, var( --color-brand ) 55%, transparent );
+}

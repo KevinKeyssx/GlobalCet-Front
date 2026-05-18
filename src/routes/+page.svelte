@@ -63,25 +63,32 @@
 </svelte:head>
 
 <!-- ─── Hero Banner ───────────────────────────────────────────────────────────── -->
-<section class="relative overflow-hidden border-b border-brand/10 bg-surface px-6 py-12">
-	<!-- Decorative background glow -->
-	<div class="pointer-events-none absolute -top-24 left-1/3 h-72 w-72 rounded-full bg-brand/10 blur-3xl"></div>
-	<div class="pointer-events-none absolute -bottom-12 right-1/4 h-48 w-48 rounded-full bg-brand/8 blur-2xl"></div>
+<section class="relative overflow-hidden border-b border-brand/10 px-6 py-20 lg:py-24">
+	<!-- Dynamic Animated Background Elements -->
+	<div class="pointer-events-none absolute -top-32 -left-10 h-[500px] w-[500px] animate-pulse rounded-full bg-brand/15 blur-[100px] duration-10000"></div>
+	<div class="pointer-events-none absolute top-10 right-0 h-[400px] w-[400px] animate-pulse rounded-full bg-brand/10 blur-[80px] duration-7000" style="animation-delay: 2s;"></div>
+	<div class="pointer-events-none absolute bottom-0 left-1/2 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-linear-to-r from-brand/0 via-brand/10 to-brand/0 blur-3xl"></div>
 
-	<div class="relative mx-auto max-w-7xl px-6">
-		<div class="flex flex-col gap-3 max-w-2xl">
-			<span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-brand">
-				<span class="inline-block h-1.5 w-5 rounded-full bg-brand"></span>
-				Catálogo {new Date().getFullYear()}
+	<div class="relative mx-auto flex max-w-7xl flex-col items-center text-center px-6">
+		<span class="mb-5 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-surface px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand backdrop-blur-md shadow-[0_0_15px_rgba(0,181,100,0.15)]">
+			<span class="relative flex h-2 w-2">
+			  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
+			  <span class="relative inline-flex rounded-full h-2 w-2 bg-brand"></span>
 			</span>
-			<h1 class="text-3xl font-bold leading-tight text-text sm:text-4xl">
-				Equipamiento Científico
-				<span class="text-brand"> de Precisión</span>
-			</h1>
-			<p class="text-base text-text-muted leading-relaxed">
-				Encuentra los insumos y equipos que tu laboratorio necesita. Calidad certificada para investigación y educación científica.
-			</p>
-		</div>
+			Catálogo {new Date().getFullYear()}
+		</span>
+		
+		<h1 class="font-display mx-auto max-w-4xl text-5xl font-extrabold tracking-tight text-text sm:text-6xl md:text-7xl">
+			Equipamiento Científico
+			<br />
+			<span class="bg-linear-to-r from-brand-muted via-brand to-brand-bright bg-clip-text text-transparent drop-shadow-sm">
+				de Precisión
+			</span>
+		</h1>
+		
+		<p class="mx-auto mt-6 max-w-2xl text-lg text-text-muted leading-relaxed font-medium">
+			Encuentra los insumos y equipos que tu laboratorio necesita. Calidad certificada para investigación y educación científica.
+		</p>
 	</div>
 </section>
 

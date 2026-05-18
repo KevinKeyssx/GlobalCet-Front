@@ -52,9 +52,9 @@
 	flex w-72 shrink-0 flex-col gap-6
 	rounded-2xl
 	border border-brand/20 dark:border-brand/15
-	bg-linear-to-br from-sidebar/95 via-sidebar/80 to-brand/5 backdrop-blur-3xl
+	bg-sidebar/90 backdrop-blur-xl
 	p-6
-	shadow-2xl shadow-brand/10 dark:shadow-black/40
+	shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-white/50
 	transition-all duration-500
 ">
 

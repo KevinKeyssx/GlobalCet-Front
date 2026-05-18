@@ -1,29 +1,31 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 /* ─── Dark mode: class-based (Tailwind v4) ───────────────────────────────────── */
 @variant dark (&:where(.dark, .dark *));
 
 /* ─── Custom Theme Tokens (Tailwind v4 CSS-first config) ─────────────────────── */
 @theme {
-	/* Brand palette — extraída del logo GlobalCET */
-	--color-brand        : #00b564;
-	--color-brand-bright : #15c973;
-	--color-brand-muted  : #00773d;
+	/* Brand palette — vivid greens for precision aesthetic */
+	--color-brand        : #00e676; /* Neon bright green */
+	--color-brand-bright : #69f0ae;
+	--color-brand-muted  : #00b564;
 	--color-brand-dark   : #004d26;
 
-	/* Light mode surfaces */
-	--color-surface      : #f0faf0;
+	/* Light mode surfaces - glassmorphism ready */
+	--color-surface      : #eff5f1; /* Un tono ligeramente más gris/verde para que las tarjetas blancas destaquen */
 	--color-surface-dark : #0d1f15;
-	--color-sidebar      : #e2f3e2;
+	--color-sidebar      : #ffffff; /* Blanco sólido, la opacidad se maneja en las clases de Tailwind */
 	--color-card         : #ffffff;
-	--color-input        : #f7fcf7;
+	--color-input        : #f7fdf9;
 
 	/* Text */
-	--color-text         : #0f2d1a;
-	--color-text-muted   : #4a7a5a;
+	--color-text         : #0a2113;
+	--color-text-muted   : #3a6b4b;
 
-	/* Font */
-	--font-sans          : 'Inter', ui-sans-serif, system-ui, sans-serif;
+	/* Fonts */
+	--font-sans          : 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+	--font-display       : 'Outfit', ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ─── Dark Mode Override (class-based) ────────────────────────────────────────── */
@@ -44,9 +46,13 @@
 body {
 	font-family        : var( --font-sans );
 	background-color   : var( --color-surface );
+	/* Precision Scientific Grid Background with soft radial glows */
 	background-image   : 
-		radial-gradient(at 0% 0%, color-mix(in srgb, var(--color-brand) 10%, transparent) 0px, transparent 40%),
-		radial-gradient(at 100% 100%, color-mix(in srgb, var(--color-brand) 10%, transparent) 0px, transparent 40%);
+		linear-gradient(to right, color-mix(in srgb, var(--color-brand) 12%, transparent) 1px, transparent 1px),
+		linear-gradient(to bottom, color-mix(in srgb, var(--color-brand) 12%, transparent) 1px, transparent 1px),
+		radial-gradient(circle at 10% 20%, color-mix(in srgb, var(--color-brand-bright) 15%, transparent) 0%, transparent 40%),
+		radial-gradient(circle at 90% 80%, color-mix(in srgb, var(--color-brand) 15%, transparent) 0%, transparent 40%);
+	background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%;
 	background-attachment: fixed;
 	color              : var( --color-text );
 	-webkit-font-smoothing  : antialiased;

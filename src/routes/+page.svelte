@@ -1,27 +1,26 @@
 <script lang="ts">
-	import type { ProductCategory, ProductType } from '$lib/types/product';
-	import { products as allProducts, allCategories, allTypes } from '$lib/data/products';
-	import FilterSidebar from '$lib/components/FilterSidebar.svelte';
+	import type { ProductType } from '$lib/types/product';
+	import { products as allProducts, allTypes } from '$lib/data/products';
+	import FilterSidebar from './filters/components/FilterSidebar.svelte';
 	import ProductGrid from '$lib/components/ProductGrid.svelte';
 
 	// ─── Filter State (Svelte 5 Runes) ────────────────────────────────────────────
-	let search             = $state( '' );
-	let selectedCategories = $state( new Set<ProductCategory>() );
-	let selectedTypes      = $state( new Set<ProductType>() );
-	let loading            = $state( false );
+	let search                = $state( '' );
+	let selectedSubCategories = $state( new Set<string>() );
+	let selectedMaterials     = $state( new Set<string>() );
+	let selectedTypes         = $state( new Set<ProductType>() );
+	let loading               = $state( false );
 
 	// ─── Derived: Filtered products ───────────────────────────────────────────────
 	const filteredProducts = $derived( () => {
 		const q    = search.trim().toLowerCase();
-		const cats = selectedCategories;
 		const typs = selectedTypes;
 
 		return allProducts.filter( ( p ) => {
 			const matchSearch   = !q || p.name.toLowerCase().includes( q ) || p.category.toLowerCase().includes( q );
-			const matchCategory = cats.size === 0 || cats.has( p.category );
 			const matchType     = typs.size === 0 || typs.has( p.type );
 
-			return matchSearch && matchCategory && matchType;
+			return matchSearch && matchType;
 		} );
 	} );
 
@@ -30,14 +29,24 @@
 		search = value;
 	}
 
-	function toggleCategory( cat: ProductCategory ) {
-		const next = new Set( selectedCategories );
-		if ( next.has( cat ) ) {
-			next.delete( cat );
+	function toggleSubCategory( id: string ) {
+		const next = new Set( selectedSubCategories );
+		if ( next.has( id ) ) {
+			next.delete( id );
 		} else {
-			next.add( cat );
+			next.add( id );
 		}
-		selectedCategories = next;
+		selectedSubCategories = next;
+	}
+
+	function toggleMaterial( id: string ) {
+		const next = new Set( selectedMaterials );
+		if ( next.has( id ) ) {
+			next.delete( id );
+		} else {
+			next.add( id );
+		}
+		selectedMaterials = next;
 	}
 
 	function toggleType( type: ProductType ) {
@@ -51,9 +60,10 @@
 	}
 
 	function clearAll() {
-		selectedCategories = new Set();
-		selectedTypes      = new Set();
-		search             = '';
+		selectedSubCategories = new Set();
+		selectedMaterials     = new Set();
+		selectedTypes         = new Set();
+		search                = '';
 	}
 </script>
 
@@ -72,12 +82,12 @@
 	<div class="relative mx-auto flex max-w-7xl flex-col items-center text-center px-6">
 		<span class="mb-5 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-surface px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand backdrop-blur-md shadow-[0_0_15px_rgba(0,181,100,0.15)]">
 			<span class="relative flex h-2 w-2">
-			  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
-			  <span class="relative inline-flex rounded-full h-2 w-2 bg-brand"></span>
+				<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
+				<span class="relative inline-flex rounded-full h-2 w-2 bg-brand"></span>
 			</span>
 			Catálogo {new Date().getFullYear()}
 		</span>
-		
+
 		<h1 class="font-display mx-auto max-w-4xl text-5xl font-extrabold tracking-tight text-text sm:text-6xl md:text-7xl">
 			Equipamiento Científico
 			<br />
@@ -85,7 +95,7 @@
 				de Precisión
 			</span>
 		</h1>
-		
+
 		<p class="mx-auto mt-6 max-w-2xl text-lg text-text-muted leading-relaxed font-medium">
 			Encuentra los insumos y equipos que tu laboratorio necesita. Calidad certificada para investigación y educación científica.
 		</p>
@@ -94,16 +104,16 @@
 
 <!-- ─── Main Content ──────────────────────────────────────────────────────────── -->
 <main class="mx-auto flex max-w-7xl gap-8 px-6 py-8">
-
 	<!-- Sidebar -->
 	<FilterSidebar
-		categories={allCategories}
 		types={allTypes}
-		{selectedCategories}
+		bind:selectedSubCategories
+		bind:selectedMaterials
 		{selectedTypes}
 		filteredCount={filteredProducts().length}
 		totalCount={allProducts.length}
-		onCategoryToggle={toggleCategory}
+		onSubCategoryToggle={toggleSubCategory}
+		onMaterialToggle={toggleMaterial}
 		onTypeToggle={toggleType}
 		onClearAll={clearAll}
 	/>

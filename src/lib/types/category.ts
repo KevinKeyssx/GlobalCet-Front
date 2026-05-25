@@ -27,3 +27,13 @@ export interface CategoryFilter {
 	name          : string;
 	subCategories : SubCategoryFilter[];
 }
+
+export interface KitCategory {
+	id   : string;
+	name : string;
+}
+
+export interface LabCategory {
+	id   : string;
+	name : string;
+}

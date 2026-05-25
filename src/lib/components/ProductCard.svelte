@@ -1,29 +1,50 @@
 <script lang="ts">
 	import type { Product } from '$lib/types/product';
+	import type { GlobalSearchProduct } from '$lib/types/search';
+	import { getImageUrl } from '$lib/utils/image';
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
-		product : Product;
+		product : GlobalSearchProduct | Product;
 	}
 
 	const { product }: Props = $props();
 
-	// ─── Derived: spec entries ─────────────────────────────────────────────────────
-	const specEntries = $derived(
-		Object.entries( product.specs ).filter( ( [ , v ] ) => v !== undefined )
+	// ─── Derived Properties (compatible with both Mock and Live schemas) ─────────
+	const categoryName = $derived(
+		'category' in product
+			? product.category
+			: ( product.subcategory?.category?.name || 'Producto' )
 	);
 
-	// ─── Badge color map ───────────────────────────────────────────────────────────
-	const badgeColors: Record<string, string> = {
-		'Más Vendido'    : 'bg-brand/20 text-brand border-brand/30',
-		'Nuevo'          : 'bg-emerald-400/20 text-emerald-300 border-emerald-400/30',
-		'Stock Limitado' : 'bg-amber-400/20 text-amber-300 border-amber-400/30',
-	};
+	const imageUrl = $derived(
+		'image' in product
+			? product.image
+			: getImageUrl( ( product.files.find( ( f ) => f.isMain ) || product.files[ 0 ] )?.url, product.id, 'products', product.name )
+	);
+
+	const specs = $derived(
+		'specs' in product
+			? product.specs
+			: {
+					SKU          : product.sku,
+					Material     : product.material?.name || 'N/A',
+					Subcategoría : product.subcategory?.name || 'N/A',
+				}
+	);
+
+	const specEntries = $derived(
+		Object.entries( specs ).filter( ( [ , v ] ) => v !== undefined )
+	);
+
+	const typeName = $derived(
+		'type' in product ? product.type : 'Producto'
+	);
 </script>
 
 <!-- ─── Card ──────────────────────────────────────────────────────────────────── -->
 <article
-	id="product-card-{product.id}"
+	id="product-card-{ product.id }"
 	class="
 		group relative flex flex-col overflow-hidden rounded-2xl
 		border border-brand/10
@@ -34,12 +55,11 @@
 		hover:-translate-y-1
 	"
 >
-
 	<!-- Image wrapper -->
 	<div class="relative h-48 overflow-hidden bg-surface">
 		<img
-			src={product.image}
-			alt={product.name}
+			src={ imageUrl }
+			alt={ product.name }
 			loading="lazy"
 			class="
 				h-full w-full object-cover
@@ -66,24 +86,12 @@
 			<ul class="flex flex-col gap-1">
 				{#each specEntries as [ key, value ]}
 					<li class="flex items-center gap-2 text-xs">
-						<span class="font-semibold capitalize text-brand/80">{key}:</span>
-						<span class="text-white/90">{value}</span>
+						<span class="font-semibold capitalize text-brand/80">{ key }:</span>
+						<span class="text-white/90">{ value }</span>
 					</li>
 				{/each}
 			</ul>
 		</div>
-
-		<!-- Badge -->
-		{#if product.badge}
-			<span class="
-				absolute left-3 top-3
-				rounded-full border px-2.5 py-0.5
-				text-xs font-semibold backdrop-blur-sm
-				{badgeColors[product.badge] ?? 'bg-brand/20 text-brand border-brand/30'}
-			">
-				{product.badge}
-			</span>
-		{/if}
 
 		<!-- Type pill -->
 		<span class="
@@ -91,31 +99,37 @@
 			rounded-full border border-white/20 bg-black/30 px-2.5 py-0.5
 			text-xs font-medium text-white/80 backdrop-blur-sm
 		">
-			{product.type}
+			{ typeName }
 		</span>
 	</div>
 
 	<!-- Card body -->
 	<div class="flex flex-1 flex-col gap-4 p-5">
-
 		<!-- Category label -->
 		<span class="text-xs font-medium uppercase tracking-widest text-brand/70">
-			{product.category}
+			{ categoryName }
 		</span>
 
-		<!-- Product name -->
-		<h3 class="
-			flex-1 text-base font-semibold leading-snug text-text
-			transition-colors duration-200
-			group-hover:text-brand
-		">
-			{product.name}
-		</h3>
+		<!-- Product name & description -->
+		<div class="flex-1 space-y-1">
+			<h3 class="
+				text-base font-semibold leading-snug text-text
+				transition-colors duration-200
+				group-hover:text-brand
+			">
+				{ product.name }
+			</h3>
+			{#if 'description' in product}
+				<p class="line-clamp-2 text-[11px] leading-relaxed text-text-muted">
+					{ product.description }
+				</p>
+			{/if}
+		</div>
 
 		<!-- Footer actions -->
 		<div class="flex items-center justify-between border-t border-brand/10 pt-3">
 			<button
-				id="card-detail-{product.id}"
+				id="card-detail-{ product.id }"
 				class="
 					rounded-lg px-3 py-1.5 text-xs font-medium
 					border border-brand/25 text-brand
@@ -127,7 +141,7 @@
 			</button>
 
 			<button
-				id="card-quote-{product.id}"
+				id="card-quote-{ product.id }"
 				aria-label="Agregar a cotización"
 				class="
 					flex h-8 w-8 items-center justify-center rounded-lg
@@ -143,6 +157,5 @@
 				</svg>
 			</button>
 		</div>
-
 	</div>
 </article>

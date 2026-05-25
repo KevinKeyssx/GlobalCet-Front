@@ -1,5 +1,49 @@
-<div class="flex flex-col items-center justify-center py-10 text-center gap-3 rounded-xl border border-brand/10 bg-surface/30 px-4">
-	<span class="text-3xl">🗃️</span>
-	<p class="text-xs font-semibold text-text-muted">Filtros de Kits de Laboratorio</p>
-	<span class="text-[10px] uppercase font-bold tracking-wider text-brand bg-brand/10 px-2 py-0.5 rounded-full border border-brand/20">Próximamente</span>
-</div>
+<script lang="ts">
+	import { createQuery } from '@tanstack/svelte-query';
+
+	import CheckboxList                   from '$lib/components/shared/CheckboxList.svelte';
+	import connectRequest, { isApiError } from '$lib/services/fetch.service';
+	import { INTERNAL_ENDPOINTS }         from '$lib/utils/endpoints';
+	import type { KitCategory }           from '$lib/types/category';
+
+	// ─── Props ────────────────────────────────────────────────────────────────────
+	interface Props {
+		selected  : Set<string>;
+		isEnabled : boolean;
+	}
+
+	let {
+		selected  = $bindable( new Set<string>() ),
+		isEnabled = false,
+	}: Props = $props();
+
+	// ─── Query: Load kit categories ───────────────────────────────────────────────
+	const kitCategoriesQuery = createQuery( () => ({
+		queryKey : [ 'kitCategories' ],
+		queryFn  : async () => {
+			const response = await connectRequest<KitCategory[]>( {
+				endpoint   : INTERNAL_ENDPOINTS.KIT_CATEGORIES.GET_ALL,
+				isInternal : true,
+			});
+
+			if ( isApiError( response )) {
+				throw new Error( response.message );
+			}
+
+			return response;
+		},
+		enabled : isEnabled,
+	}));
+
+	// ─── Derived: Loading / Error States ──────────────────────────────────────────
+	const isLoading = $derived( kitCategoriesQuery.isLoading );
+	const isError   = $derived( kitCategoriesQuery.isError );
+</script>
+
+<CheckboxList
+	items={ kitCategoriesQuery.data || [] }
+	bind:selected
+	isLoading={ isLoading }
+	isError={ isError }
+	onRetry={ () => kitCategoriesQuery.refetch() }
+/>

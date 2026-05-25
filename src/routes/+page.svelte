@@ -1,35 +1,124 @@
 <script lang="ts">
+	import { createQuery } from '@tanstack/svelte-query';
+
 	import type { ProductType } from '$lib/types/product';
-	import { products as allProducts, allTypes } from '$lib/data/products';
+	import type {
+		GlobalSearchResponse,
+		GlobalSearchProduct,
+		GlobalSearchKit,
+		GlobalSearchMobileLab,
+	} from '$lib/types/search';
 	import FilterSidebar from './filters/components/FilterSidebar.svelte';
-	import ProductGrid from '$lib/components/ProductGrid.svelte';
+	import ProductGrid   from '$lib/components/ProductGrid.svelte';
+	import connectRequest, { isApiError } from '$lib/services/fetch.service';
+
+	// ─── Constants ────────────────────────────────────────────────────────────────
+	const allTypes: ProductType[] = [ 'Producto', 'Kit', 'Laboratorio Móvil' ];
 
 	// ─── Filter State (Svelte 5 Runes) ────────────────────────────────────────────
 	let search                = $state( '' );
 	let selectedSubCategories = $state( new Set<string>() );
 	let selectedMaterials     = $state( new Set<string>() );
-	let selectedTypes         = $state( new Set<ProductType>() );
-	let loading               = $state( false );
+	let selectedKitCategories = $state( new Set<string>() );
+	let selectedLabCategories = $state( new Set<string>() );
+	let activeTab             = $state( 'productos' );
+	let sortBy                = $state( 'relevance' );
 
-	// ─── Derived: Filtered products ───────────────────────────────────────────────
-	const filteredProducts = $derived( () => {
-		const q    = search.trim().toLowerCase();
-		const typs = selectedTypes;
+	// ─── Query: Fetch Global Searches from Backend ────────────────────────────────
+	const globalSearchQuery = createQuery( () => ({
+		queryKey : [ 'globalSearch', search ],
+		queryFn  : async () => {
+			const params = new URLSearchParams( {
+				query          : search,
+				limitPerEntity : '10',
+				suggestion     : 'false',
+			} );
 
-		return allProducts.filter( ( p ) => {
-			const matchSearch   = !q || p.name.toLowerCase().includes( q ) || p.category.toLowerCase().includes( q );
-			const matchType     = typs.size === 0 || typs.has( p.type );
+			const response = await connectRequest<GlobalSearchResponse>( {
+				endpoint   : `global-search?${params.toString()}`,
+				isInternal : true,
+			} );
 
-			return matchSearch && matchType;
+			if ( isApiError( response ) ) {
+				throw new Error( response.message );
+			}
+
+			return response;
+		},
+	}));
+
+	// ─── Derived: Collections from Query Data ──────────────────────────────────────
+	const products   = $derived( globalSearchQuery.data?.products || [] );
+	const kits       = $derived( globalSearchQuery.data?.kits || [] );
+	const mobileLabs = $derived( globalSearchQuery.data?.mobileLabs || [] );
+
+	// ─── Derived & Local Filtering ────────────────────────────────────────────────
+	const filteredProducts = $derived.by( () => {
+		return products.filter( ( p: GlobalSearchProduct ) => {
+			const matchSub  = selectedSubCategories.size === 0 || selectedSubCategories.has( p.subcategory?.id );
+			const matchMat  = selectedMaterials.size === 0 || selectedMaterials.has( p.material?.id );
+			return matchSub && matchMat;
 		} );
 	} );
 
+	const filteredKits = $derived.by( () => {
+		return kits.filter( ( k: GlobalSearchKit ) => {
+			return selectedKitCategories.size === 0 || selectedKitCategories.has( k.category?.id );
+		} );
+	} );
+
+	const filteredLabs = $derived.by( () => {
+		return mobileLabs.filter( ( l: GlobalSearchMobileLab ) => {
+			return selectedLabCategories.size === 0 || selectedLabCategories.has( l.category?.id );
+		} );
+	} );
+
+	// ─── Derived: Local Sorting ──────────────────────────────────────────────────
+	const sortedProducts = $derived.by( () => {
+		const items = [ ...filteredProducts ];
+		if ( sortBy === 'name' ) {
+			items.sort( ( a, b ) => a.name.localeCompare( b.name ) );
+		} else if ( sortBy === 'category' ) {
+			items.sort( ( a, b ) => ( a.subcategory?.category?.name || '' ).localeCompare( b.subcategory?.category?.name || '' ) );
+		}
+		return items;
+	} );
+
+	const sortedKits = $derived.by( () => {
+		const items = [ ...filteredKits ];
+		if ( sortBy === 'name' ) {
+			items.sort( ( a, b ) => a.name.localeCompare( b.name ) );
+		} else if ( sortBy === 'category' ) {
+			items.sort( ( a, b ) => ( a.category?.name || '' ).localeCompare( b.category?.name || '' ) );
+		}
+		return items;
+	} );
+
+	const sortedLabs = $derived.by( () => {
+		const items = [ ...filteredLabs ];
+		if ( sortBy === 'name' ) {
+			items.sort( ( a, b ) => a.name.localeCompare( b.name ) );
+		} else if ( sortBy === 'category' ) {
+			items.sort( ( a, b ) => ( a.category?.name || '' ).localeCompare( b.category?.name || '' ) );
+		}
+		return items;
+	} );
+
+	// ─── Derived: Display Counts ─────────────────────────────────────────────────
+	const currentDisplayCount = $derived(
+		sortedProducts.length + sortedKits.length + sortedLabs.length
+	);
+
+	const totalDisplayCount = $derived(
+		products.length + kits.length + mobileLabs.length
+	);
+
 	// ─── Handlers ─────────────────────────────────────────────────────────────────
-	function handleSearch( value: string ) {
+	function handleSearch( value: string ): void {
 		search = value;
 	}
 
-	function toggleSubCategory( id: string ) {
+	function toggleSubCategory( id: string ): void {
 		const next = new Set( selectedSubCategories );
 		if ( next.has( id ) ) {
 			next.delete( id );
@@ -39,7 +128,7 @@
 		selectedSubCategories = next;
 	}
 
-	function toggleMaterial( id: string ) {
+	function toggleMaterial( id: string ): void {
 		const next = new Set( selectedMaterials );
 		if ( next.has( id ) ) {
 			next.delete( id );
@@ -49,26 +138,21 @@
 		selectedMaterials = next;
 	}
 
-	function toggleType( type: ProductType ) {
-		const next = new Set( selectedTypes );
-		if ( next.has( type ) ) {
-			next.delete( type );
-		} else {
-			next.add( type );
-		}
-		selectedTypes = next;
+	function toggleType( type: ProductType ): void {
+		// No-op or type selector logic if type pill clicked
 	}
 
-	function clearAll() {
+	function clearAll(): void {
 		selectedSubCategories = new Set();
 		selectedMaterials     = new Set();
-		selectedTypes         = new Set();
+		selectedKitCategories = new Set();
+		selectedLabCategories = new Set();
 		search                = '';
 	}
 </script>
 
 <svelte:head>
-	<title>Catálogo de Productos | GlobalCET</title>
+	<title>Catálogo de Productos - Kits - Laboratorios Móbiles | GlobalCET</title>
 	<meta name="description" content="Explora el catálogo de productos de bioquímica de GlobalCET: material de vidrio, reactivos, kits de laboratorio y sistemas completos." />
 </svelte:head>
 
@@ -85,7 +169,7 @@
 				<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
 				<span class="relative inline-flex rounded-full h-2 w-2 bg-brand"></span>
 			</span>
-			Catálogo {new Date().getFullYear()}
+			Catálogo { new Date().getFullYear() }
 		</span>
 
 		<h1 class="font-display mx-auto max-w-4xl text-5xl font-extrabold tracking-tight text-text sm:text-6xl md:text-7xl">
@@ -106,16 +190,19 @@
 <main class="mx-auto flex max-w-7xl gap-8 px-6 py-8">
 	<!-- Sidebar -->
 	<FilterSidebar
-		types={allTypes}
+		types={ allTypes }
 		bind:selectedSubCategories
 		bind:selectedMaterials
-		{selectedTypes}
-		filteredCount={filteredProducts().length}
-		totalCount={allProducts.length}
-		onSubCategoryToggle={toggleSubCategory}
-		onMaterialToggle={toggleMaterial}
-		onTypeToggle={toggleType}
-		onClearAll={clearAll}
+		bind:selectedKitCategories
+		bind:selectedLabCategories
+		bind:activeTab
+		selectedTypes={ new Set() }
+		filteredCount={ currentDisplayCount }
+		totalCount={ totalDisplayCount }
+		onSubCategoryToggle={ toggleSubCategory }
+		onMaterialToggle={ toggleMaterial }
+		onTypeToggle={ toggleType }
+		onClearAll={ clearAll }
 	/>
 
 	<!-- Content area -->
@@ -124,13 +211,15 @@
 		<div class="flex items-center justify-between">
 			<p class="text-sm text-text-muted">
 				Mostrando
-				<span class="font-semibold text-text">{filteredProducts().length}</span>
-				resultado{filteredProducts().length !== 1 ? 's' : ''}
+				<span class="font-semibold text-text">{ currentDisplayCount }</span>
+				resultado{ currentDisplayCount !== 1 ? 's' : '' }
 			</p>
+
 			<div class="flex items-center gap-2 text-xs text-text-muted">
 				<span class="hidden sm:inline">Ordenar por:</span>
 				<select
 					id="sort-select"
+					bind:value={ sortBy }
 					class="
 						rounded-lg border border-brand/20 bg-input
 						px-3 py-1.5 text-xs text-text
@@ -145,10 +234,12 @@
 			</div>
 		</div>
 
-		<!-- Product Grid -->
+		<!-- Unified Product & Kit & Lab Grid -->
 		<ProductGrid
-			products={filteredProducts()}
-			{loading}
+			products={ sortedProducts }
+			kits={ sortedKits }
+			mobileLabs={ sortedLabs }
+			loading={ globalSearchQuery.isLoading }
 		/>
 	</div>
 </main>

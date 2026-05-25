@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Accordion } from 'bits-ui';
+	import { slide }     from 'svelte/transition';
 	import { createQuery } from '@tanstack/svelte-query';
 
 	import Select from '$lib/components/shared/Select.svelte';
@@ -20,6 +21,9 @@
 		selectedMaterials     = $bindable( new Set<string>() ),
 		isEnabled,
 	}: Props = $props();
+
+	// ─── Local State: Category Search ─────────────────────────────────────────────
+	let categorySearch = $state( '' );
 
 	// ─── Query: Load categories dynamically ───────────────────────────────────────
 	const categoriesQuery = createQuery( () => ({
@@ -69,6 +73,14 @@
 				chemicalResistance : m.chemicalResistance,
 			},
 		}));
+	});
+
+	// ─── Derived: Filtered Categories (Local Search) ──────────────────────────────
+	const filteredCategories = $derived.by( () => {
+		if ( !categoriesQuery.data ) return [];
+		const q = categorySearch.trim().toLowerCase();
+		if ( !q ) return categoriesQuery.data;
+		return categoriesQuery.data.filter( ( cat ) => cat.name.toLowerCase().includes( q ) );
 	});
 
 	// ─── Derived: Loading / Error States ──────────────────────────────────────────
@@ -128,19 +140,40 @@
 			</Accordion.Header>
 
 			<Accordion.Content class="px-4 pb-4 pt-2 border-t border-brand/5 bg-surface/10 space-y-4">
+				<!-- Local Category Filter Input -->
+				<div class="relative flex items-center mt-1 mb-3">
+					<svg class="absolute left-3.5 h-3.5 w-3.5 text-text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+						<circle cx="11" cy="11" r="8"></circle>
+						<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+					</svg>
+					<input
+						type="search"
+						bind:value={ categorySearch }
+						placeholder="Buscar categorías..."
+						class="
+							w-full rounded-xl border border-brand/10 bg-surface/50
+							py-2 pl-9 pr-4 text-xs text-text placeholder-text-muted/65
+							outline-none transition-all duration-300
+							focus:border-brand/40 focus:ring-1 focus:ring-brand/20
+						"
+					/>
+				</div>
+
 				{#if categoriesQuery.data}
-					{#each categoriesQuery.data as category}
-						<div class="space-y-1.5">
+					{#each filteredCategories as category (category.id)}
+						<div transition:slide={ { duration: 200 } } class="space-y-1.5">
 							<div class="flex items-center gap-2 pl-1">
-								<span class="text-sm">{getCategoryIcon( category.name )}</span>
-								<span class="text-[11px] font-bold text-text-muted">{category.name}</span>
+								<span class="text-sm">{ getCategoryIcon( category.name ) }</span>
+								<span class="text-[11px] font-bold text-text-muted">{ category.name }</span>
 							</div>
 							<Select
-								options={category.subCategories}
-								bind:selected={selectedSubCategories}
+								options={ category.subCategories }
+								bind:selected={ selectedSubCategories }
 								placeholder="Buscar subcategorías..."
 							/>
 						</div>
+					{:else}
+						<p class="text-center text-[11px] text-text-muted py-2 italic">Sin resultados</p>
 					{/each}
 				{/if}
 			</Accordion.Content>

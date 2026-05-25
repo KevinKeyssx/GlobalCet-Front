@@ -1,14 +1,47 @@
 <script lang="ts">
+	import type {
+        GlobalSearchProduct,
+        GlobalSearchKit,
+        GlobalSearchMobileLab
+    }                       from '$lib/types/search';
 	import type { Product } from '$lib/types/product';
-	import ProductCard from './ProductCard.svelte';
+	import ProductCard      from './ProductCard.svelte';
+	import KitCard          from './KitCard.svelte';
+	import LabCard          from './LabCard.svelte';
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
-		products  : Product[];
-		loading   : boolean;
+		products?  : Array<GlobalSearchProduct | Product>;
+		kits?      : GlobalSearchKit[];
+		mobileLabs?: GlobalSearchMobileLab[];
+		loading    : boolean;
 	}
 
-	const { products, loading }: Props = $props();
+	const {
+		products   = [],
+		kits       = [],
+		mobileLabs = [],
+		loading    = false,
+	}: Props = $props();
+
+	// ─── Derived: Combined items for unified staggered rendering ─────────────────
+	const unifiedItems = $derived.by( () => {
+		const list: Array<
+			| { cardType: 'product'; data: GlobalSearchProduct | Product }
+			| { cardType: 'kit'; data: GlobalSearchKit }
+			| { cardType: 'lab'; data: GlobalSearchMobileLab }
+		> = [];
+
+		products.forEach( ( p ) => list.push( { cardType: 'product', data: p } ) );
+		kits.forEach( ( k ) => list.push( { cardType: 'kit', data: k } ) );
+		mobileLabs.forEach( ( l ) => list.push( { cardType: 'lab', data: l } ) );
+
+		return list;
+	});
+
+	const isEmpty = $derived(
+		unifiedItems.length === 0
+	);
 </script>
 
 <!-- ─── Grid ──────────────────────────────────────────────────────────────────── -->
@@ -19,7 +52,7 @@
 		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
 			{#each { length: 6 } as _, i}
 				<div
-					id="skeleton-card-{i}"
+					id="skeleton-card-{ i }"
 					class="flex flex-col overflow-hidden rounded-2xl border border-brand/10 bg-card animate-pulse"
 				>
 					<div class="h-48 bg-brand/8"></div>
@@ -32,7 +65,7 @@
 			{/each}
 		</div>
 
-	{:else if products.length === 0}
+	{:else if isEmpty}
 		<!-- Empty State -->
 		<div class="flex flex-col items-center justify-center gap-5 py-24 text-center">
 			<div class="flex h-20 w-20 items-center justify-center rounded-full bg-brand/10">
@@ -51,30 +84,23 @@
 		</div>
 
 	{:else}
-		<!-- Product Grid with staggered appear animation -->
+		<!-- Unified Grid with staggered appear animation -->
 		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-			{#each products as product, index ( product.id )}
+			{#each unifiedItems as item, index ( item.data.id )}
 				<div
 					class="transition-all duration-300"
-					style="animation-delay: {index * 60}ms; animation: fadeSlideIn 0.35s ease-out both"
+					style="animation-delay: { index * 60 }ms; animation: fadeSlideIn 0.35s ease-out both"
 				>
-					<ProductCard {product} />
+					{#if item.cardType === 'product'}
+						<ProductCard product={ item.data } />
+					{:else if item.cardType === 'kit'}
+						<KitCard kit={ item.data } />
+					{:else if item.cardType === 'lab'}
+						<LabCard lab={ item.data } />
+					{/if}
 				</div>
 			{/each}
 		</div>
 	{/if}
 
 </section>
-
-<style>
-	@keyframes fadeSlideIn {
-		from {
-			opacity    : 0;
-			transform  : translateY( 12px );
-		}
-		to {
-			opacity    : 1;
-			transform  : translateY( 0 );
-		}
-	}
-</style>

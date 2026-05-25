@@ -57,16 +57,25 @@
 		selected = next;
 	}
 
-	function removeOption( id: string, event: MouseEvent ) {
+
+    function removeOption( id: string, event: MouseEvent ) {
 		event.stopPropagation();
 		const next = new Set( selected );
 		next.delete( id );
 		selected = next;
 	}
 
-	function clearAll( event: MouseEvent ) {
+
+    function clearAll( event: MouseEvent ): void {
 		event.stopPropagation();
-		selected = new Set<string>();
+
+        const next: Set<string> = new Set( selected );
+
+        for ( const opt of options ) {
+			next.delete( opt.id );
+		}
+
+        selected = next;
 	}
 
 	// ─── Click Outside Listener ───────────────────────────────────────────────────

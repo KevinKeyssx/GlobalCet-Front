@@ -1,29 +1,41 @@
 export const INTERNAL_ENDPOINTS = {
-	PRODUCTS      : {
+	PRODUCTS       : {
 		TECHNICAL_SPECS : 'products/get-technical-specs',
 	},
-	GLOBAL_SEARCH : {
+	GLOBAL_SEARCH  : {
 		BASE : 'global-search',
 	},
-	CATEGORIES    : {
+	CATEGORIES     : {
 		GET_ALL : 'categories/get-all',
 	},
-	MATERIALS     : {
+	MATERIALS      : {
 		GET_ALL : 'material/get-all',
+	},
+	KIT_CATEGORIES : {
+		GET_ALL : 'kit-categories/get-all',
+	},
+	LAB_CATEGORIES : {
+		GET_ALL : 'lab-categories/get-all',
 	},
 };
 
 export const EXTERNAL_ENDPOINTS = {
-	PRODUCTS      : {
+	PRODUCTS       : {
 		BASE : '/products',
 	},
-	GLOBAL_SEARCH : {
-		BASE : '/search',
+	GLOBAL_SEARCH  : {
+		BASE : '/global-searches',
 	},
-	CATEGORIES    : {
+	CATEGORIES     : {
 		GET_ALL : '/categories',
 	},
-	MATERIALS     : {
+	MATERIALS      : {
 		GET_ALL : '/materials',
+	},
+	KIT_CATEGORIES : {
+		GET_ALL : '/kit-categories',
+	},
+	LAB_CATEGORIES : {
+		GET_ALL : '/lab-categories',
 	},
 };

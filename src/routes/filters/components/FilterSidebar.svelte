@@ -10,19 +10,24 @@
 	interface Props {
 		selectedSubCategories : Set<string>;
 		selectedMaterials     : Set<string>;
-		selectedTypes         : Set<ProductType>;
-		onSubCategoryToggle   : ( id: string ) => void;
-		onMaterialToggle      : ( id: string ) => void;
-		onTypeToggle          : ( type: ProductType ) => void;
-		onClearAll            : () => void;
-		filteredCount         : number;
-		totalCount            : number;
-		types                 : ProductType[];
+		selectedKitCategories? : Set<string>;
+		selectedLabCategories? : Set<string>;
+		selectedTypes          : Set<ProductType>;
+		onSubCategoryToggle    : ( id: string ) => void;
+		onMaterialToggle       : ( id: string ) => void;
+		onTypeToggle           : ( type: ProductType ) => void;
+		onClearAll             : () => void;
+		filteredCount          : number;
+		totalCount             : number;
+		types                  : ProductType[];
+		activeTab?             : string;
 	}
 
 	let {
 		selectedSubCategories = $bindable( new Set<string>() ),
 		selectedMaterials     = $bindable( new Set<string>() ),
+		selectedKitCategories  = $bindable( new Set<string>() ),
+		selectedLabCategories  = $bindable( new Set<string>() ),
 		selectedTypes,
 		onSubCategoryToggle,
 		onMaterialToggle,
@@ -31,24 +36,42 @@
 		filteredCount,
 		totalCount,
 		types,
+		activeTab             = $bindable( 'productos' ),
 	}: Props = $props();
 
-	// ─── Filter State (Tabs) ──────────────────────────────────────────────────────
-	let activeTab = $state( 'productos' );
-
 	// ─── Derived: Has active filters? ─────────────────────────────────────────────
-	const hasActiveFilters = $derived(
-		selectedSubCategories.size > 0 || selectedMaterials.size > 0 || selectedTypes.size > 0
-	);
+	const hasActiveFilters = $derived.by( () => {
+		if ( activeTab === 'productos' ) {
+			return selectedSubCategories.size > 0 || selectedMaterials.size > 0 || selectedTypes.size > 0;
+		}
+		if ( activeTab === 'kits' ) {
+			return selectedKitCategories.size > 0;
+		}
+		if ( activeTab === 'lab-movil' ) {
+			return selectedLabCategories.size > 0;
+		}
+		return false;
+	} );
+
+	// ─── Handlers ─────────────────────────────────────────────────────────────────
+	function handleClear(): void {
+		if ( activeTab === 'productos' ) {
+			onClearAll();
+		} else if ( activeTab === 'kits' ) {
+			selectedKitCategories = new Set<string>();
+		} else if ( activeTab === 'lab-movil' ) {
+			selectedLabCategories = new Set<string>();
+		}
+	}
 </script>
 
 <!-- ─── Sidebar Premium ──────────────────────────────────────────────────────────── -->
 <aside class="
-	flex w-72 shrink-0 flex-col gap-3
+	flex w-80 shrink-0 flex-col gap-3
 	rounded-2xl
-	border border-brand/20 dark:border-brand/15
+	border border-brand/20 dark:border-brand
 	bg-sidebar/90 backdrop-blur-xl
-	p-6
+	px-5 py-6
 	shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-white/50
 	transition-all duration-500
 ">
@@ -59,7 +82,7 @@
 		{#if hasActiveFilters}
 			<button
 				id="filter-clear-all"
-				onclick={onClearAll}
+				onclick={ handleClear }
 				class="
 					group flex items-center gap-1.5 rounded-full px-0
 					text-[11px] font-bold tracking-wider text-text-muted
@@ -81,7 +104,7 @@
 
 	<!-- Categories Section -->
 	<section class="flex flex-col gap-3">
-		<Tabs.Root bind:value={activeTab} class="w-full flex flex-col gap-4">
+		<Tabs.Root bind:value={ activeTab } class="w-full flex flex-col gap-4">
 			<Tabs.List class="flex w-full items-center gap-1.5 rounded-xl bg-surface/50 border border-brand/5 p-1 backdrop-blur-md">
 				<Tabs.Trigger
 					value="productos"
@@ -119,36 +142,23 @@
 				<ProductTab
 					bind:selectedSubCategories
 					bind:selectedMaterials
-					isEnabled={activeTab === 'productos'}
+					isEnabled={ activeTab === 'productos' }
 				/>
 			</Tabs.Content>
 
 			<Tabs.Content value="kits" class="w-full">
-				<KitTab />
+				<KitTab
+					bind:selected={ selectedKitCategories }
+					isEnabled={ activeTab === 'kits' }
+				/>
 			</Tabs.Content>
 
 			<Tabs.Content value="lab-movil" class="w-full">
-				<MobileLabTab />
+				<MobileLabTab
+					bind:selected={ selectedLabCategories }
+					isEnabled={ activeTab === 'lab-movil' }
+				/>
 			</Tabs.Content>
 		</Tabs.Root>
 	</section>
-
-	<div class="mt-auto pt-4">
-		<button
-			id="filter-search-btn"
-			class="
-				w-full flex items-center justify-center gap-2 rounded-xl py-3
-				bg-brand text-surface-dark font-black tracking-wider text-xs uppercase
-				shadow-[0_4px_20px_rgba(0,230,118,0.25)] hover:shadow-[0_4px_25px_rgba(0,230,118,0.4)]
-				border border-brand-bright/20 hover:border-brand-bright/40
-				transition-all duration-300 transform active:scale-[0.98]
-			"
-		>
-			<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-				<circle cx="11" cy="11" r="8"></circle>
-				<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-			</svg>
-			Buscar
-		</button>
-	</div>
 </aside>

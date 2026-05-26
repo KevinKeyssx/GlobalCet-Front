@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Product } from '$lib/types/product';
 	import type { GlobalSearchProduct } from '$lib/types/search';
-	import { getImageUrl } from '$lib/utils/image';
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
@@ -18,9 +17,7 @@
 	);
 
 	const imageUrl = $derived(
-		'image' in product
-			? product.image
-			: getImageUrl( ( product.files.find( ( f ) => f.isMain ) || product.files[ 0 ] )?.url, product.id, 'products', product.name )
+		'image' in product ? product.image : product.files[ 0 ].url
 	);
 
 	const specs = $derived(

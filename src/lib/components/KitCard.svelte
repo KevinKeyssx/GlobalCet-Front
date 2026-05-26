@@ -1,20 +1,11 @@
 <script lang="ts">
 	import type { GlobalSearchKit } from '$lib/types/search';
-	import { getImageUrl } from '$lib/utils/image';
 
 	interface Props {
 		kit : GlobalSearchKit;
 	}
 
 	const { kit }: Props = $props();
-
-	// Find the main file or use the first available file
-	const mainFile = $derived(
-		kit.files.find( ( f ) => f.isMain ) || kit.files[ 0 ]
-	);
-	const imageUrl = $derived(
-		getImageUrl( mainFile?.url, kit.id, 'kits', kit.name )
-	);
 </script>
 
 <article
@@ -32,7 +23,7 @@
 	<!-- Image wrapper -->
 	<div class="relative h-48 overflow-hidden bg-surface">
 		<img
-			src={ imageUrl }
+			src={ kit.files[ 0 ].url }
 			alt={ kit.name }
 			loading="lazy"
 			class="

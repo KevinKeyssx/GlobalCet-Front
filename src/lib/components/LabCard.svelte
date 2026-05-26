@@ -1,20 +1,11 @@
 <script lang="ts">
 	import type { GlobalSearchMobileLab } from '$lib/types/search';
-	import { getImageUrl } from '$lib/utils/image';
 
 	interface Props {
 		lab : GlobalSearchMobileLab;
 	}
 
 	const { lab }: Props = $props();
-
-	// Find the main file or use the first available file
-	const mainFile = $derived(
-		lab.files.find( ( f ) => f.isMain ) || lab.files[ 0 ]
-	);
-	const imageUrl = $derived(
-		getImageUrl( mainFile?.url, lab.id, 'labs', lab.name )
-	);
 </script>
 
 <article
@@ -32,7 +23,7 @@
 	<!-- Image wrapper -->
 	<div class="relative h-48 overflow-hidden bg-surface">
 		<img
-			src={ imageUrl }
+			src={ lab.files[ 0 ].url }
 			alt={ lab.name }
 			loading="lazy"
 			class="

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { Tabs } from 'bits-ui';
 
-	import ProductTab                       from './ProductTab.svelte';
-	import KitTab                           from './KitTab.svelte';
-	import MobileLabTab                     from './MobileLabTab.svelte';
-	import type { ProductType }             from '$lib/types/product';
+	import ProductTab           from './ProductTab.svelte';
+	import KitTab               from './KitTab.svelte';
+	import MobileLabTab         from './MobileLabTab.svelte';
+	import type { ProductType } from '$lib/types/product';
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {

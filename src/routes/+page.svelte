@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { createQuery } from '@tanstack/svelte-query';
 
-	import type { ProductType } from '$lib/types/product';
 	import type {
-		GlobalSearchResponse,
+        GlobalSearchResponse,
 		GlobalSearchProduct,
 		GlobalSearchKit,
 		GlobalSearchMobileLab,
-	} from '$lib/types/search';
-	import FilterSidebar from './filters/components/FilterSidebar.svelte';
-	import ProductGrid   from '$lib/components/ProductGrid.svelte';
-	import connectRequest, { isApiError } from '$lib/services/fetch.service';
+	}                           from '$lib/types/search';
+	import
+    connectRequest, {
+        isApiError
+    }                           from '$lib/services/fetch.service';
+    import type { ProductType } from '$lib/types/product';
+	import FilterSidebar        from './filters/components/FilterSidebar.svelte';
+	import ProductGrid          from '$lib/components/ProductGrid.svelte';
 
 	// ─── Constants ────────────────────────────────────────────────────────────────
 	const allTypes: ProductType[] = [ 'Producto', 'Kit', 'Laboratorio Móvil' ];
@@ -37,9 +40,9 @@
 			const response = await connectRequest<GlobalSearchResponse>( {
 				endpoint   : `global-search?${params.toString()}`,
 				isInternal : true,
-			} );
+			});
 
-			if ( isApiError( response ) ) {
+			if ( isApiError( response )) {
 				throw new Error( response.message );
 			}
 

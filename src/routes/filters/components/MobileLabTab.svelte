@@ -22,7 +22,7 @@
 		queryKey : [ 'labCategories' ],
 		queryFn  : async () => {
 			const response = await connectRequest<LabCategory[]>( {
-				endpoint   : INTERNAL_ENDPOINTS.LAB_CATEGORIES.GET_ALL,
+				endpoint   : INTERNAL_ENDPOINTS.LABS.CATEGORIES.GET_ALL,
 				isInternal : true,
 			});
 

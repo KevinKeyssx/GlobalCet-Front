@@ -30,7 +30,7 @@
 		queryKey : [ 'categories' ],
 		queryFn  : async () => {
 			const response = await connectRequest<CategoryFilter[]>( {
-				endpoint   : INTERNAL_ENDPOINTS.CATEGORIES.GET_ALL,
+				endpoint   : INTERNAL_ENDPOINTS.PRODUCTS.CATEGORIES.GET_ALL,
 				isInternal : true,
 			});
 
@@ -48,7 +48,7 @@
 		queryKey : [ 'materials' ],
 		queryFn  : async () => {
 			const response = await connectRequest<Material[]>( {
-				endpoint   : INTERNAL_ENDPOINTS.MATERIALS.GET_ALL,
+				endpoint   : INTERNAL_ENDPOINTS.PRODUCTS.MATERIALS.GET_ALL,
 				isInternal : true,
 			});
 

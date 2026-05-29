@@ -22,7 +22,7 @@
 		queryKey : [ 'kitCategories' ],
 		queryFn  : async () => {
 			const response = await connectRequest<KitCategory[]>( {
-				endpoint   : INTERNAL_ENDPOINTS.KIT_CATEGORIES.GET_ALL,
+				endpoint   : INTERNAL_ENDPOINTS.KITS.CATEGORIES.GET_ALL,
 				isInternal : true,
 			});
 

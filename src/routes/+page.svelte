@@ -1,24 +1,25 @@
 <script lang="ts">
 	import { createQuery } from '@tanstack/svelte-query';
+	import { Pagination }  from 'bits-ui';
 
 	import type {
-        GlobalSearchResponse,
+		GlobalSearchResponse,
 		GlobalSearchProduct,
 		GlobalSearchKit,
 		GlobalSearchMobileLab,
-	}                           from '$lib/types/search';
-	import
-    connectRequest, {
-        isApiError
-    }                           from '$lib/services/fetch.service';
-    import type { ProductType } from '$lib/types/product';
-	import FilterSidebar        from './filters/components/FilterSidebar.svelte';
-	import ProductGrid          from '$lib/components/ProductGrid.svelte';
+	}                               from '$lib/types/search';
+	import connectRequest, {
+		isApiError,
+	}                               from '$lib/services/fetch.service';
+	import type { ProductType }     from '$lib/types/product';
+	import FilterSidebar            from './filters/components/FilterSidebar.svelte';
+	import ProductGrid              from '$lib/components/ProductGrid.svelte';
+	import { INTERNAL_ENDPOINTS }   from '$lib/utils/endpoints';
 
 	// ─── Constants ────────────────────────────────────────────────────────────────
 	const allTypes: ProductType[] = [ 'Producto', 'Kit', 'Laboratorio Móvil' ];
 
-	// ─── Filter State (Svelte 5 Runes) ────────────────────────────────────────────
+
 	let search                = $state( '' );
 	let selectedSubCategories = $state( new Set<string>() );
 	let selectedMaterials     = $state( new Set<string>() );
@@ -27,18 +28,29 @@
 	let activeTab             = $state( 'productos' );
 	let sortBy                = $state( 'relevance' );
 
+	// ─── Pagination State (Svelte 5 Runes) ─────────────────────────────────────────
+	let page                  = $state( 1 );
+	let size                  = $state( 9 );
+
+
+    $effect( () => {
+		selectedSubCategories;
+		selectedMaterials;
+		page = 1;
+	} );
+
 	// ─── Query: Fetch Global Searches from Backend ────────────────────────────────
-	const globalSearchQuery = createQuery( () => ({
+	const globalSearchQuery = createQuery( () => ( {
 		queryKey : [ 'globalSearch', search ],
 		queryFn  : async () => {
 			const params = new URLSearchParams( {
 				query          : search,
 				limitPerEntity : '10',
 				suggestion     : 'false',
-			} );
+			});
 
 			const response = await connectRequest<GlobalSearchResponse>( {
-				endpoint   : `global-search?${params.toString()}`,
+				endpoint   : `global-search?${ params.toString() }`,
 				isInternal : true,
 			});
 
@@ -48,6 +60,37 @@
 
 			return response;
 		},
+	} ) );
+
+	const hasActiveProductFilters = $derived( selectedSubCategories.size > 0 || selectedMaterials.size > 0 );
+	const hasActiveKitFilters     = $derived( selectedKitCategories.size > 0 );
+	const hasActiveLabFilters     = $derived( selectedLabCategories.size > 0 );
+	const isAnyFilterActive       = $derived( hasActiveProductFilters || hasActiveKitFilters || hasActiveLabFilters );
+
+	// ─── Query: Fetch Products paginated and filtered from Backend ──────────────
+	const productsQuery = createQuery( () => ( {
+		queryKey : [ 'products', Array.from( selectedSubCategories ), Array.from( selectedMaterials ), page, size ],
+		queryFn  : async () => {
+			const params = new URLSearchParams( {
+				page : page.toString(),
+				size : size.toString(),
+			});
+
+			selectedSubCategories.forEach( ( id ) => params.append( 'subcategories', id ) );
+			selectedMaterials.forEach( ( id ) => params.append( 'materials', id ) );
+
+			const response = await connectRequest<{ data : GlobalSearchProduct[]; meta : { total : number; page : number; size : number; totalPages : number } }>( {
+				endpoint   : `${INTERNAL_ENDPOINTS.PRODUCTS.FILTERS}?${ params.toString() }`,
+				isInternal : true,
+			});
+
+			if ( isApiError( response )) {
+				throw new Error( response.message );
+			}
+
+			return response;
+		},
+		enabled : activeTab === 'productos' && search === '' && hasActiveProductFilters,
 	}));
 
 	// ─── Derived: Collections from Query Data ──────────────────────────────────────
@@ -109,11 +152,21 @@
 
 	// ─── Derived: Display Counts ─────────────────────────────────────────────────
 	const currentDisplayCount = $derived(
-		sortedProducts.length + sortedKits.length + sortedLabs.length
+		( search !== '' || !isAnyFilterActive )
+			? ( sortedProducts.length + sortedKits.length + sortedLabs.length )
+			: ( activeTab === 'productos'
+				? ( hasActiveProductFilters ? ( productsQuery.data?.meta?.total || 0 ) : sortedProducts.length )
+				: ( activeTab === 'kits' ? sortedKits.length : sortedLabs.length )
+			)
 	);
 
 	const totalDisplayCount = $derived(
-		products.length + kits.length + mobileLabs.length
+		( search !== '' || !isAnyFilterActive )
+			? ( products.length + kits.length + mobileLabs.length )
+			: ( activeTab === 'productos'
+				? ( hasActiveProductFilters ? ( productsQuery.data?.meta?.total || 0 ) : products.length )
+				: ( activeTab === 'kits' ? kits.length : mobileLabs.length )
+			)
 	);
 
 	// ─── Handlers ─────────────────────────────────────────────────────────────────
@@ -121,6 +174,7 @@
 		search = value;
 	}
 
+	// Reset page to 1 when filters are toggled to avoid paginating empty pages
 	function toggleSubCategory( id: string ): void {
 		const next = new Set( selectedSubCategories );
 		if ( next.has( id ) ) {
@@ -129,6 +183,7 @@
 			next.add( id );
 		}
 		selectedSubCategories = next;
+		page                  = 1;
 	}
 
 	function toggleMaterial( id: string ): void {
@@ -139,6 +194,7 @@
 			next.add( id );
 		}
 		selectedMaterials = next;
+		page              = 1;
 	}
 
 	function toggleType( type: ProductType ): void {
@@ -151,6 +207,7 @@
 		selectedKitCategories = new Set();
 		selectedLabCategories = new Set();
 		search                = '';
+		page                  = 1;
 	}
 </script>
 
@@ -239,10 +296,88 @@
 
 		<!-- Unified Product & Kit & Lab Grid -->
 		<ProductGrid
-			products={ sortedProducts }
-			kits={ sortedKits }
-			mobileLabs={ sortedLabs }
-			loading={ globalSearchQuery.isLoading }
+			products={ ( search !== '' || !isAnyFilterActive )
+				? sortedProducts
+				: ( activeTab === 'productos'
+					? ( hasActiveProductFilters ? ( productsQuery.data?.data || [] ) : sortedProducts )
+					: []
+				)
+			}
+			kits={ ( search !== '' || !isAnyFilterActive )
+				? sortedKits
+				: ( activeTab === 'kits' ? sortedKits : [] )
+			}
+			mobileLabs={ ( search !== '' || !isAnyFilterActive )
+				? sortedLabs
+				: ( activeTab === 'lab-movil' ? sortedLabs : [] )
+			}
+			loading={ ( search !== '' || !isAnyFilterActive )
+				? globalSearchQuery.isLoading
+				: ( activeTab === 'productos'
+					? ( hasActiveProductFilters ? productsQuery.isLoading : globalSearchQuery.isLoading )
+					: globalSearchQuery.isLoading
+				)
+			}
 		/>
+
+		<!-- Interlocking Paginated Controls -->
+		{#if search === '' && activeTab === 'productos' && hasActiveProductFilters && productsQuery.data && productsQuery.data.meta.totalPages > 1}
+			<Pagination.Root
+				count={ productsQuery.data.meta.total }
+				perPage={ size }
+				bind:page={ page }
+			>
+				{#snippet children( { pages } )}
+					<div class="flex items-center justify-center gap-2 mt-8">
+						<Pagination.PrevButton
+							class="
+								inline-flex h-9 w-9 items-center justify-center rounded-xl
+								border border-brand/10 bg-surface/30 text-text
+								transition-all duration-300
+								hover:bg-brand/10 hover:text-brand
+								disabled:pointer-events-none disabled:opacity-40
+							"
+						>
+							<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+								<polyline points="15 18 9 12 15 6"></polyline>
+							</svg>
+						</Pagination.PrevButton>
+
+						{#each pages as p ( p.key )}
+							{#if p.type === 'ellipsis'}
+								<span class="inline-flex h-9 w-9 items-center justify-center text-xs font-bold text-text-muted">...</span>
+							{:else}
+								<Pagination.Page
+									page={ p }
+									class="
+										inline-flex h-9 w-9 items-center justify-center rounded-xl
+										border border-brand/10 bg-surface/30 text-xs font-bold text-text-muted
+										transition-all duration-300
+										hover:bg-brand/10 hover:text-brand
+										data-selected:bg-brand data-selected:text-surface-dark data-selected:border-brand data-selected:shadow-md
+									"
+								>
+									{ p.value }
+								</Pagination.Page>
+							{/if}
+						{/each}
+
+						<Pagination.NextButton
+							class="
+								inline-flex h-9 w-9 items-center justify-center rounded-xl
+								border border-brand/10 bg-surface/30 text-text
+								transition-all duration-300
+								hover:bg-brand/10 hover:text-brand
+								disabled:pointer-events-none disabled:opacity-40
+							"
+						>
+							<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+								<polyline points="9 18 15 12 9 6"></polyline>
+							</svg>
+						</Pagination.NextButton>
+					</div>
+				{/snippet}
+			</Pagination.Root>
+		{/if}
 	</div>
 </main>

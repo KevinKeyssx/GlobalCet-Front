@@ -27,26 +27,29 @@ export const INTERNAL_ENDPOINTS = {
 };
 
 export const EXTERNAL_ENDPOINTS = {
-	PRODUCTS       : {
-		BASE : '/products',
-        MATERIALS      : {
-            GET_ALL : '/materials',
-        },
-        CATEGORIES     : {
-            GET_ALL : '/categories',
-        },
+	PRODUCTS      : {
+		BASE       : '/products',
+		MATERIALS  : {
+			GET_ALL : '/materials',
+		},
+		CATEGORIES : {
+			GET_ALL : '/categories',
+		},
 	},
-	GLOBAL_SEARCH  : {
+	GLOBAL_SEARCH : {
 		BASE : '/global-searches',
 	},
-    KITS: {
-        CATEGORIES : {
-            GET_ALL : '/kit-categories',
-        },
-    },
-    LABS: {
-        CATEGORIES : {
-            GET_ALL : '/lab-categories',
-        },
-    }
+	KITS          : {
+		BASE       : '/kits',
+		CATEGORIES : {
+			GET_ALL : '/kit-categories',
+		},
+	},
+	LABS          : {
+		BASE       : '/mobile-labs',
+		CATEGORIES : {
+			GET_ALL : '/lab-categories',
+		},
+	}
 };
+

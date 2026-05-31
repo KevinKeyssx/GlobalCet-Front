@@ -69,10 +69,10 @@
 <aside class="
 	flex w-80 shrink-0 flex-col gap-3
 	rounded-2xl
-	border border-brand/20 dark:border-brand
+	border border-brand/20 dark:border-brand/20
 	bg-sidebar/90 backdrop-blur-xl
 	px-5 py-6
-	shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-white/50
+	shadow-sidebar ring-1 ring-brand/5 dark:ring-white/5
 	transition-all duration-500
 ">
 	<!-- Header section -->

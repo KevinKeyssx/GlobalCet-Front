@@ -5,8 +5,10 @@
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
 
-    import Header   from '$lib/components/Header.svelte';
-	import favicon  from '$lib/assets/favicon.svg';
+    import Header           from '$lib/components/home/Header.svelte';
+    import Footer           from '$lib/components/home/Footer.svelte';
+	import { searchStore }  from '$lib/state/search';
+	import favicon          from '$lib/assets/favicon.svg';
 
 	// ─── Dark Mode State ──────────────────────────────────────────────────────────
 	const initialDark = browser ? ( localStorage.getItem( 'theme' ) === 'dark' || ( !localStorage.getItem( 'theme' ) && window.matchMedia( '(prefers-color-scheme: dark)' ).matches ) ) : false;
@@ -14,7 +16,6 @@
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	let { data, children } = $props();
     let darkMode = $state( initialDark );
-	let search   = $state( '' );
 
 	// ─── Effect: sync dark class and localStorage ─────────────────────────────────
 	$effect( () => {
@@ -25,10 +26,11 @@
 			document.documentElement.classList.remove( 'dark' );
 			localStorage.setItem( 'theme', 'light' );
 		}
-	} );
+	});
 
-	function handleSearch( value: string ) {
-		search = value;
+
+    function handleSearch( value: string ): void {
+		$searchStore = value;
 	}
 </script>
 
@@ -51,16 +53,18 @@
 
 <QueryClientProvider client={ data.queryClient }>
 	<!-- ─── App Shell ─────────────────────────────────────────────────────────────── -->
-	<div class="min-h-screen bg-surface text-text transition-colors duration-300 font-sans">
+	<main class="min-h-screen bg-surface text-text transition-colors duration-300 font-sans">
 		<Header
-			{ search }
+			search={ $searchStore }
 			{ darkMode }
 			onSearch={ handleSearch }
 			onToggle={ () => { darkMode = !darkMode; } }
 		/>
 
 		{@render children()}
-	</div>
+
+		<Footer />
+	</main>
 
 	{#if dev }
 		<SvelteQueryDevtools initialIsOpen={ false } />

@@ -1,13 +1,30 @@
 <script lang="ts">
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
-		search    : string;
-		darkMode  : boolean;
-		onSearch  : ( value: string ) => void;
-		onToggle  : () => void;
+		search   : string;
+		darkMode : boolean;
+		onSearch : ( value: string ) => void;
+		onToggle : () => void;
 	}
 
 	const { search, darkMode, onSearch, onToggle }: Props = $props();
+
+	let localSearch = $state( '' );
+
+	// Keep localSearch in sync if search prop changes from parent (e.g. clearAll)
+	$effect( () => {
+		localSearch = search;
+	} );
+
+	let timeoutId: any;
+
+	function handleInput( value: string ): void {
+		localSearch = value;
+		clearTimeout( timeoutId );
+		timeoutId = setTimeout( () => {
+			onSearch( value );
+		}, 300 );
+	}
 </script>
 
 <!-- ─── Header Shell ─────────────────────────────────────────────────────────── -->
@@ -21,7 +38,7 @@
 
 		<!-- Logo -->
 		<a href="/" id="header-logo" class="flex shrink-0 items-center gap-3 group">
-			<div class="
+			<!-- <div class="
 				flex h-9 w-9 items-center justify-center rounded-lg
 				bg-brand/20 ring-1 ring-brand/40
 				transition-all duration-300 group-hover:bg-brand/35
@@ -29,11 +46,14 @@
 				<svg viewBox="0 0 24 24" class="h-5 w-5 fill-brand" xmlns="http://www.w3.org/2000/svg">
 					<path d="M7 2v2H5a2 2 0 0 0-2 2v1h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm-4 7v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3zm9 2a5 5 0 1 1 0 10A5 5 0 0 1 12 11zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
 				</svg>
-			</div>
-			<div class="leading-tight">
+			</div> -->
+            <div class="flex items-center justify-center rounded-xl border border-brand/10 bg-white p-0.5 size-10 transition-all duration-300 hover:border-brand/30 hover:scale-105">
+							<img src="/logo/logo.avif" alt="GlobalCET" class="h-full w-full object-contain" />
+						</div> 
+			<!-- <div class="leading-tight">
 				<span class="block text-sm font-bold tracking-widest text-brand uppercase">Global</span>
 				<span class="block text-xs font-semibold tracking-wider text-text-muted uppercase">CET</span>
-			</div>
+			</div> -->
 		</a>
 
 		<!-- Search Bar -->
@@ -47,13 +67,15 @@
 				<circle cx="11" cy="11" r="8"/>
 				<path d="m21 21-4.35-4.35"/>
 			</svg>
-			<input
-				id="header-search"
-				type="search"
-				placeholder="Buscar productos, reactivos, equipos..."
-				value={search}
-				oninput={( e ) => onSearch( ( e.target as HTMLInputElement ).value )}
-				class="
+
+            <!-- Global Search -->
+            <input
+				id          = "header-search"
+				type        = "search"
+				placeholder = "Buscar productos, reactivos, equipos..."
+				value       = { localSearch }
+				oninput     = { ( e ) => handleInput(( e.target as HTMLInputElement ).value )}
+				class       = "
 					peer w-full rounded-xl
 					border border-brand/25 bg-input
 					py-2.5 pl-10 pr-4 text-sm text-text
@@ -68,7 +90,7 @@
 		<!-- Nav links -->
 		<nav class="hidden items-center gap-1 md:flex">
 			<a
-				href="/catalogo"
+				href="/filters"
 				id="nav-catalogo"
 				class="rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition-colors duration-200 hover:bg-brand/10 hover:text-brand"
 			>Catálogo</a>

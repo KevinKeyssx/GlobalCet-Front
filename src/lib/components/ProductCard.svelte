@@ -46,9 +46,9 @@
 		group relative flex flex-col overflow-hidden rounded-2xl
 		border border-brand/10
 		bg-card
-		shadow-sm shadow-brand/5
+		shadow-card
 		transition-all duration-300
-		hover:border-brand/35 hover:shadow-xl hover:shadow-brand/10
+		hover:border-brand/35 hover:shadow-card-hover
 		hover:-translate-y-1
 	"
 >
@@ -65,10 +65,10 @@
 			"
 		/>
 
-		<!-- Gradient overlay (visible on hover) -->
+		<!-- Dark overlay (visible on hover) -->
 		<div class="
 			absolute inset-0
-			bg-linear-to-t from-brand-dark/85 via-transparent to-transparent
+			bg-slate-950/40 backdrop-blur-sm
 			opacity-0 transition-opacity duration-300
 			group-hover:opacity-100
 		"></div>
@@ -83,8 +83,8 @@
 			<ul class="flex flex-col gap-1">
 				{#each specEntries as [ key, value ]}
 					<li class="flex items-center gap-2 text-xs">
-						<span class="font-semibold capitalize text-brand/80">{ key }:</span>
-						<span class="text-white/90">{ value }</span>
+						<span class="font-bold capitalize text-brand-bright">{ key }:</span>
+						<span class="text-white">{ value }</span>
 					</li>
 				{/each}
 			</ul>

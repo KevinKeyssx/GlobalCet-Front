@@ -14,9 +14,9 @@
 		group relative flex flex-col overflow-hidden rounded-2xl
 		border border-brand/10
 		bg-card
-		shadow-sm shadow-brand/5
+		shadow-card
 		transition-all duration-300
-		hover:border-brand/35 hover:shadow-xl hover:shadow-brand/10
+		hover:border-brand/35 hover:shadow-card-hover
 		hover:-translate-y-1
 	"
 >
@@ -33,10 +33,10 @@
 			"
 		/>
 
-		<!-- Gradient overlay (visible on hover) -->
+		<!-- Dark overlay (visible on hover) -->
 		<div class="
 			absolute inset-0
-			bg-linear-to-t from-brand-dark/85 via-transparent to-transparent
+			bg-slate-950/40 backdrop-blur-sm
 			opacity-0 transition-opacity duration-300
 			group-hover:opacity-100
 		"></div>
@@ -50,29 +50,29 @@
 		">
 			<div class="space-y-2">
 				<!-- Dimensions spec -->
-				<div class="flex items-center gap-1.5 text-xs text-white/95">
-					<svg class="h-3.5 w-3.5 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<div class="flex items-center gap-1.5 text-xs text-white">
+					<svg class="h-3.5 w-3.5 text-brand-bright" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 						<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
 						<polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
 						<line x1="12" y1="22.08" x2="12" y2="12"></line>
 					</svg>
-					<span class="font-bold text-brand">Dimens:</span>
+					<span class="font-bold text-brand-bright">Dimens:</span>
 					<span class="font-medium">{ lab.dimensions }</span>
 				</div>
 
-				{#if lab.kits.length > 0 || lab.products.length > 0}
+				{#if ( lab.kits || [] ).length > 0 || ( lab.products || [] ).length > 0}
 					<div class="space-y-1">
-						<span class="text-[10px] font-bold uppercase tracking-wider text-brand/80">Equipamiento Incluido:</span>
+						<span class="text-[10px] font-bold uppercase tracking-wider text-brand-bright">Equipamiento Incluido:</span>
 						<ul class="flex flex-col gap-0.5 max-h-24 overflow-y-auto custom-scrollbar">
-							{#each lab.kits as lk}
-								<li class="flex items-center gap-1.5 text-[11px] text-white/95">
-									<span class="inline-flex h-3.5 w-3.5 items-center justify-center rounded-sm bg-brand/20 text-[9px] font-bold text-brand">{ lk.quantity }x</span>
+							{#each ( lab.kits || [] ) as lk}
+								<li class="flex items-center gap-1.5 text-[11px] text-white">
+									<span class="inline-flex h-3.5 w-3.5 items-center justify-center rounded-sm bg-brand-bright/20 text-[9px] font-bold text-brand-bright">{ lk.quantity }x</span>
 									<span class="truncate font-medium">{ lk.kit.name } (Kit)</span>
 								</li>
 							{/each}
-							{#each lab.products as lp}
-								<li class="flex items-center gap-1.5 text-[11px] text-white/95">
-									<span class="inline-flex h-3.5 w-3.5 items-center justify-center rounded-sm bg-brand/20 text-[9px] font-bold text-brand">{ lp.quantity }x</span>
+							{#each ( lab.products || [] ) as lp}
+								<li class="flex items-center gap-1.5 text-[11px] text-white">
+									<span class="inline-flex h-3.5 w-3.5 items-center justify-center rounded-sm bg-brand-bright/20 text-[9px] font-bold text-brand-bright">{ lp.quantity }x</span>
 									<span class="truncate font-medium">{ lp.product.name }</span>
 								</li>
 							{/each}

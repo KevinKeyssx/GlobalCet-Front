@@ -14,9 +14,9 @@
 		group relative flex flex-col overflow-hidden rounded-2xl
 		border border-brand/10
 		bg-card
-		shadow-sm shadow-brand/5
+		shadow-card
 		transition-all duration-300
-		hover:border-brand/35 hover:shadow-xl hover:shadow-brand/10
+		hover:border-brand/35 hover:shadow-card-hover
 		hover:-translate-y-1
 	"
 >
@@ -33,10 +33,10 @@
 			"
 		/>
 
-		<!-- Gradient overlay (visible on hover) -->
+		<!-- Dark overlay (visible on hover) -->
 		<div class="
 			absolute inset-0
-			bg-linear-to-t from-brand-dark/85 via-transparent to-transparent
+			bg-slate-950/40 backdrop-blur-sm
 			opacity-0 transition-opacity duration-300
 			group-hover:opacity-100
 		"></div>
@@ -48,13 +48,13 @@
 			transition-all duration-300
 			group-hover:opacity-100 group-hover:translate-y-0
 		">
-			{#if kit.products.length > 0}
+			{#if ( kit.products || [] ).length > 0}
 				<div class="space-y-1">
-					<span class="text-[10px] font-bold uppercase tracking-wider text-brand/80">Componentes ({ kit.products.length }):</span>
+					<span class="text-[10px] font-bold uppercase tracking-wider text-brand-bright">Componentes ({ ( kit.products || [] ).length }):</span>
 					<ul class="flex flex-col gap-0.5 max-h-24 overflow-y-auto custom-scrollbar">
-						{#each kit.products as kp}
-							<li class="flex items-center gap-1.5 text-[11px] text-white/95">
-								<span class="inline-flex h-3.5 w-3.5 items-center justify-center rounded-sm bg-brand/20 text-[9px] font-bold text-brand">{ kp.quantity }x</span>
+						{#each ( kit.products || [] ) as kp}
+							<li class="flex items-center gap-1.5 text-[11px] text-white">
+								<span class="inline-flex h-3.5 w-3.5 items-center justify-center rounded-sm bg-brand-bright/20 text-[9px] font-bold text-brand-bright">{ kp.quantity }x</span>
 								<span class="truncate font-medium">{ kp.product.name }</span>
 							</li>
 						{/each}

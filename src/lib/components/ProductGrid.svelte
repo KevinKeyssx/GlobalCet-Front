@@ -5,9 +5,7 @@
         GlobalSearchMobileLab
     }                       from '$lib/types/search';
 	import type { Product } from '$lib/types/product';
-	import ProductCard      from './ProductCard.svelte';
-	import KitCard          from './KitCard.svelte';
-	import LabCard          from './LabCard.svelte';
+	import ItemCard         from './ItemCard.svelte';
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
@@ -91,13 +89,7 @@
 					class="transition-all duration-300"
 					style="animation-delay: { index * 60 }ms; animation: fadeSlideIn 0.35s ease-out both"
 				>
-					{#if item.cardType === 'product'}
-						<ProductCard product={ item.data } />
-					{:else if item.cardType === 'kit'}
-						<KitCard kit={ item.data } />
-					{:else if item.cardType === 'lab'}
-						<LabCard lab={ item.data } />
-					{/if}
+					<ItemCard itemType={ item.cardType } item={ item.data } />
 				</div>
 			{/each}
 		</div>

@@ -30,14 +30,15 @@
 
 				<div class="space-y-4">
 					<h1 class="font-display text-4xl font-extrabold tracking-tight text-text sm:text-5xl md:text-6xl lg:text-7xl leading-tight">
-						Ingeniería &
+						Ciencia
 						<br />
 						<span class="bg-linear-to-r from-brand via-brand-bright to-emerald-400 bg-clip-text text-transparent drop-shadow-sm">
-							Precisión Científica
+							Educación & Tecnología
 						</span>
 					</h1>
 					<p class="max-w-2xl text-base font-medium leading-relaxed text-text-muted sm:text-lg">
-						En <strong class="text-text font-bold">GlobalCET</strong> proveemos soluciones bioquímicas integrales de alta pureza. Suministramos reactivos avanzados, material de vidrio certificado, kits de diagnóstico especializados y laboratorios móviles autónomos diseñados bajo estándares internacionales.
+						<!-- En <strong class="text-text font-bold">GlobalCET</strong> proveemos soluciones bioquímicas integrales de alta pureza. Suministramos reactivos avanzados, material de vidrio certificado, kits de diagnóstico especializados y laboratorios móviles autónomos diseñados bajo estándares internacionales. -->
+                        Insumos, Material, instrumentos y equipos para sus laboratorios de ciencias, fisica, química y biologia, entregando soluciones prácticas, científicas con laboratorios móviles y nodolabs, estación descubrimiento móbil para la educación.
 					</p>
 				</div>
 
@@ -74,13 +75,20 @@
 							<p class="text-xl font-bold text-text font-display">100%</p>
 							<p class="text-xs font-semibold text-text-muted uppercase tracking-wider">Pureza Certificada</p>
 						</div>
-						<div>
+
+                        <div>
 							<p class="text-xl font-bold text-text font-display">ISO 9001</p>
 							<p class="text-xs font-semibold text-text-muted uppercase tracking-wider">Estándar Global</p>
 						</div>
-						<div>
-							<p class="text-xl font-bold text-text font-display">LATAM</p>
-							<p class="text-xs font-semibold text-text-muted uppercase tracking-wider">Logística Rápida</p>
+
+                        <div>
+							<p class="text-xl font-bold text-text font-display">(OA)</p>
+							<p class="text-xs font-semibold text-text-muted uppercase tracking-wider">Objetivos de apredizaje</p>
+						</div>
+
+                        <div>
+							<p class="text-xl font-bold text-text font-display">(PME)</p>
+							<p class="text-xs font-semibold text-text-muted uppercase tracking-wider">Procesos de mejora continúa, fortalecimiento de aprendizaje de los estudiante</p>
 						</div>
 					</div>
 				</div>
@@ -93,97 +101,14 @@
 					<div class="absolute inset-0 bg-brand/10 rounded-full blur-3xl animate-pulse"></div>
 
 					<!-- Native SVG Molecular Structure representation -->
-					<svg
-						class="w-4/5 h-4/5 text-brand drop-shadow-[0_10px_30px_rgba(5,150,105,0.15)]"
-						viewBox="0 0 400 400"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<!-- Hexagonal central grid overlay -->
-						<path d="M200 40 L340 120 L340 280 L200 360 L60 280 L60 120 Z" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 8" class="opacity-25" />
-						<path d="M200 100 L280 150 L280 250 L200 300 L120 250 L120 150 Z" stroke="currentColor" stroke-width="1" stroke-dasharray="6 6" class="opacity-30" />
-
-						<!-- Connecting Bonds (molecular lines) -->
-						<line x1="200" y1="40" x2="200" y2="100" stroke="currentColor" stroke-width="3" class="animate-pulse" />
-						<line x1="340" y1="120" x2="280" y2="150" stroke="currentColor" stroke-width="3" />
-						<line x1="340" y1="280" x2="280" y2="250" stroke="currentColor" stroke-width="3" />
-						<line x1="200" y1="360" x2="200" y2="300" stroke="currentColor" stroke-width="3" />
-						<line x1="60" y1="280" x2="120" y2="250" stroke="currentColor" stroke-width="3" />
-						<line x1="60" y1="120" x2="120" y2="150" stroke="currentColor" stroke-width="3" />
-
-						<!-- Inner molecular chain -->
-						<line x1="200" y1="100" x2="280" y2="150" stroke="currentColor" stroke-width="2.5" />
-						<line x1="280" y1="150" x2="280" y2="250" stroke="currentColor" stroke-width="2.5" />
-						<line x1="280" y1="250" x2="200" y2="300" stroke="currentColor" stroke-width="2.5" />
-						<line x1="200" y1="300" x2="120" y2="250" stroke="currentColor" stroke-width="2.5" />
-						<line x1="120" y1="250" x2="120" y2="150" stroke="currentColor" stroke-width="2.5" />
-						<line x1="120" y1="150" x2="200" y2="100" stroke="currentColor" stroke-width="2.5" />
-
-						<!-- Double bond representing chemical structure -->
-						<line x1="135" y1="160" x2="195" y2="115" stroke="currentColor" stroke-width="1.5" class="opacity-60" />
-						<line x1="265" y1="240" x2="205" y2="290" stroke="currentColor" stroke-width="1.5" class="opacity-60" />
-
-						<!-- Molecular atoms (rendered as gorgeous layered circles) -->
-						<!-- Atom Carbon (Top) -->
-						<g class="transition-transform duration-500 hover:scale-110 origin-[200px_40px]">
-							<circle cx="200" cy="40" r="16" fill="var(--color-brand)" class="opacity-20" />
-							<circle cx="200" cy="40" r="10" fill="var(--color-brand)" />
-							<circle cx="200" cy="40" r="4" fill="#ffffff" />
-						</g>
-
-						<!-- Atom Nitrogen (Right) -->
-						<g class="transition-transform duration-500 hover:scale-110 origin-[340px_120px]">
-							<circle cx="340" cy="120" r="18" fill="var(--color-brand-bright)" class="opacity-20" />
-							<circle cx="340" cy="120" r="11" fill="var(--color-brand-bright)" />
-							<circle cx="340" cy="120" r="5" fill="#ffffff" />
-						</g>
-
-						<!-- Atom Oxygen (Bottom-Right) -->
-						<g class="transition-transform duration-500 hover:scale-110 origin-[340px_280px]">
-							<circle cx="340" cy="280" r="16" fill="var(--color-brand)" class="opacity-20" />
-							<circle cx="340" cy="280" r="9" fill="var(--color-brand)" />
-							<circle cx="340" cy="280" r="3" fill="#ffffff" />
-						</g>
-
-						<!-- Atom Hydrogen (Bottom) -->
-						<g class="transition-transform duration-500 hover:scale-110 origin-[200px_360px]">
-							<circle cx="200" cy="360" r="20" fill="var(--color-brand-bright)" class="opacity-20" />
-							<circle cx="200" cy="360" r="12" fill="var(--color-brand-bright)" />
-							<circle cx="200" cy="360" r="6" fill="#ffffff" />
-						</g>
-
-						<!-- Atom carbon (Left-Bottom) -->
-						<g class="transition-transform duration-500 hover:scale-110 origin-[60px_280px]">
-							<circle cx="60" cy="280" r="16" fill="var(--color-brand)" class="opacity-20" />
-							<circle cx="60" cy="280" r="10" fill="var(--color-brand)" />
-							<circle cx="60" cy="280" r="4" fill="#ffffff" />
-						</g>
-
-						<!-- Atom Sulfur (Left-Top) -->
-						<g class="transition-transform duration-500 hover:scale-110 origin-[60px_120px]">
-							<circle cx="60" cy="120" r="18" fill="var(--color-brand-bright)" class="opacity-20" />
-							<circle cx="60" cy="120" r="11" fill="var(--color-brand-bright)" />
-							<circle cx="60" cy="120" r="5" fill="#ffffff" />
-						</g>
-
-						<!-- Inner Atoms (small nodes) -->
-						<circle cx="200" cy="100" r="4" fill="currentColor" />
-						<circle cx="280" cy="150" r="4" fill="currentColor" />
-						<circle cx="280" cy="250" r="4" fill="currentColor" />
-						<circle cx="200" cy="300" r="4" fill="currentColor" />
-						<circle cx="120" cy="250" r="4" fill="currentColor" />
-						<circle cx="120" cy="150" r="4" fill="currentColor" />
-
-						<!-- Decorative orbit path representation -->
-						<ellipse cx="200" cy="200" rx="150" ry="60" stroke="currentColor" stroke-width="0.75" class="opacity-20" transform="rotate(-30 200 200)" />
-						<ellipse cx="200" cy="200" rx="150" ry="60" stroke="currentColor" stroke-width="0.75" class="opacity-20" transform="rotate(30 200 200)" />
-					</svg>
+                    <img src="/logo/logo.avif" alt="GlobalCET" class="h-full w-full object-contain" />
 
 					<!-- floating badges -->
 					<div class="absolute -top-6 -right-2 bg-card border border-brand/20 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-wider text-brand shadow-card backdrop-blur-sm animate-bounce duration-4000">
 						H2O + Reactivos
 					</div>
-					<div class="absolute -bottom-4 -left-6 bg-card border border-brand/20 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-wider text-brand-bright shadow-card backdrop-blur-sm animate-bounce duration-3000" style="animation-delay: 1.5s;">
+
+                    <div class="absolute -bottom-4 -left-6 bg-card border border-brand/20 rounded-xl px-3 py-2 text-[10px] font-black uppercase tracking-wider text-brand-bright shadow-card backdrop-blur-sm animate-bounce duration-3000" style="animation-delay: 1.5s;">
 						Purity level &gt; 99.9%
 					</div>
 				</div>
@@ -201,12 +126,12 @@
 					Sistemas Integrados para el Progreso Científico
 				</p>
 				<p class="text-base text-text-muted max-w-xl mx-auto">
-					Diseñamos y distribuimos infraestructura e insumos bajo los controles de calidad más rigurosos del sector de la biotecnología.
+					Desarrollamos, distribuimos insumos bajo los controles de calidad más rigurosos del sector del área de la ciencia.
 				</p>
 			</div>
 
 			<!-- Features Cards Grid -->
-			<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-4">
 				<!-- Pillar 1: Equipos & Reactivos -->
 				<article class="
 					group relative flex flex-col justify-between overflow-hidden rounded-2xl
@@ -225,7 +150,7 @@
 						<div class="space-y-2">
 							<h3 class="font-display text-xl font-bold text-text transition-colors duration-200 group-hover:text-brand">Equipos & Reactivos</h3>
 							<p class="text-sm leading-relaxed text-text-muted">
-								Reactivos moleculares, compuestos químicos analíticos, material de vidrio soplado de borosilicato y equipos electrónicos de calibración de alta exactitud para laboratorios clínicos y de enseñanza.
+								Reactivos técnicos, PA, material de vidrio (Borosilicato 3.3). Instrumentos de medición y análisis, para sus laboratorios.
 							</p>
 						</div>
 					</div>
@@ -255,14 +180,17 @@
 								<rect x="3" y="16" width="7" height="5" rx="1" />
 							</svg>
 						</div>
-						<div class="space-y-2">
-							<h3 class="font-display text-xl font-bold text-text transition-colors duration-200 group-hover:text-brand">Kits de Diagnóstico</h3>
-							<p class="text-sm leading-relaxed text-text-muted">
-								Configuraciones prediseñadas listas para su uso. Sets completos para extracción de ADN/ARN, análisis microbiológico, microbiología médica, docencia académica y ensayos clínicos avanzados.
+
+                        <div class="space-y-2">
+							<h3 class="font-display text-xl font-bold text-text transition-colors duration-200 group-hover:text-brand">Kits de laboratorios</h3>
+
+                            <p class="text-sm leading-relaxed text-text-muted">
+                                Herramientas pedagógicas, ideales para el aula, diseñadas para transformar la teoría en experimentos prácticos mediente la metodología (ciencia y tecnología).
 							</p>
 						</div>
 					</div>
-					<div class="mt-8 border-t border-brand/5 pt-4">
+
+                    <div class="mt-8 border-t border-brand/5 pt-4">
 						<a href="/filters" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand-bright group-hover:underline">
 							Ver Kits
 							<svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -287,17 +215,56 @@
 								<line x1="12" y1="17" x2="12" y2="21" />
 							</svg>
 						</div>
-						<div class="space-y-2">
+
+                        <div class="space-y-2">
 							<h3 class="font-display text-xl font-bold text-text transition-colors duration-200 group-hover:text-brand">Laboratorios Móviles</h3>
-							<p class="text-sm leading-relaxed text-text-muted">
-								Unidades científicas totalmente autónomas y autogestionables instaladas en contenedores expandibles de alta resistencia. Equipadas con climatización estéril, energía independiente y purificadores de aire.
+
+                            <p class="text-sm leading-relaxed text-text-muted">
+                                Instalación completamente equipada, la cual se desplaza hacia diferentes puntos, para realizar análisis, ensayos o actividades educativas. Consiste en un carro tecnológico diseñado para moverse dentro del recinto. Cualquier lugar se convierte en ciencia.
 							</p>
 						</div>
 					</div>
-					<div class="mt-8 border-t border-brand/5 pt-4">
+
+                    <div class="mt-8 border-t border-brand/5 pt-4">
 						<a href="/filters" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
 							Ver Laboratorios
-							<svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+
+                            <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+								<polyline points="9 18 15 12 9 6"></polyline>
+							</svg>
+						</a>
+					</div>
+				</article>
+
+                <article class="
+					group relative flex flex-col justify-between overflow-hidden rounded-2xl
+					border border-brand/10 bg-card p-8
+					shadow-card transition-all duration-300
+					hover:-translate-y-1 hover:border-brand/30 hover:shadow-card-hover
+				">
+					<div class="space-y-6">
+						<div class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-brand transition-all duration-300 group-hover:bg-brand group-hover:text-surface-dark">
+							<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<rect x="2" y="3" width="20" height="14" rx="2" />
+								<line x1="8" y1="21" x2="16" y2="21" />
+								<line x1="12" y1="17" x2="12" y2="21" />
+							</svg>
+						</div>
+
+                        <div class="space-y-2">
+							<h3 class="font-display text-xl font-bold text-text transition-colors duration-200 group-hover:text-brand">Nodo Labs</h3>
+
+                            <p class="text-sm leading-relaxed text-text-muted">
+                                Son iniciativas cientificas, educativas. Laboratorios de educación digital y prototipado rápido hacia la educación para potenciar la innovación y la formatión técnico prefesional. Posee equipamiento de punta, con enfoque pedagógico para problemas reales en su entorno mediante la tecnología.
+                            </p>
+						</div>
+					</div>
+
+                    <div class="mt-8 border-t border-brand/5 pt-4">
+						<a href="/filters" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
+							Ver NodoLabs
+
+                            <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
 								<polyline points="9 18 15 12 9 6"></polyline>
 							</svg>
 						</a>

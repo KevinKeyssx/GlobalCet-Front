@@ -14,7 +14,7 @@
 	<div class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[ 500px ] w-[ 500px ] rounded-full bg-brand/5 blur-[ 120px ]"></div>
 
 	<div class="relative max-w-xl w-full text-center space-y-16">
-		
+
 		<!-- Biochemistry Beaker / Atomic Illustration with Floating Animation -->
 		<!-- <div class="flex justify-center">
 			<div class="relative flex items-center justify-center h-40 w-40 rounded-full bg-brand/5 border border-brand/10 shadow-card animate-float">
@@ -70,15 +70,17 @@
 				"
 			>
 				<span class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-				<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
 					<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
 					<polyline points="9 22 9 12 15 12 15 22" />
 				</svg>
-				<span>Volver al Inicio</span>
+
+                <span>Volver al Inicio</span>
 			</a>
 
 			<a
-				href="/filters"
+				href="/catalog"
 				class="
 					flex items-center justify-center gap-2 rounded-xl bg-brand/10 border border-brand/20 px-6 py-3.5 text-xs font-black uppercase tracking-wider text-brand
 					shadow-xs transition-all duration-300
@@ -89,10 +91,10 @@
 					<circle cx="11" cy="11" r="8" />
 					<line x1="21" y1="21" x2="16.65" y2="16.65" />
 				</svg>
-				<span>Ver Catálogo</span>
+
+                <span>Ver Catálogo</span>
 			</a>
 		</div>
-
 	</div>
 </main>
 

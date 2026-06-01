@@ -15,6 +15,7 @@
 	import ProductGrid              from '$lib/components/ProductGrid.svelte';
 	import { INTERNAL_ENDPOINTS }   from '$lib/utils/endpoints';
 	import { searchStore }          from '$lib/state/search';
+	import { globalLoadingStore }   from '$lib/state/loading';
 	import FilterSidebar            from './components/FilterSidebar.svelte';
 
 	// ─── Constants ────────────────────────────────────────────────────────────────
@@ -50,14 +51,14 @@
 		queryFn  : async () => {
 			const params = new URLSearchParams( {
 				query          : $searchStore,
-				limitPerEntity : '10',
-				suggestion     : 'false',
-			} );
+				limitPerEntity : '15',
+				suggestion     : 'true',
+			});
 
 			const response = await connectRequest<GlobalSearchResponse>( {
 				endpoint   : `global-search?${ params.toString() }`,
 				isInternal : true,
-			} );
+			});
 
 			if ( isApiError( response ) ) {
 				throw new Error( response.message );
@@ -153,6 +154,7 @@
 	const products   = $derived( globalSearchQuery.data?.products || [] );
 	const kits       = $derived( globalSearchQuery.data?.kits || [] );
 	const mobileLabs = $derived( globalSearchQuery.data?.mobileLabs || [] );
+	const isSearchSuggestion = $derived( !!globalSearchQuery.data?.meta?.isSuggestion );
 
 	// ─── Derived & Local Filtering ────────────────────────────────────────────────
 	const filteredProducts = $derived.by( () => {
@@ -231,6 +233,27 @@
 			)
 	);
 
+	// ─── Sync global loading store with query loading state ─────────────────────
+	const activeLoadingState = $derived(
+		( $searchStore !== '' || !isAnyFilterActive )
+			? globalSearchQuery.isFetching
+			: ( activeTab === 'productos'
+				? ( hasActiveProductFilters ? productsQuery.isFetching : globalSearchQuery.isFetching )
+				: ( activeTab === 'kits'
+					? ( hasActiveKitFilters ? kitsQuery.isFetching : globalSearchQuery.isFetching )
+					: ( hasActiveLabFilters ? labsQuery.isFetching : globalSearchQuery.isFetching )
+				)
+			)
+	);
+
+	$effect( ( ) => {
+		$globalLoadingStore = activeLoadingState;
+
+		return ( ) => {
+			$globalLoadingStore = false;
+		};
+	} );
+
 	// ─── Handlers ─────────────────────────────────────────────────────────────────
 	function handleSearch( value: string ): void {
 		$searchStore = value;
@@ -279,14 +302,14 @@
 </svelte:head>
 
 <!-- ─── Hero Banner ───────────────────────────────────────────────────────────── -->
-<section class="relative overflow-hidden border-b border-brand/10 px-6 py-20 lg:py-24">
+<section class="relative overflow-hidden border-b border-brand/10 px-6 py-20 lg:py-6">
 	<!-- Dynamic Animated Background Elements -->
 	<div class="pointer-events-none absolute -top-32 -left-10 h-[500px] w-[500px] animate-pulse rounded-full bg-brand/15 blur-[100px] duration-10000"></div>
 	<div class="pointer-events-none absolute top-10 right-0 h-[400px] w-[400px] animate-pulse rounded-full bg-brand/10 blur-[80px] duration-7000" style="animation-delay: 2s;"></div>
 	<div class="pointer-events-none absolute bottom-0 left-1/2 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-linear-to-r from-brand/0 via-brand/10 to-brand/0 blur-3xl"></div>
 
-	<div class="relative mx-auto flex max-w-7xl flex-col items-center text-center px-6">
-		<span class="mb-5 inline-flex items-center gap-2 rounded-full border border-brand/20 bg-surface px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand backdrop-blur-md shadow-[0_0_15px_rgba(0,181,100,0.15)]">
+	<div class="relative mx-auto flex max-w-7xl flex-col items-center text-center px-6 space-y-2">
+		<span class="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-surface px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand backdrop-blur-md shadow-[0_0_15px_rgba(0,181,100,0.15)]">
 			<span class="relative flex h-2 w-2">
 				<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
 				<span class="relative inline-flex rounded-full h-2 w-2 bg-brand"></span>
@@ -294,15 +317,15 @@
 			Catálogo { new Date().getFullYear() }
 		</span>
 
-		<h1 class="font-display mx-auto max-w-4xl text-5xl font-extrabold tracking-tight text-text sm:text-6xl md:text-7xl">
+		<!-- <h1 class="font-display mx-auto max-w-4xl text-5xl font-extrabold tracking-tight text-text sm:text-6xl md:text-7xl">
 			Equipamiento Científico
 			<br />
 			<span class="bg-linear-to-r from-brand-muted via-brand to-brand-bright bg-clip-text text-transparent drop-shadow-sm">
 				de Precisión
 			</span>
-		</h1>
+		</h1> -->
 
-		<p class="mx-auto mt-6 max-w-2xl text-lg text-text-muted leading-relaxed font-medium">
+		<p class="mx-auto max-w-2xl text-md text-text-muted leading-relaxed font-medium">
 			Encuentra los insumos y equipos que tu laboratorio necesita. Calidad certificada para investigación y educación científica.
 		</p>
 	</div>
@@ -355,6 +378,24 @@
 				</select>
 			</div>
 		</div>
+
+		{#if ( $searchStore !== '' && isSearchSuggestion ) }
+			<div class="mb-8 overflow-hidden rounded-2xl border border-amber-500/30 bg-amber-500/5 p-5 text-sm text-text backdrop-blur-md shadow-[0_0_20px_rgba(245,158,11,0.1)] flex items-start gap-4 animate-fade-in">
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
+					<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<circle cx="12" cy="12" r="10"></circle>
+						<line x1="12" y1="8" x2="12" y2="12"></line>
+						<line x1="12" y1="16" x2="12.01" y2="16"></line>
+					</svg>
+				</div>
+				<div class="space-y-1 flex-1">
+					<p class="font-display text-base font-bold text-amber-400">No se encontraron resultados para "{ $searchStore }"</p>
+					<p class="text-xs text-text-muted leading-relaxed font-medium">
+						No hemos encontrado ninguna coincidencia exacta para lo que estás buscando en nuestro catálogo actual. Para ayudarte a encontrar lo que necesitas, te sugerimos los siguientes equipos y materiales científicos relacionados:
+					</p>
+				</div>
+			</div>
+		{/if}
 
 		<!-- Unified Product & Kit & Lab Grid -->
 		<ProductGrid

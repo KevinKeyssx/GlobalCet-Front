@@ -1,6 +1,8 @@
 <script lang="ts">
 	import './layout.css';
 	import { dev, browser } from '$app/environment';
+	import { page }         from '$app/state';
+	import { goto }         from '$app/navigation';
 
 	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
 	import { QueryClientProvider } from '@tanstack/svelte-query';
@@ -29,8 +31,12 @@
 	});
 
 
-    function handleSearch( value: string ): void {
+	function handleSearch( value: string ): void {
 		$searchStore = value;
+
+        if ( value && page.url.pathname !== '/catalog' ) {
+			goto( '/catalog' );
+		}
 	}
 </script>
 

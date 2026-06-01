@@ -1,30 +1,42 @@
 <script lang="ts">
-	// ─── Props ────────────────────────────────────────────────────────────────────
+	import { fade }               from 'svelte/transition';
+	import { navigating }         from '$app/stores';
+	import { globalLoadingStore } from '$lib/state/loading';
+	import NavigationMenu         from '$lib/components/shared/NavigationMenu.svelte';
+
+	const isLoading = $derived( !!$navigating || $globalLoadingStore );
+
 	interface Props {
 		search   : string;
 		darkMode : boolean;
-		onSearch : ( value: string ) => void;
-		onToggle : () => void;
+		onSearch : ( value : string ) => void;
+		onToggle : ( ) => void;
 	}
 
 	const { search, darkMode, onSearch, onToggle }: Props = $props();
 
 	let localSearch = $state( '' );
 
+    let timeoutId: number;
+
+
 	// Keep localSearch in sync if search prop changes from parent (e.g. clearAll)
-	$effect( () => {
+	$effect(() => {
 		localSearch = search;
-	} );
+	});
 
-	let timeoutId: any;
 
-	function handleInput( value: string ): void {
+	function handleInput( value : string ): void {
 		localSearch = value;
-		clearTimeout( timeoutId );
-		timeoutId = setTimeout( () => {
+
+        clearTimeout( timeoutId );
+
+        timeoutId = setTimeout( ( ) => {
 			onSearch( value );
 		}, 300 );
 	}
+
+
 </script>
 
 <!-- ─── Header Shell ─────────────────────────────────────────────────────────── -->
@@ -33,36 +45,36 @@
 	border-b border-brand/20
 	bg-surface/80 backdrop-blur-lg
 	transition-colors duration-300
+	relative
 ">
+	<!-- Infinite Marquee glowing loading bar -->
+	{#if ( isLoading ) }
+		<div class="loading-bar" transition:fade={ { duration : 250 } }></div>
+	{/if}
 	<div class="mx-auto flex max-w-7xl items-center gap-6 px-6 py-4">
 
 		<!-- Logo -->
-		<a href="/" id="header-logo" class="flex shrink-0 items-center gap-3 group">
-			<!-- <div class="
-				flex h-9 w-9 items-center justify-center rounded-lg
-				bg-brand/20 ring-1 ring-brand/40
-				transition-all duration-300 group-hover:bg-brand/35
-			">
-				<svg viewBox="0 0 24 24" class="h-5 w-5 fill-brand" xmlns="http://www.w3.org/2000/svg">
-					<path d="M7 2v2H5a2 2 0 0 0-2 2v1h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm-4 7v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3zm9 2a5 5 0 1 1 0 10A5 5 0 0 1 12 11zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
-				</svg>
-			</div> -->
-            <div class="flex items-center justify-center rounded-xl border border-brand/10 bg-white p-0.5 size-10 transition-all duration-300 hover:border-brand/30 hover:scale-105">
-							<img src="/logo/logo.avif" alt="GlobalCET" class="h-full w-full object-contain" />
-						</div> 
-			<!-- <div class="leading-tight">
-				<span class="block text-sm font-bold tracking-widest text-brand uppercase">Global</span>
-				<span class="block text-xs font-semibold tracking-wider text-text-muted uppercase">CET</span>
-			</div> -->
+		<a href="/" id="header-logo" class="relative shrink-0 w-24 h-12 group">
+			<div class="absolute -top-3 left-0 z-50 flex size-24 items-center justify-center transition-all duration-300 hover:scale-105">
+				<!-- Blur glow underneath the logo image for modern depth -->
+				<div class="absolute inset-4 rounded-full bg-brand/20 blur-md opacity-60"></div>
+
+				<!-- Transparent Logo image protruding past the header edge -->
+				<img src="/logo/logo.avif" alt="GlobalCET" class="relative z-10 h-full w-full object-contain" />
+			</div>
 		</a>
 
 		<!-- Search Bar -->
-		<div class="relative flex-1 max-w-xl">
+		<div class="
+			relative flex-1 max-w-xl
+			transition-all duration-500 ease-out
+			focus-within:max-w-2xl focus-within:scale-[ 1.015 ]
+		">
 			<svg class="
 				absolute left-3.5 top-1/2 -translate-y-1/2
 				h-4 w-4 text-text-muted
-				transition-colors duration-200
-				peer-focus:text-brand
+				transition-all duration-500 ease-out
+				peer-focus:text-brand peer-focus:scale-110 peer-focus:rotate-6
 			" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 				<circle cx="11" cy="11" r="8"/>
 				<path d="m21 21-4.35-4.35"/>
@@ -74,36 +86,23 @@
 				type        = "search"
 				placeholder = "Buscar productos, reactivos, equipos..."
 				value       = { localSearch }
-				oninput     = { ( e ) => handleInput(( e.target as HTMLInputElement ).value )}
+				oninput     = { ( e ) => handleInput( ( e.target as HTMLInputElement ).value ) }
 				class       = "
 					peer w-full rounded-xl
 					border border-brand/25 bg-input
 					py-2.5 pl-10 pr-4 text-sm text-text
 					placeholder:text-text-muted
 					outline-none ring-0
-					transition-all duration-300
-					focus:border-brand focus:ring-2 focus:ring-brand/25
+					transition-all duration-500 ease-out
+					focus:border-brand focus:bg-card focus:ring-4 focus:ring-brand/15
+					focus:shadow-[ 0_0_30px_rgba( 5,150,105,0.15 ) ]
 				"
 			/>
 		</div>
 
 		<!-- Nav links -->
-		<nav class="hidden items-center gap-1 md:flex">
-			<a
-				href="/filters"
-				id="nav-catalogo"
-				class="rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition-colors duration-200 hover:bg-brand/10 hover:text-brand"
-			>Catálogo</a>
-			<a
-				href="/nosotros"
-				id="nav-nosotros"
-				class="rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition-colors duration-200 hover:bg-brand/10 hover:text-brand"
-			>Nosotros</a>
-			<a
-				href="/contacto"
-				id="nav-contacto"
-				class="rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition-colors duration-200 hover:bg-brand/10 hover:text-brand"
-			>Contacto</a>
+		<nav class="hidden items-center gap-1.5 md:flex">
+			<NavigationMenu />
 		</nav>
 
 		<!-- Dark Mode Toggle -->
@@ -142,3 +141,27 @@
 
 	</div>
 </header>
+
+<style>
+	.loading-bar {
+		position         : absolute;
+		bottom           : -1px;
+		left             : 0;
+		right            : 0;
+		height           : 2px;
+		background       : linear-gradient( to right, var( --color-brand ), var( --color-brand-bright ), #00e676, var( --color-brand ) );
+		background-size  : 200% 100%;
+		animation        : loading-marquee 1.5s linear infinite;
+		box-shadow       : 0 1px 8px color-mix( in srgb, var( --color-brand ) 50%, transparent );
+		z-index          : 50;
+	}
+
+	@keyframes loading-marquee {
+		0% {
+			background-position : 200% 0;
+		}
+		100% {
+			background-position : -200% 0;
+		}
+	}
+</style>

@@ -229,13 +229,13 @@
 
 	<!-- ─── INTERACTIVE SECTOR SWITCHER ────────────────────────────────────────── -->
 	<section class="relative mx-auto max-w-5xl px-6 py-6 sm:px-8">
-		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2.5 rounded-3xl bg-card border border-brand/10 shadow-card">
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-1.5 rounded-3xl bg-card border border-brand/10 shadow-card">
 			<button
 				onclick={ ( ) => { activeMainTab = 'ejes'; } }
 				class="
-					relative py-5 px-6 rounded-2xl transition-all duration-300 font-display text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-3 group
+					relative py-2 px-6 rounded-2xl transition-all duration-300 font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-3 group
 					{ activeMainTab === 'ejes'
-						? 'bg-brand text-surface-dark shadow-md scale-[ 1.01 ]'
+						? 'bg-brand text-surface-dark shadow-md scale-105'
 						: 'text-text-muted hover:text-text hover:bg-brand/5'
 					}
 				"
@@ -249,9 +249,9 @@
 			<button
 				onclick={ ( ) => { activeMainTab = 'guide'; } }
 				class="
-					relative py-5 px-6 rounded-2xl transition-all duration-300 font-display text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-3 group
+					relative py-2 px-6 rounded-2xl transition-all duration-300 font-display text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-3 group
 					{ activeMainTab === 'guide'
-						? 'bg-brand text-surface-dark shadow-md scale-[ 1.01 ]'
+						? 'bg-brand text-surface-dark shadow-md scale-105'
 						: 'text-text-muted hover:text-text hover:bg-brand/5'
 					}
 				"
@@ -272,15 +272,15 @@
 	<section class="relative mx-auto max-w-7xl px-6 py-10 sm:px-8">
 		{#key activeMainTab}
 			<div in:fade={ { duration : 200 } } class="space-y-16">
-				
+
 				{#if activeMainTab === 'ejes'}
 					<!-- ─── EJES FUNDAMENTALES VIEW ─── -->
-					
+
 					<!-- Conceptual Map Image 1 (fundamentals1.avif) - Placed Centered and Enlarged -->
 					<div class="mx-auto max-w-4xl flex justify-center">
 						<div class="relative w-full flex items-center justify-center">
 							<div class="absolute inset-0 bg-brand/5 rounded-full blur-3xl animate-pulse"></div>
-							
+
 							<!-- Large Map Frame -->
 							<div class="group relative w-full overflow-hidden rounded-3xl bg-white  shadow-card transition-all duration-500 hover:border-brand/30 hover:scale-105 hover:shadow-card-hover animate-float">
 								<div class="overflow-hidden rounded-2xl bg-white flex items-center justify-center p-3">
@@ -446,7 +446,7 @@
 					<div class="mx-auto max-w-4xl flex justify-center mt-16">
 						<div class="relative w-full flex items-center justify-center">
 							<div class="absolute inset-0 bg-brand/5 rounded-full blur-3xl animate-pulse"></div>
-							
+
 							<!-- Large Map Frame -->
 							<div class="group relative w-full overflow-hidden rounded-3xl  bg-white shadow-card transition-all duration-500 hover:border-brand/30 hover:scale-105 hover:shadow-card-hover animate-float">
 								<div class="overflow-hidden rounded-2xl bg-white flex items-center justify-center p-3">

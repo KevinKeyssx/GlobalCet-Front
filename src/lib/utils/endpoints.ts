@@ -1,26 +1,29 @@
 export const INTERNAL_ENDPOINTS = {
 	PRODUCTS       : {
-        FILTERS         : 'products/filters',
+		FILTERS         : 'products/filters',
 		TECHNICAL_SPECS : 'products/get-technical-specs',
-        MATERIALS       : {
-            GET_ALL : 'products/materials/get-all',
-        },
-        CATEGORIES     : {
-            GET_ALL : 'products/categories/get-all',
-        },
+		GET_ONE         : 'products/get-one',
+		MATERIALS       : {
+			GET_ALL : 'products/materials/get-all',
+		},
+		CATEGORIES     : {
+			GET_ALL : 'products/categories/get-all',
+		},
 	},
-    KITS : {
-        FILTERS : 'kits/filters',
-        CATEGORIES : {
-            GET_ALL : 'kits/categories/get-all',
-        },
-    },
-    LABS : {
-        FILTERS : 'labs/filters',
-        CATEGORIES : {
-            GET_ALL : 'labs/categories/get-all',
-        },
-    },
+	KITS : {
+		FILTERS    : 'kits/filters',
+		GET_ONE    : 'kits/get-one',
+		CATEGORIES : {
+			GET_ALL : 'kits/categories/get-all',
+		},
+	},
+	LABS : {
+		FILTERS    : 'labs/filters',
+		GET_ONE    : 'labs/get-one',
+		CATEGORIES : {
+			GET_ALL : 'labs/categories/get-all',
+		},
+	},
 	GLOBAL_SEARCH  : {
 		BASE : 'global-search',
 	},

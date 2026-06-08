@@ -2,11 +2,15 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { page }        from '$app/state';
 
+    import { ChevronLeft, ChevronRight, Download, Share2 } from '@lucide/svelte';
+
 	import connectRequest, { isApiError } from '$lib/services/fetch.service';
 	import { INTERNAL_ENDPOINTS }         from '$lib/utils/endpoints';
+	import { getItemImages }              from '$lib/utils/image';
 	import ProductSpecs                   from './components/ProductSpecs.svelte';
 	import KitSpecs                       from './components/KitSpecs.svelte';
 	import LabSpecs                       from './components/LabSpecs.svelte';
+	import ShareDialog                    from '$lib/components/shared/ShareDialog.svelte';
 
 	// ─── Route Params ( Reactive Svelte 5 Kit ) ────────────────────────────────────
 	const itemType = $derived( page.params.item );
@@ -48,6 +52,7 @@
 
 	// ─── Description Read-More Toggle State ────────────────────────────────────────
 	let isDescriptionExpanded = $state( false );
+	let isShareOpen           = $state( false );
 
 	const descLength = $derived( item?.description ? item.description.length : 0 );
 	const shouldTruncate = $derived( descLength > 280 );
@@ -68,15 +73,14 @@
         return item.description;
 	});
 
-	const images = $derived.by( ( ) => {
-		if ( !item ) return [];
-		if ( item.files && item.files.length > 0 ) {
-			return item.files.map( ( f : any ) => f.url );
-		}
-		if ( item.image ) {
-			return [ item.image ];
-		}
-		return [ '/images/placeholder.avif' ];
+	const images = $derived( item ? getItemImages( item ) : [] );
+
+	const documents = $derived.by( () => {
+		if ( !item || !item.files ) return [];
+		return item.files.filter( ( f : any ) => {
+			const typeUpper = ( f.attachmentType || '' ).toUpperCase().trim();
+			return typeUpper.startsWith( 'DOCUMENT' );
+		} );
 	} );
 
 	// Reset index if item changes
@@ -213,9 +217,7 @@
 								hover:bg-black/60 hover:scale-105 cursor-pointer
 							"
 						>
-							<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-								<polyline points="15 18 9 12 15 6"></polyline>
-							</svg>
+                            <ChevronLeft class="size-5" />
 						</button>
 
 						<button
@@ -229,9 +231,7 @@
 								hover:bg-black/60 hover:scale-105 cursor-pointer
 							"
 						>
-							<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-								<polyline points="9 18 15 12 9 6"></polyline>
-							</svg>
+                            <ChevronRight class="size-5" />
 						</button>
 					{/if}
 				</div>
@@ -260,7 +260,7 @@
 			<section class="lg:col-span-6 flex flex-col gap-6">
 
 				<!-- Meta Type Badge -->
-				<div>
+				<div class="flex gap-4 justify-between">
 					<span class="
 						rounded-full px-3 py-1
 						text-[10px] font-black uppercase tracking-widest backdrop-blur-md
@@ -273,6 +273,19 @@
 					">
 						{ itemType === 'lab' ? 'Laboratorio Móvil' : itemType === 'kit' ? 'Kit Científico' : 'Producto Individual' }
 					</span>
+
+                    <button
+						onclick     = { () => isShareOpen = true }
+                        aria-label  = "Compartir este producto"
+						class       = "
+							flex h-7 items-center gap-1.5 rounded-full px-3 border border-brand/30 dark:border-brand/20 bg-brand/10 hover:bg-brand dark:hover:bg-brand
+							text-[10px] font-bold uppercase tracking-wider text-brand hover:text-surface-dark dark:text-brand-bright dark:hover:text-surface-dark
+							transition-all duration-300 hover:scale-[1.03] active:scale-95 cursor-pointer shadow-sm
+						"
+					>
+						<Share2 class="size-3.5" />
+						<span>Compartir</span>
+					</button>
 				</div>
 
 				<!-- Main Title Header -->
@@ -280,10 +293,35 @@
 					<h1 class="text-3xl font-extrabold font-display leading-tight text-text sm:text-4xl">
 						{ item.name }
 					</h1>
-					<div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-muted">
-						<span class="font-bold text-brand uppercase tracking-wider">{ categoryName }</span>
-						<span class="h-3 w-[ 1px ] bg-brand/25"></span>
-						<span class="font-mono">SKU: { item.sku }</span>
+					<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-x-4 gap-y-3 text-xs text-text-muted w-full">
+						<div class="flex items-center gap-4">
+							<span class="font-bold text-brand uppercase tracking-wider">{ categoryName }</span>
+							<span class="h-3 w-[ 1px ] bg-brand/25"></span>
+							<span class="font-mono">SKU: { item.sku }</span>
+						</div>
+
+						{#if documents.length > 0 }
+							<div class="flex flex-col gap-1.5 items-start sm:items-end w-full sm:w-auto">
+								{#each documents as doc, i ( doc.id ) }
+									<a
+										href        = { doc.url }
+										download    = ""
+										target      = "_blank"
+                                        title       = { doc.alt || ( "Archivo " + ( i + 1 ))}
+										class       = "
+											inline-flex items-center gap-1.5 rounded-md
+											bg-brand/10 border border-brand/20 px-2.5 py-1 text-[10px] font-bold text-brand
+											hover:bg-brand hover:text-surface-dark transition-all duration-300 w-full sm:w-auto
+										"
+									>
+										<Download class="size-3.5" />
+										<span class="truncate max-w-[300px] sm:max-w-[200px] md:max-w-[150px]">
+											{ doc.alt || ( "Archivo " + ( i + 1 ) ) }
+										</span>
+									</a>
+								{/each}
+							</div>
+						{/if}
 					</div>
 				</div>
 
@@ -319,3 +357,5 @@
         </div>
 	{/if}
 </main>
+
+<ShareDialog bind:isOpen={ isShareOpen } title={ item?.name } />

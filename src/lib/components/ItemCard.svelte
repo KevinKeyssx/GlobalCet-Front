@@ -4,7 +4,8 @@
 		GlobalSearchKit,
 		GlobalSearchMobileLab,
 	}                       from '$lib/types/search';
-    import type { Product } from '$lib/types/product';
+	import type { Product } from '$lib/types/product';
+	import { getItemImages } from '$lib/utils/image';
 
 	// ─── Interfaces ───────────────────────────────────────────────────────────────
 	export interface SubProduct {
@@ -95,15 +96,7 @@
 	} );
 
 	// Unified image URLs list
-	const images: Array< string > = $derived.by( ( ) => {
-		if ( 'files' in item && item.files && item.files.length > 0 ) {
-			return item.files.map( ( f ) => f.url );
-		}
-		if ( 'image' in item && item.image ) {
-			return [ item.image ];
-		}
-		return [ '/images/placeholder.avif' ];
-	} );
+	const images: Array< string > = $derived( getItemImages( item as any ) );
 
 	// ─── Carousel Navigation Methods ──────────────────────────────────────────────
 	function nextImage( e : Event ): void {

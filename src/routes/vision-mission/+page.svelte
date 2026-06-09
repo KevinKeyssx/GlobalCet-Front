@@ -45,31 +45,52 @@
 				<div class="relative w-full max-w-md aspect-square flex items-center justify-center">
 					<div class="absolute inset-0 bg-brand/5 rounded-full blur-3xl animate-pulse"></div>
 					
-					<!-- Decorative Scientific Orb Card -->
-					<div class="group relative overflow-hidden rounded-3xl border border-brand/15 bg-card p-8 shadow-md text-center backdrop-blur-md max-w-sm w-full">
-						<!-- Ambient Light Glow behind image -->
-						<div class="absolute inset-0 bg-linear-to-br from-brand/10 to-brand-bright/5 opacity-50"></div>
+					<!-- Premium Brand Center Card -->
+					<div class="group relative overflow-hidden rounded-[32px] border border-brand/25 dark:border-brand/15 bg-card/60 dark:bg-card/25 p-8 shadow-[0_20px_50px_rgba(5,150,105,0.08)] text-center backdrop-blur-xl max-w-sm w-full transition-all duration-500 hover:shadow-[0_24px_60px_rgba(5,150,105,0.15)] hover:border-brand-bright/40">
+						<!-- Soft ambient radial lights inside card -->
+						<div class="absolute -top-20 -left-20 h-40 w-40 rounded-full bg-brand/20 blur-3xl group-hover:bg-brand/35 transition-colors duration-500"></div>
+						<div class="absolute -bottom-20 -right-20 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl group-hover:bg-brand-bright/25 transition-colors duration-500"></div>
+						<div class="absolute inset-0 bg-linear-to-br from-brand/5 to-transparent opacity-65"></div>
 						
-						<div class="relative z-10 space-y-6">
-							<div class="inline-flex h-20 w-20 items-center justify-center rounded-full bg-brand/10 text-brand shadow-lg">
-								<svg class="h-10 w-10 animate-spin-slow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-									<circle cx="12" cy="12" r="10" />
-									<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-									<path d="M2 12h22" />
-								</svg>
+						<div class="relative z-10 space-y-2">
+							<!-- Logo container with ambient reflection -->
+							<div class="relative mx-auto flex size-48 items-center justify-center overflow-hidden group-hover:scale-105 group-hover:rotate-1 transition-all duration-300">
+								<img
+									src="/logo/logo2.avif"
+									alt="CET Chile Logo"
+									class="relative z-10 h-full w-full object-contain filter drop-shadow-[0_2px_8px_rgba(5,150,105,0.15)] dark:brightness-110"
+								/>
 							</div>
 							
-							<div class="space-y-2">
-								<h3 class="font-display text-lg font-bold text-text">Globalizando la Ciencia</h3>
-								<p class="text-xs text-text-muted leading-relaxed font-medium">
-									Comprometidos con el progreso tecnológico, social y educativo bajo el lema institucional <strong class="text-brand font-semibold">Ciencia con Conciencia</strong>.
+							<div class="space-y-2.5">
+								<h3 class="font-display text-xl font-extrabold tracking-tight text-text dark:text-white group-hover:text-brand-bright transition-colors duration-300">
+									Globalizando la Ciencia
+								</h3>
+								<p class="text-xs text-text-muted dark:text-[#6aad82] leading-relaxed font-semibold">
+									Comprometidos con el progreso tecnológico, social y educativo bajo el lema institucional <strong class="text-brand dark:text-brand-bright font-black uppercase tracking-wider">Ciencia con Conciencia</strong>.
 								</p>
 							</div>
 							
-							<div class="flex justify-center gap-2 pt-2 border-t border-brand/10">
-								<span class="rounded-md bg-brand/15 px-2.5 py-1 text-[ 9px ] font-black uppercase tracking-wider text-brand">Ciencia</span>
-								<span class="rounded-md bg-brand-bright/15 px-2.5 py-1 text-[ 9px ] font-black uppercase tracking-wider text-brand-bright">Educación</span>
-								<span class="rounded-md bg-emerald-500/15 px-2.5 py-1 text-[ 9px ] font-black uppercase tracking-wider text-emerald-400">Tecnología</span>
+							<!-- Capsules of Sci, Edu, Tech -->
+							<div class="flex justify-center gap-2 pt-4 border-t border-brand/10 dark:border-[#004d26]/30">
+								<span class="
+									rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-widest border transition-all duration-300 hover:scale-105 cursor-default
+									border-sky-400/30 bg-sky-400/10 text-sky-500 dark:text-sky-300 dark:border-sky-400/20
+								">
+									Ciencia
+								</span>
+								<span class="
+									rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-widest border transition-all duration-300 hover:scale-105 cursor-default
+									border-emerald-400/30 bg-emerald-400/10 text-emerald-500 dark:text-brand-bright dark:border-brand/20
+								">
+									Educación
+								</span>
+								<span class="
+									rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-widest border transition-all duration-300 hover:scale-105 cursor-default
+									border-indigo-400/30 bg-indigo-400/10 text-indigo-500 dark:text-indigo-300 dark:border-indigo-400/20
+								">
+									Tecnología
+								</span>
 							</div>
 						</div>
 					</div>
@@ -401,16 +422,4 @@
 		animation : float 6s ease-in-out infinite;
 	}
 
-	.animate-spin-slow {
-		animation : spin 15s linear infinite;
-	}
-
-	@keyframes spin {
-		from {
-			transform : rotate( 0deg );
-		}
-		to {
-			transform : rotate( 360deg );
-		}
-	}
 </style>

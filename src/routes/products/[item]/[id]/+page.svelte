@@ -54,8 +54,10 @@
 	let isDescriptionExpanded = $state( false );
 	let isShareOpen           = $state( false );
 
+    const maxLeghtDescription = 1500;
+
 	const descLength = $derived( item?.description ? item.description.length : 0 );
-	const shouldTruncate = $derived( descLength > 280 );
+	const shouldTruncate = $derived( descLength > maxLeghtDescription );
 
 	const displayedDescription = $derived.by( ( ) => {
 		if ( !item ) {
@@ -67,7 +69,7 @@
 		}
 
         if ( shouldTruncate && !isDescriptionExpanded ) {
-			return item.description.slice( 0, 260 ) + '...';
+			return item.description.slice( 0, maxLeghtDescription ) + '...';
 		}
 
         return item.description;
@@ -328,9 +330,9 @@
 				<!-- Educational Description Container -->
 				<div class="rounded-2xl border border-brand/10 bg-surface/50 p-6 shadow-card space-y-3">
 					<h4 class="text-[10px] font-black uppercase tracking-widest text-brand">Descripción del Recurso</h4>
-					<p class="text-sm leading-relaxed text-text-muted">
-						{ displayedDescription }
-					</p>
+					<div class="text-sm leading-relaxed text-text-muted description-content">
+						{@html displayedDescription }
+					</div>
 					{#if shouldTruncate }
 						<button
 							onclick = { ( ) => isDescriptionExpanded = !isDescriptionExpanded }
@@ -345,7 +347,7 @@
 		</div>
 
         <div class="space-y-2 mt-12">
-            <h4 class="text-[10px] font-black uppercase tracking-widest text-brand mb-4">Especificaciones Técnicas</h4>
+            <h4 class="text-xs font-black uppercase tracking-widest text-brand mb-4">Especificaciones Técnicas</h4>
 
             {#if itemType === 'product' }
                 <ProductSpecs product={ item } />
@@ -359,3 +361,64 @@
 </main>
 
 <ShareDialog bind:isOpen={ isShareOpen } title={ item?.name } />
+
+<style>
+	.description-content :global( ul ) {
+		list-style-type : disc;
+		padding-left    : 1.25rem;
+		margin-top      : 0.5rem;
+		margin-bottom   : 0.5rem;
+	}
+
+	.description-content :global( ol ) {
+		list-style-type : decimal;
+		padding-left    : 1.25rem;
+		margin-top      : 0.5rem;
+		margin-bottom   : 0.5rem;
+	}
+
+	.description-content :global( li ) {
+		margin-bottom : 0.25rem;
+	}
+
+	.description-content :global( p ) {
+		margin-bottom : 0.5rem;
+	}
+
+	.description-content :global( table ) {
+		width           : 100%;
+		border-collapse : collapse;
+		margin          : 1.25rem 0;
+	}
+
+	.description-content :global( th ),
+	.description-content :global( td ) {
+		border  : 1px solid rgba( 0, 230, 118, 0.2 );
+		padding : 0.625rem 0.875rem;
+	}
+
+	.description-content :global( th ) {
+		background-color : rgba( 0, 230, 118, 0.08 );
+		color            : #00b564;
+		font-weight      : 700;
+		text-align       : left;
+	}
+
+	:global( .dark ) .description-content :global( th ) {
+		color : #00e676;
+	}
+
+	.description-content :global( blockquote ) {
+		border-left      : 3px solid #00b564;
+		background-color : rgba( 0, 230, 118, 0.06 );
+		padding          : 0.75rem 1rem;
+		margin           : 1.25rem 0;
+		border-radius    : 0 0.5rem 0.5rem 0;
+		font-style       : italic;
+	}
+
+	:global( .dark ) .description-content :global( blockquote ) {
+		border-left      : 3px solid #00e676;
+		background-color : rgba( 0, 230, 118, 0.1 );
+	}
+</style>

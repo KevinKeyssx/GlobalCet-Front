@@ -18,6 +18,7 @@ export const GET: RequestHandler = async ( { url, fetch } ) => {
 	const params = new URLSearchParams( {
 		limitPerEntity : limitPerEntity,
 		suggestion     : suggestion,
+        includeFiles: 'true',
 	} );
 
 	if ( query ) {

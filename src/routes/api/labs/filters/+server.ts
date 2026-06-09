@@ -28,7 +28,7 @@ export const GET: RequestHandler = async ( { url, fetch } ) => {
 	const params = new URLSearchParams( {
 		page          : page,
 		size          : size,
-		includeImages : 'true',
+		includeFiles : 'true',
 	} );
 
 	categories.forEach( ( id ) => params.append( 'categories', id ) );

@@ -30,7 +30,7 @@
 	<div class="flex items-center gap-2">
 		<span class="text-lg">🧰</span>
 		<div class="flex flex-col">
-			<span class="text-[9px] font-black uppercase tracking-wider text-brand">Configuración Educativa</span>
+			<span class="text-xs font-black uppercase tracking-wider text-brand">Configuración Educativa</span>
 			<h5 class="text-sm font-bold text-text">Insumos y Reactivos Incluidos</h5>
 		</div>
 	</div>
@@ -53,10 +53,10 @@
 							{ kp.quantity }x
 						</span>
 						<div class="flex flex-col min-w-0">
-							<span class="truncate text-xs font-bold text-text group-hover/item:text-brand transition-colors duration-200">
+							<span class="truncate text-sm font-bold text-text group-hover/item:text-brand transition-colors duration-200">
 								{ kp.product.name }
 							</span>
-							<span class="text-[9px] font-mono text-text-muted mt-0.5">
+							<span class="text-xs font-mono text-text-muted mt-0.5">
 								SKU: { kp.product.sku }
 							</span>
 						</div>

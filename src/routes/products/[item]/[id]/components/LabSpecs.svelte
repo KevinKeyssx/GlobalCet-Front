@@ -90,7 +90,7 @@
 								<span class="truncate text-xs font-bold text-text group-hover/item:text-blue-400 transition-colors duration-200">
 									{ lk.kit.name }
 								</span>
-								<span class="text-[9px] font-mono text-text-muted mt-0.5">
+								<span class="text-xs font-mono text-text-muted mt-0.5">
 									SKU: { lk.kit.sku } ( Kit )
 								</span>
 							</div>
@@ -124,10 +124,10 @@
 								{ lp.quantity }x
 							</span>
 							<div class="flex flex-col min-w-0">
-								<span class="truncate text-xs font-bold text-text group-hover/item:text-brand transition-colors duration-200">
+								<span class="truncate text-sm font-bold text-text group-hover/item:text-brand transition-colors duration-200">
 									{ lp.product.name }
 								</span>
-								<span class="text-[9px] font-mono text-text-muted mt-0.5">
+								<span class="text-xs font-mono text-text-muted mt-0.5">
 									SKU: { lp.product.sku }
 								</span>
 							</div>

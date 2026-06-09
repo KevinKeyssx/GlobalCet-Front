@@ -44,10 +44,9 @@
 
 <!-- ─── Grid ──────────────────────────────────────────────────────────────────── -->
 <section class="flex-1 min-w-0">
-
 	{#if loading}
 		<!-- Skeleton Loading State -->
-		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
 			{#each { length: 6 } as _, i}
 				<div
 					id="skeleton-card-{ i }"
@@ -83,7 +82,7 @@
 
 	{:else}
 		<!-- Unified Grid with staggered appear animation -->
-		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+		<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
 			{#each unifiedItems as item, index ( item.data.id )}
 				<div
 					class="transition-all duration-300"

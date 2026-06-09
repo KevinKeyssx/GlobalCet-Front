@@ -57,6 +57,10 @@
 </svelte:head>
 
 <QueryClientProvider client={ data.queryClient }>
+    <div class="fixed pointer-events-none top-48 left-10 h-[500px] w-[500px] animate-pulse rounded-full bg-brand/15 blur-[100px] duration-10000"></div>
+	<div class="fixed pointer-events-none top-10 right-0 h-[400px] w-[400px] animate-pulse rounded-full bg-brand/10 blur-[80px] duration-7000" style="animation-delay: 2s;"></div>
+	<div class="fixed pointer-events-none bottom-40 left-1/2 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-linear-to-r from-brand/0 via-brand/10 to-brand/0 blur-3xl"></div>
+
 	<!-- ─── App Shell ─────────────────────────────────────────────────────────────── -->
 	<main class="min-h-screen bg-surface text-text transition-colors duration-300 font-sans">
 		<Header

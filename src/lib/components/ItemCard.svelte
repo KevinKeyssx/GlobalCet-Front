@@ -4,8 +4,9 @@
 		GlobalSearchKit,
 		GlobalSearchMobileLab,
 	}                       from '$lib/types/search';
-	import type { Product } from '$lib/types/product';
+	import type { Product }  from '$lib/types/product';
 	import { getItemImages } from '$lib/utils/image';
+	import { stripHtml }     from '$lib/utils/string';
 
 	// ─── Interfaces ───────────────────────────────────────────────────────────────
 	export interface SubProduct {
@@ -25,7 +26,7 @@
 
 	// ─── Derived: Unifying properties ─────────────────────────────────────────────
 	const name        = $derived( item.name );
-	const description = $derived( 'description' in item ? item.description : '' );
+	const description = $derived( 'description' in item ? stripHtml( item.description ) : '' );
 	const sku         = $derived( ( item as any ).sku || 'N/A' );
 
 	const categoryName = $derived.by( ( ) => {

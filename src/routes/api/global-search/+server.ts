@@ -12,24 +12,26 @@ export const GET: RequestHandler = async ( { url, fetch } ) => {
 	const query          = url.searchParams.get( 'query' ) || '';
 	const limitPerEntity = url.searchParams.get( 'limitPerEntity' ) || '10';
 	const suggestion     = url.searchParams.get( 'suggestion' ) || 'false';
-	const sortBy         = url.searchParams.get( 'sortBy' ) || '';
-	const sortOrder      = url.searchParams.get( 'sortOrder' ) || '';
+	const orderBy        = url.searchParams.get( 'orderBy' ) || url.searchParams.get( 'sortBy' ) || '';
+	const order          = url.searchParams.get( 'order' ) || url.searchParams.get( 'sortOrder' ) || '';
 
 	const params = new URLSearchParams( {
-		limitPerEntity,
-		suggestion,
-	});
+		limitPerEntity : limitPerEntity,
+		suggestion     : suggestion,
+	} );
 
 	if ( query ) {
 		params.set( 'query', query );
 	}
 
-    if ( sortBy ) {
-		params.set( 'sortBy', sortBy );
+	if ( orderBy ) {
+		params.set( 'orderBy', orderBy );
+		params.set( 'sortBy', orderBy );
 	}
 
-    if ( sortOrder ) {
-		params.set( 'sortOrder', sortOrder );
+	if ( order ) {
+		params.set( 'order', order );
+		params.set( 'sortOrder', order );
 	}
 
 	const response = await connectRequest<GlobalSearchResponse>( {

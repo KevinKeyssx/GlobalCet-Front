@@ -23,15 +23,25 @@ export const GET: RequestHandler = async ( { url, fetch } ) => {
 	const size          = url.searchParams.get( 'size' ) || '10';
 	const subcategories = url.searchParams.getAll( 'subcategories' );
 	const materials     = url.searchParams.getAll( 'materials' );
+	const orderBy       = url.searchParams.get( 'orderBy' ) || '';
+	const order         = url.searchParams.get( 'order' ) || '';
 
 	const params = new URLSearchParams( {
-		page,
-		size,
+		page          : page,
+		size          : size,
 		includeImages : 'true',
-	});
+	} );
 
-	subcategories.forEach(( id ) => params.append( 'subcategories', id ));
-	materials.forEach(( id ) => params.append( 'materials', id ));
+	subcategories.forEach( ( id ) => params.append( 'subcategories', id ) );
+	materials.forEach( ( id ) => params.append( 'materials', id ) );
+
+	if ( orderBy ) {
+		params.set( 'orderBy', orderBy );
+	}
+
+	if ( order ) {
+		params.set( 'order', order );
+	}
 
 	const response = await connectRequest<PaginatedProductsResponse>( {
 		endpoint   : `${ EXTERNAL_ENDPOINTS.PRODUCTS.BASE }?${ params.toString() }`,

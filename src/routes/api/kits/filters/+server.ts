@@ -22,14 +22,24 @@ export const GET: RequestHandler = async ( { url, fetch } ) => {
 	const page       = url.searchParams.get( 'page' ) || '1';
 	const size       = url.searchParams.get( 'size' ) || '10';
 	const categories = url.searchParams.getAll( 'categories' );
+	const orderBy    = url.searchParams.get( 'orderBy' ) || '';
+	const order      = url.searchParams.get( 'order' ) || '';
 
 	const params = new URLSearchParams( {
-		page,
-		size,
+		page          : page,
+		size          : size,
 		includeImages : 'true',
 	} );
 
 	categories.forEach( ( id ) => params.append( 'categories', id ) );
+
+	if ( orderBy ) {
+		params.set( 'orderBy', orderBy );
+	}
+
+	if ( order ) {
+		params.set( 'order', order );
+	}
 
 	const response = await connectRequest<PaginatedKitsResponse>( {
 		endpoint   : `${ EXTERNAL_ENDPOINTS.KITS.BASE }?${ params.toString() }`,

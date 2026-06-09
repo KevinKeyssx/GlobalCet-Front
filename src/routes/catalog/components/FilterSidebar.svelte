@@ -199,6 +199,7 @@
 
 <!-- Desktop Sidebar View (Hidden on mobile) -->
 <aside class="
+	relative z-10
 	hidden md:flex w-80 shrink-0 flex-col gap-3
 	rounded-2xl
 	border border-brand/20 dark:border-brand/20

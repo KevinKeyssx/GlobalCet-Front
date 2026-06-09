@@ -1,6 +1,13 @@
 <script lang="ts">
-	import { createQuery } from '@tanstack/svelte-query';
-	import { Pagination }  from 'bits-ui';
+	import { createQuery }          from '@tanstack/svelte-query';
+	import Pagination               from '$lib/components/shared/Pagination.svelte';
+	import SoftSelect               from '$lib/components/shared/SoftSelect.svelte';
+	import { untrack }              from 'svelte';
+	import {
+		ArrowUpAZ,
+		ArrowDownAZ,
+        TriangleAlert
+	}                               from '@lucide/svelte';
 
 	import type {
 		GlobalSearchResponse,
@@ -15,33 +22,216 @@
 	import ProductGrid              from '$lib/components/ProductGrid.svelte';
 	import { INTERNAL_ENDPOINTS }   from '$lib/utils/endpoints';
 	import { searchStore }          from '$lib/state/search';
+	import { page as appPage }      from '$app/state';
+	import { goto }                 from '$app/navigation';
 	import { globalLoadingStore }   from '$lib/state/loading';
+	import type { PaginationMeta }  from '$lib/types/pagination';
 	import FilterSidebar            from './components/FilterSidebar.svelte';
 
 	// ─── Constants ────────────────────────────────────────────────────────────────
 	const allTypes: ProductType[] = [ 'Producto', 'Kit', 'Laboratorio Móvil' ];
 
 
-	let selectedSubCategories = $state( new Set<string>() );
-	let selectedMaterials     = $state( new Set<string>() );
-	let selectedKitCategories = $state( new Set<string>() );
-	let selectedLabCategories = $state( new Set<string>() );
-	let activeTab             = $state( 'productos' );
-	let sortBy                = $state( 'relevance' );
+	// ─── URL Query Parsing Helper ──────────────────────────────────────────────────
+	function getSetFromParam( paramName: string ): Set<string> {
+		const vals: string[] = appPage.url.searchParams.getAll( paramName );
 
-	// ─── Pagination State (Svelte 5 Runes) ─────────────────────────────────────────
-	let page                  = $state( 1 );
+        if ( vals.length === 0 ) {
+			const singleVal: string | null = appPage.url.searchParams.get( paramName );
+
+            if ( !singleVal ) {
+				return new Set<string>();
+			}
+
+            return new Set<string>( singleVal.split( ',' ).filter( Boolean ) );
+		}
+
+        const items: string[] = [];
+
+        for ( const v of vals ) {
+			if ( v.includes( ',' ) ) {
+				items.push( ...v.split( ',' ).filter( Boolean ) );
+			} else if ( v ) {
+				items.push( v );
+			}
+		}
+
+        return new Set<string>( items );
+	}
+
+	let selectedSubCategories = $state( getSetFromParam( 'subcategories' ) );
+	let selectedMaterials     = $state( getSetFromParam( 'materials' ) );
+	let selectedKitCategories = $state( getSetFromParam( 'kitCategories' ) );
+	let selectedLabCategories = $state( getSetFromParam( 'labCategories' ) );
+	let activeTab             = $state( appPage.url.searchParams.get( 'tab' ) || 'productos' );
+	let sortBy                = $state( appPage.url.searchParams.get( 'sort' ) || 'relevance' );
+	let sortOrder             = $state( appPage.url.searchParams.get( 'order' ) || 'asc' );
+	let page                  = $state( Number( appPage.url.searchParams.get( 'page' ) ) || 1 );
 	let size                  = $state( 9 );
+	let isMounted             = $state( false );
+
+	const sortOptions = [
+		{
+			id   : 'name',
+			name : 'Nombre',
+		},
+		{
+			id   : 'createdAt',
+			name : 'Lo más nuevo',
+		},
+		{
+			id   : 'category',
+			name : 'Categoría',
+		},
+		{
+			id   : 'relevance',
+			name : 'Relevancia',
+		},
+	];
+
+	const backendSortField = $derived( ( sortBy === 'name' || sortBy === 'createdAt' ) ? sortBy : 'name' );
+	const backendSortOrder = $derived( ( sortBy === 'name' || sortBy === 'createdAt' ) ? sortOrder : 'asc' );
 
 
-    $effect( () => {
+	$effect( () => {
 		selectedSubCategories;
 		selectedMaterials;
 		selectedKitCategories;
 		selectedLabCategories;
 		activeTab;
-		if ( page !== 1 ) {
-			page = 1;
+
+		if ( isMounted ) {
+			if ( page !== 1 ) {
+				page = 1;
+			}
+		} else {
+			isMounted = true;
+		}
+	} );
+
+	// ─── Sync local state from URL parameters (on navigation / load) ──────────────
+	$effect( () => {
+		const searchParams = appPage.url.searchParams;
+
+		if ( !isMounted ) {
+			return;
+		}
+
+		untrack( () => {
+			// Sync tab
+			const tabParam = searchParams.get( 'tab' ) || 'productos';
+			if ( activeTab !== tabParam ) {
+				activeTab = tabParam;
+			}
+
+			// Sync sort
+			const sortParam = searchParams.get( 'sort' ) || 'relevance';
+			if ( sortBy !== sortParam ) {
+				sortBy = sortParam;
+			}
+
+			// Sync order
+			const orderParam = searchParams.get( 'order' ) || 'asc';
+			if ( sortOrder !== orderParam ) {
+				sortOrder = orderParam;
+			}
+
+			// Sync page
+			const pageParam = Number( searchParams.get( 'page' ) ) || 1;
+			if ( page !== pageParam ) {
+				page = pageParam;
+			}
+
+			// Sync subcategories
+			const subCats = getSetFromParam( 'subcategories' );
+			if ( Array.from( selectedSubCategories ).join( ',' ) !== Array.from( subCats ).join( ',' ) ) {
+				selectedSubCategories = subCats;
+			}
+
+			// Sync materials
+			const mats = getSetFromParam( 'materials' );
+			if ( Array.from( selectedMaterials ).join( ',' ) !== Array.from( mats ).join( ',' ) ) {
+				selectedMaterials = mats;
+			}
+
+			// Sync kitCategories
+			const kitCats = getSetFromParam( 'kitCategories' );
+			if ( Array.from( selectedKitCategories ).join( ',' ) !== Array.from( kitCats ).join( ',' ) ) {
+				selectedKitCategories = kitCats;
+			}
+
+			// Sync labCategories
+			const labCats = getSetFromParam( 'labCategories' );
+			if ( Array.from( selectedLabCategories ).join( ',' ) !== Array.from( labCats ).join( ',' ) ) {
+				selectedLabCategories = labCats;
+			}
+
+			// Sync query
+			const queryParam = searchParams.get( 'query' ) || '';
+			if ( $searchStore !== queryParam ) {
+				$searchStore = queryParam;
+			}
+		} );
+	} );
+
+	// ─── URL Search Params Synchronization Effect ─────────────────────────────────
+	$effect( () => {
+		const currentTab: string       = activeTab;
+		const currentSort: string      = sortBy;
+		const currentOrder: string     = sortOrder;
+		const currentPage: number      = page;
+		const subCats: Set<string>     = selectedSubCategories;
+		const mats: Set<string>        = selectedMaterials;
+		const kitCats: Set<string>     = selectedKitCategories;
+		const labCats: Set<string>     = selectedLabCategories;
+
+		const params: URLSearchParams = new URLSearchParams();
+
+		if ( currentTab !== 'productos' ) {
+			params.set( 'tab', currentTab );
+		}
+
+		if ( currentSort !== 'relevance' ) {
+			params.set( 'sort', currentSort );
+		}
+
+		if ( currentOrder !== 'asc' ) {
+			params.set( 'order', currentOrder );
+		}
+
+		if ( currentPage !== 1 ) {
+			params.set( 'page', currentPage.toString() );
+		}
+
+		if ( subCats.size > 0 ) {
+			params.set( 'subcategories', Array.from( subCats ).join( ',' ) );
+		}
+
+		if ( mats.size > 0 ) {
+			params.set( 'materials', Array.from( mats ).join( ',' ) );
+		}
+
+		if ( kitCats.size > 0 ) {
+			params.set( 'kitCategories', Array.from( kitCats ).join( ',' ) );
+		}
+
+		if ( labCats.size > 0 ) {
+			params.set( 'labCategories', Array.from( labCats ).join( ',' ) );
+		}
+
+		if ( $searchStore ) {
+			params.set( 'query', $searchStore );
+		}
+
+		const newQueryString: string = params.toString();
+		const currentQueryString: string = untrack( () => appPage.url.searchParams.toString() );
+
+		if ( newQueryString !== currentQueryString ) {
+			goto( `?${ newQueryString }`, {
+				replaceState	: true,
+				noScroll		: true,
+				keepFocus		: true,
+			} );
 		}
 	} );
 
@@ -50,15 +240,15 @@
 		queryKey : [ 'globalSearch', $searchStore ],
 		queryFn  : async () => {
 			const params = new URLSearchParams( {
-				query          : $searchStore,
-				limitPerEntity : '15',
-				suggestion     : 'true',
-			});
+				query			: $searchStore,
+				limitPerEntity	: '15',
+				suggestion		: 'true',
+			} );
 
 			const response = await connectRequest<GlobalSearchResponse>( {
-				endpoint   : `global-search?${ params.toString() }`,
-				isInternal : true,
-			});
+				endpoint	: `global-search?${ params.toString() }`,
+				isInternal	: true,
+			} );
 
 			if ( isApiError( response ) ) {
 				throw new Error( response.message );
@@ -75,17 +265,19 @@
 
 	// ─── Query: Fetch Products paginated and filtered from Backend ──────────────
 	const productsQuery = createQuery( () => ( {
-		queryKey : [ 'products', Array.from( selectedSubCategories ), Array.from( selectedMaterials ), page, size ],
+		queryKey : [ 'products', Array.from( selectedSubCategories ), Array.from( selectedMaterials ), page, size, backendSortField, backendSortOrder ],
 		queryFn  : async () => {
 			const params = new URLSearchParams( {
-				page : page.toString(),
-				size : size.toString(),
+				page    : page.toString(),
+				size    : size.toString(),
+				orderBy : backendSortField,
+				order   : backendSortOrder,
 			} );
 
 			selectedSubCategories.forEach( ( id ) => params.append( 'subcategories', id ) );
 			selectedMaterials.forEach( ( id ) => params.append( 'materials', id ) );
 
-			const response = await connectRequest<{ data : GlobalSearchProduct[]; meta : { total : number; page : number; size : number; totalPages : number } }>( {
+			const response = await connectRequest<PaginationMeta<GlobalSearchProduct[]>>( {
 				endpoint   : `${ INTERNAL_ENDPOINTS.PRODUCTS.FILTERS }?${ params.toString() }`,
 				isInternal : true,
 			} );
@@ -101,16 +293,18 @@
 
 	// ─── Query: Fetch Kits paginated and filtered from Backend ──────────────────
 	const kitsQuery = createQuery( () => ( {
-		queryKey : [ 'kits', Array.from( selectedKitCategories ), page, size ],
+		queryKey : [ 'kits', Array.from( selectedKitCategories ), page, size, backendSortField, backendSortOrder ],
 		queryFn  : async () => {
 			const params = new URLSearchParams( {
-				page : page.toString(),
-				size : size.toString(),
+				page    : page.toString(),
+				size    : size.toString(),
+				orderBy : backendSortField,
+				order   : backendSortOrder,
 			} );
 
 			selectedKitCategories.forEach( ( id ) => params.append( 'categories', id ) );
 
-			const response = await connectRequest<{ data : GlobalSearchKit[]; meta : { total : number; page : number; size : number; totalPages : number } }>( {
+			const response = await connectRequest<PaginationMeta<GlobalSearchKit[]>>( {
 				endpoint   : `${ INTERNAL_ENDPOINTS.KITS.FILTERS }?${ params.toString() }`,
 				isInternal : true,
 			} );
@@ -126,25 +320,27 @@
 
 	// ─── Query: Fetch Labs paginated and filtered from Backend ──────────────────
 	const labsQuery = createQuery( () => ( {
-		queryKey : [ 'labs', Array.from( selectedLabCategories ), page, size ],
+		queryKey : [ 'labs', Array.from( selectedLabCategories ), page, size, backendSortField, backendSortOrder ],
 		queryFn  : async () => {
-			const params = new URLSearchParams({
-				page : page.toString(),
-				size : size.toString(),
-			});
+			const params = new URLSearchParams( {
+				page    : page.toString(),
+				size    : size.toString(),
+				orderBy : backendSortField,
+				order   : backendSortOrder,
+			} );
 
 			selectedLabCategories.forEach( ( id ) => params.append( 'categories', id ) );
 
-			const response = await connectRequest<{ data : GlobalSearchMobileLab[]; meta : { total : number; page : number; size : number; totalPages : number } }>( {
+			const response = await connectRequest<PaginationMeta<GlobalSearchMobileLab[]>>( {
 				endpoint   : `${ INTERNAL_ENDPOINTS.LABS.FILTERS }?${ params.toString() }`,
 				isInternal : true,
-			});
+			} );
 
 			if ( isApiError( response ) ) {
 				throw new Error( response.message );
 			}
 
-			console.log('🚀 ~ response:', response)
+			console.log( '🚀 ~ response:', response )
 			return response;
 		},
 		enabled : activeTab === 'lab-movil' && $searchStore === '' && hasActiveLabFilters,
@@ -180,30 +376,42 @@
 	// ─── Derived: Local Sorting ──────────────────────────────────────────────────
 	const sortedProducts = $derived.by( () => {
 		const items = [ ...filteredProducts ];
+		const direction = sortOrder === 'asc' ? 1 : -1;
+
 		if ( sortBy === 'name' ) {
-			items.sort( ( a, b ) => a.name.localeCompare( b.name ) );
+			items.sort( ( a, b ) => direction * a.name.localeCompare( b.name ) );
+		} else if ( sortBy === 'createdAt' ) {
+			items.sort( ( a, b ) => direction * ( new Date( a.createdAt ).getTime() - new Date( b.createdAt ).getTime() ) );
 		} else if ( sortBy === 'category' ) {
-			items.sort( ( a, b ) => ( a.subcategory?.category?.name || '' ).localeCompare( b.subcategory?.category?.name || '' ) );
+			items.sort( ( a, b ) => direction * ( a.subcategory?.category?.name || '' ).localeCompare( b.subcategory?.category?.name || '' ) );
 		}
 		return items;
 	} );
 
 	const sortedKits = $derived.by( () => {
 		const items = [ ...filteredKits ];
+		const direction = sortOrder === 'asc' ? 1 : -1;
+
 		if ( sortBy === 'name' ) {
-			items.sort( ( a, b ) => a.name.localeCompare( b.name ) );
+			items.sort( ( a, b ) => direction * a.name.localeCompare( b.name ) );
+		} else if ( sortBy === 'createdAt' ) {
+			items.sort( ( a, b ) => direction * ( new Date( a.createdAt ).getTime() - new Date( b.createdAt ).getTime() ) );
 		} else if ( sortBy === 'category' ) {
-			items.sort( ( a, b ) => ( a.category?.name || '' ).localeCompare( b.category?.name || '' ) );
+			items.sort( ( a, b ) => direction * ( a.category?.name || '' ).localeCompare( b.category?.name || '' ) );
 		}
 		return items;
 	} );
 
 	const sortedLabs = $derived.by( () => {
 		const items = [ ...filteredLabs ];
+		const direction = sortOrder === 'asc' ? 1 : -1;
+
 		if ( sortBy === 'name' ) {
-			items.sort( ( a, b ) => a.name.localeCompare( b.name ) );
+			items.sort( ( a, b ) => direction * a.name.localeCompare( b.name ) );
+		} else if ( sortBy === 'createdAt' ) {
+			items.sort( ( a, b ) => direction * ( new Date( a.createdAt ).getTime() - new Date( b.createdAt ).getTime() ) );
 		} else if ( sortBy === 'category' ) {
-			items.sort( ( a, b ) => ( a.category?.name || '' ).localeCompare( b.category?.name || '' ) );
+			items.sort( ( a, b ) => direction * ( a.category?.name || '' ).localeCompare( b.category?.name || '' ) );
 		}
 		return items;
 	} );
@@ -246,18 +454,13 @@
 			)
 	);
 
-	$effect( ( ) => {
+	$effect( () => {
 		$globalLoadingStore = activeLoadingState;
 
-		return ( ) => {
+		return () => {
 			$globalLoadingStore = false;
 		};
 	} );
-
-	// ─── Handlers ─────────────────────────────────────────────────────────────────
-	function handleSearch( value: string ): void {
-		$searchStore = value;
-	}
 
 	// Reset page to 1 when filters are toggled to avoid paginating empty pages
 	function toggleSubCategory( id: string ): void {
@@ -271,6 +474,7 @@
 		page                  = 1;
 	}
 
+	// Reset page to 1 when filters are toggled to avoid paginating empty pages
 	function toggleMaterial( id: string ): void {
 		const next = new Set( selectedMaterials );
 		if ( next.has( id ) ) {
@@ -280,10 +484,6 @@
 		}
 		selectedMaterials = next;
 		page              = 1;
-	}
-
-	function toggleType( type: ProductType ): void {
-		// No-op or type selector logic if type pill clicked
 	}
 
 	function clearAll(): void {
@@ -303,11 +503,6 @@
 
 <!-- ─── Hero Banner ───────────────────────────────────────────────────────────── -->
 <section class="relative overflow-hidden border-b border-brand/10 px-6 py-20 lg:py-6">
-	<!-- Dynamic Animated Background Elements -->
-	<div class="pointer-events-none absolute -top-32 -left-10 h-[500px] w-[500px] animate-pulse rounded-full bg-brand/15 blur-[100px] duration-10000"></div>
-	<div class="pointer-events-none absolute top-10 right-0 h-[400px] w-[400px] animate-pulse rounded-full bg-brand/10 blur-[80px] duration-7000" style="animation-delay: 2s;"></div>
-	<div class="pointer-events-none absolute bottom-0 left-1/2 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-linear-to-r from-brand/0 via-brand/10 to-brand/0 blur-3xl"></div>
-
 	<div class="relative mx-auto flex max-w-7xl flex-col items-center text-center px-6 space-y-2">
 		<span class="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-surface px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand backdrop-blur-md shadow-[0_0_15px_rgba(0,181,100,0.15)]">
 			<span class="relative flex h-2 w-2">
@@ -317,14 +512,6 @@
 			Catálogo { new Date().getFullYear() }
 		</span>
 
-		<!-- <h1 class="font-display mx-auto max-w-4xl text-5xl font-extrabold tracking-tight text-text sm:text-6xl md:text-7xl">
-			Equipamiento Científico
-			<br />
-			<span class="bg-linear-to-r from-brand-muted via-brand to-brand-bright bg-clip-text text-transparent drop-shadow-sm">
-				de Precisión
-			</span>
-		</h1> -->
-
 		<p class="mx-auto max-w-2xl text-md text-text-muted leading-relaxed font-medium">
 			Encuentra los insumos y equipos que tu laboratorio necesita. Calidad certificada para investigación y educación científica.
 		</p>
@@ -332,7 +519,7 @@
 </section>
 
 <!-- ─── Main Content ──────────────────────────────────────────────────────────── -->
-<main class="mx-auto flex max-w-7xl gap-8 px-6 py-8">
+<main class="mx-auto flex max-w-7xl gap-8 px-6 pt-8 pb-56">
 	<!-- Sidebar -->
 	<FilterSidebar
 		types={ allTypes }
@@ -346,7 +533,7 @@
 		totalCount={ totalDisplayCount }
 		onSubCategoryToggle={ toggleSubCategory }
 		onMaterialToggle={ toggleMaterial }
-		onTypeToggle={ toggleType }
+		onTypeToggle={ () => {} }
 		onClearAll={ clearAll }
 	/>
 
@@ -362,33 +549,41 @@
 
 			<div class="flex items-center gap-2 text-xs text-text-muted">
 				<span class="hidden sm:inline">Ordenar por:</span>
-				<select
-					id="sort-select"
-					bind:value={ sortBy }
+				<div class="w-48">
+					<SoftSelect
+						options={ sortOptions }
+						bind:value={ sortBy }
+						placeholder="Ordenar por..."
+					/>
+				</div>
+
+				<button
+					type="button"
+					onclick={ () => sortOrder = sortOrder === 'asc' ? 'desc' : 'asc' }
 					class="
-						rounded-lg border border-brand/20 bg-input
-						px-3 py-1.5 text-xs text-text
-						outline-none transition-colors duration-200
-						focus:border-brand focus:ring-1 focus:ring-brand/25
+						flex h-9 w-9 items-center justify-center rounded-lg
+						border border-brand/20 dark:border-brand/10 bg-surface/40 hover:bg-surface/60
+						text-text transition-all duration-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)]
 					"
+					title={ sortOrder === 'asc' ? 'Orden Ascendente (A-Z)' : 'Orden Descendente (Z-A)' }
+					aria-label="Alternar dirección de orden"
 				>
-					<option value="relevance">Relevancia</option>
-					<option value="name">Nombre A–Z</option>
-					<option value="category">Categoría</option>
-				</select>
+					{#if sortOrder === 'asc'}
+						<ArrowUpAZ class="h-4 w-4 text-brand" />
+					{:else}
+						<ArrowDownAZ class="h-4 w-4 text-brand" />
+					{/if}
+				</button>
 			</div>
 		</div>
 
 		{#if ( $searchStore !== '' && isSearchSuggestion ) }
 			<div class="mb-8 overflow-hidden rounded-2xl border border-amber-500/30 bg-amber-500/5 p-5 text-sm text-text backdrop-blur-md shadow-[0_0_20px_rgba(245,158,11,0.1)] flex items-start gap-4 animate-fade-in">
 				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
-					<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<circle cx="12" cy="12" r="10"></circle>
-						<line x1="12" y1="8" x2="12" y2="12"></line>
-						<line x1="12" y1="16" x2="12.01" y2="16"></line>
-					</svg>
+					<TriangleAlert class="size-5" />
 				</div>
-				<div class="space-y-1 flex-1">
+
+                <div class="space-y-1 flex-1">
 					<p class="font-display text-base font-bold text-amber-400">No se encontraron resultados para "{ $searchStore }"</p>
 					<p class="text-xs text-text-muted leading-relaxed font-medium">
 						No hemos encontrado ninguna coincidencia exacta para lo que estás buscando en nuestro catálogo actual. Para ayudarte a encontrar lo que necesitas, te sugerimos los siguientes equipos y materiales científicos relacionados:
@@ -434,180 +629,27 @@
 
 		<!-- Interlocking Paginated Controls -->
 		{#if $searchStore === '' && activeTab === 'productos' && hasActiveProductFilters && productsQuery.data && productsQuery.data.meta.totalPages > 1}
-			<Pagination.Root
+			<Pagination
 				count={ productsQuery.data.meta.total }
 				perPage={ size }
 				bind:page={ page }
-			>
-				{#snippet children( { pages } )}
-					<div class="flex items-center justify-center gap-2 mt-8">
-						<Pagination.PrevButton
-							class="
-								inline-flex h-9 w-9 items-center justify-center rounded-xl
-								border border-brand/10 bg-surface/30 text-text
-								transition-all duration-300
-								hover:bg-brand/10 hover:text-brand
-								disabled:pointer-events-none disabled:opacity-40
-							"
-						>
-							<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-								<polyline points="15 18 9 12 15 6"></polyline>
-							</svg>
-						</Pagination.PrevButton>
-
-						{#each pages as p ( p.key )}
-							{#if p.type === 'ellipsis'}
-								<span class="inline-flex h-9 w-9 items-center justify-center text-xs font-bold text-text-muted">...</span>
-							{:else}
-								<Pagination.Page
-									page={ p }
-									class="
-										inline-flex h-9 w-9 items-center justify-center rounded-xl
-										border border-brand/10 bg-surface/30 text-xs font-bold text-text-muted
-										transition-all duration-300
-										hover:bg-brand/10 hover:text-brand
-										data-selected:bg-brand data-selected:text-surface-dark data-selected:border-brand data-selected:shadow-md
-									"
-								>
-									{ p.value }
-								</Pagination.Page>
-							{/if}
-						{/each}
-
-						<Pagination.NextButton
-							class="
-								inline-flex h-9 w-9 items-center justify-center rounded-xl
-								border border-brand/10 bg-surface/30 text-text
-								transition-all duration-300
-								hover:bg-brand/10 hover:text-brand
-								disabled:pointer-events-none disabled:opacity-40
-							"
-						>
-							<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-								<polyline points="9 18 15 12 9 6"></polyline>
-							</svg>
-						</Pagination.NextButton>
-					</div>
-				{/snippet}
-			</Pagination.Root>
+			/>
 		{/if}
 
 		{#if $searchStore === '' && activeTab === 'kits' && hasActiveKitFilters && kitsQuery.data && kitsQuery.data.meta.totalPages > 1}
-			<Pagination.Root
+			<Pagination
 				count={ kitsQuery.data.meta.total }
 				perPage={ size }
 				bind:page={ page }
-			>
-				{#snippet children( { pages } )}
-					<div class="flex items-center justify-center gap-2 mt-8">
-						<Pagination.PrevButton
-							class="
-								inline-flex h-9 w-9 items-center justify-center rounded-xl
-								border border-brand/10 bg-surface/30 text-text
-								transition-all duration-300
-								hover:bg-brand/10 hover:text-brand
-								disabled:pointer-events-none disabled:opacity-40
-							"
-						>
-							<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-								<polyline points="15 18 9 12 15 6"></polyline>
-							</svg>
-						</Pagination.PrevButton>
-
-						{#each pages as p ( p.key )}
-							{#if p.type === 'ellipsis'}
-								<span class="inline-flex h-9 w-9 items-center justify-center text-xs font-bold text-text-muted">...</span>
-							{:else}
-								<Pagination.Page
-									page={ p }
-									class="
-										inline-flex h-9 w-9 items-center justify-center rounded-xl
-										border border-brand/10 bg-surface/30 text-xs font-bold text-text-muted
-										transition-all duration-300
-										hover:bg-brand/10 hover:text-brand
-										data-selected:bg-brand data-selected:text-surface-dark data-selected:border-brand data-selected:shadow-md
-									"
-								>
-									{ p.value }
-								</Pagination.Page>
-							{/if}
-						{/each}
-
-						<Pagination.NextButton
-							class="
-								inline-flex h-9 w-9 items-center justify-center rounded-xl
-								border border-brand/10 bg-surface/30 text-text
-								transition-all duration-300
-								hover:bg-brand/10 hover:text-brand
-								disabled:pointer-events-none disabled:opacity-40
-							"
-						>
-							<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-								<polyline points="9 18 15 12 9 6"></polyline>
-							</svg>
-						</Pagination.NextButton>
-					</div>
-				{/snippet}
-			</Pagination.Root>
+			/>
 		{/if}
 
 		{#if $searchStore === '' && activeTab === 'lab-movil' && hasActiveLabFilters && labsQuery.data && labsQuery.data.meta.totalPages > 1}
-			<Pagination.Root
+			<Pagination
 				count={ labsQuery.data.meta.total }
 				perPage={ size }
 				bind:page={ page }
-			>
-				{#snippet children( { pages } )}
-					<div class="flex items-center justify-center gap-2 mt-8">
-						<Pagination.PrevButton
-							class="
-								inline-flex h-9 w-9 items-center justify-center rounded-xl
-								border border-brand/10 bg-surface/30 text-text
-								transition-all duration-300
-								hover:bg-brand/10 hover:text-brand
-								disabled:pointer-events-none disabled:opacity-40
-							"
-						>
-							<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-								<polyline points="15 18 9 12 15 6"></polyline>
-							</svg>
-						</Pagination.PrevButton>
-
-						{#each pages as p ( p.key )}
-							{#if p.type === 'ellipsis'}
-								<span class="inline-flex h-9 w-9 items-center justify-center text-xs font-bold text-text-muted">...</span>
-							{:else}
-								<Pagination.Page
-									page={ p }
-									class="
-										inline-flex h-9 w-9 items-center justify-center rounded-xl
-										border border-brand/10 bg-surface/30 text-xs font-bold text-text-muted
-										transition-all duration-300
-										hover:bg-brand/10 hover:text-brand
-										data-selected:bg-brand data-selected:text-surface-dark data-selected:border-brand data-selected:shadow-md
-									"
-								>
-									{ p.value }
-								</Pagination.Page>
-							{/if}
-						{/each}
-
-						<Pagination.NextButton
-							class="
-								inline-flex h-9 w-9 items-center justify-center rounded-xl
-								border border-brand/10 bg-surface/30 text-text
-								transition-all duration-300
-								hover:bg-brand/10 hover:text-brand
-								disabled:pointer-events-none disabled:opacity-40
-							"
-						>
-							<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-								<polyline points="9 18 15 12 9 6"></polyline>
-							</svg>
-						</Pagination.NextButton>
-					</div>
-				{/snippet}
-			</Pagination.Root>
+			/>
 		{/if}
 	</div>
 </main>

@@ -1,8 +1,4 @@
 <script lang="ts">
-	// ─── Svelte 5 - Commercial Terms Page ────────────────────────────────────────
-	// An elegant, responsive, and interactive portal designed to display CET Chile
-	// SpA's commercial terms. Divided in easy-to-read interactive tabs.
-
 	import { fade } from 'svelte/transition';
 
 	interface TermSection {

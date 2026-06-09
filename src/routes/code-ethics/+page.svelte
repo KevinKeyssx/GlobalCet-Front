@@ -1,9 +1,5 @@
 <script lang="ts">
-	// ─── Svelte 5 - Code of Ethics Page ──────────────────────────────────────────
-	// An elegant, modern, and responsive portal designed to display CET Chile SpA's
-	// ethical principles, using a layout aligned with the premium look of the site.
-
-	import { fade, slide } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 
 	interface LawDetail {
 		title       : string;

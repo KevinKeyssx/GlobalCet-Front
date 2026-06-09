@@ -1,8 +1,4 @@
 <script lang="ts">
-	// ─── Svelte 5 - Fundamentals Page ───────────────────────────────────────────
-	// An elegant, responsive, and interactive portal designed to display CET Chile
-	// SpA's fundamental ejes for science laboratory implementations.
-
 	import { fade } from 'svelte/transition';
 
 	interface FundamentSubPoint {

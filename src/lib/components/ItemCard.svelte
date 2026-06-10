@@ -1,12 +1,14 @@
 <script lang="ts">
-	import type {
+    import { ChevronLeft, ChevronRight } from '@lucide/svelte';
+
+    import type {
         GlobalSearchProduct,
 		GlobalSearchKit,
 		GlobalSearchMobileLab,
-	}                       from '$lib/types/search';
-	import type { Product }  from '$lib/types/product';
-	import { getItemImages } from '$lib/utils/image';
-	import { stripHtml }     from '$lib/utils/string';
+	}                           from '$lib/types/search';
+	import type { Product }     from '$lib/types/product';
+	import { getItemImages }    from '$lib/utils/image';
+	import { stripHtml }        from '$lib/utils/string';
 
 	// ─── Interfaces ───────────────────────────────────────────────────────────────
 	export interface SubProduct {
@@ -170,14 +172,12 @@
 				class      = "
 					absolute left-2.5 top-1/2 -translate-y-1/2 z-30
 					flex h-7.5 w-7.5 items-center justify-center rounded-full
-					bg-black/35 backdrop-blur-md text-white border border-white/10
+					bg-brand-dark/60 backdrop-blur-md text-white border border-white/10
 					opacity-0 group-hover:opacity-100 transition-all duration-300
-					hover:bg-black/60 hover:scale-105 cursor-pointer
+					hover:bg-brand-dark hover:scale-105 cursor-pointer
 				"
 			>
-				<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-					<polyline points="15 18 9 12 15 6"></polyline>
-				</svg>
+				<ChevronLeft size={16} />
 			</button>
 
 			<button
@@ -186,14 +186,12 @@
 				class      = "
 					absolute right-2.5 top-1/2 -translate-y-1/2 z-30
 					flex h-7.5 w-7.5 items-center justify-center rounded-full
-					bg-black/35 backdrop-blur-md text-white border border-white/10
+					bg-brand-dark/60 backdrop-blur-md text-white border border-white/10
 					opacity-0 group-hover:opacity-100 transition-all duration-300
-					hover:bg-black/60 hover:scale-105 cursor-pointer
+					hover:bg-brand-dark hover:scale-105 cursor-pointer
 				"
 			>
-				<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-					<polyline points="9 18 15 12 9 6"></polyline>
-				</svg>
+				<ChevronRight size={16} />
 			</button>
 
 			<!-- Tiny indicators dots at the bottom edge of image -->
@@ -217,7 +215,6 @@
 
 	<!-- Card Body Container -->
 	<div class="flex flex-1 flex-col gap-2 p-4">
-
 		<!-- Category and SKU Header -->
 		<div class="flex flex-col">
 			<span class="text-[10px] font-black uppercase tracking-widest text-brand/70 truncate">
@@ -249,15 +246,17 @@
 				<!-- Product specifications -->
 				<div class="grid grid-cols-2 gap-3.5">
 					<div class="space-y-0.5 min-w-0">
-						<span class="block text-[9px] font-black uppercase tracking-wider text-brand">Material</span>
-						<span class="block text-xs font-semibold text-text truncate">{ material }</span>
+                        <span class="block text-[9px] font-black uppercase tracking-wider text-brand">Material</span>
+
+                        <span class="block text-xs font-semibold text-text truncate">{ material }</span>
 					</div>
-					<div class="space-y-0.5 min-w-0">
+
+                    <div class="space-y-0.5 min-w-0">
 						<span class="block text-[9px] font-black uppercase tracking-wider text-brand">Subcategoría</span>
-						<span class="block text-xs font-semibold text-text truncate">{ subcategory }</span>
+
+                        <span class="block text-xs font-semibold text-text truncate">{ subcategory }</span>
 					</div>
 				</div>
-
 			{:else if itemType === 'kit' }
 				<!-- Kit specifications: Components list -->
 				<div class="space-y-2">
@@ -267,7 +266,8 @@
 							{#each components as kp }
 								<span class="inline-flex items-center gap-1 rounded-md bg-brand/5 border border-brand/10 px-2 py-0.5 text-[10px] font-bold text-text">
 									<strong class="text-brand-bright">{ kp.quantity }x</strong>
-									<span class="truncate max-w-[ 100px ]">{ kp.name }</span>
+
+                                    <span class="truncate max-w-[ 100px ]">{ kp.name }</span>
 								</span>
 							{/each}
 						</div>
@@ -286,25 +286,31 @@
 							<polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
 							<line x1="12" y1="22.08" x2="12" y2="12"></line>
 						</svg>
-						<span class="text-[10px] font-black uppercase tracking-wider text-brand">Dimensiones:</span>
-						<span class="text-xs font-semibold text-text truncate">{ dimensions }</span>
+
+                        <span class="text-[10px] font-black uppercase tracking-wider text-brand">Dimensiones:</span>
+
+                        <span class="text-xs font-semibold text-text truncate">{ dimensions }</span>
 					</div>
 
 					<!-- Equipment details list -->
 					<div class="space-y-1.5">
 						<span class="block text-[9px] font-black uppercase tracking-wider text-brand">Equipamiento Incluido</span>
-						{#if ( labKits.length > 0 || labProducts.length > 0 ) }
+
+                        {#if ( labKits.length > 0 || labProducts.length > 0 ) }
 							<div class="flex flex-wrap gap-1.5">
 								{#each labKits as lk }
 									<span class="inline-flex items-center gap-1 rounded-md bg-blue-500/5 border border-blue-500/15 px-2 py-0.5 text-[10px] font-bold text-text">
 										<strong class="text-blue-400">{ lk.quantity }x</strong>
-										<span class="truncate max-w-[ 90px ]">{ lk.name } (Kit)</span>
+
+                                        <span class="truncate max-w-[ 90px ]">{ lk.name } (Kit)</span>
 									</span>
 								{/each}
-								{#each labProducts as lp }
+
+                                {#each labProducts as lp }
 									<span class="inline-flex items-center gap-1 rounded-md bg-brand/5 border border-brand/10 px-2 py-0.5 text-[10px] font-bold text-text">
 										<strong class="text-brand-bright">{ lp.quantity }x</strong>
-										<span class="truncate max-w-[ 90px ]">{ lp.name }</span>
+
+                                        <span class="truncate max-w-[ 90px ]">{ lp.name }</span>
 									</span>
 								{/each}
 							</div>

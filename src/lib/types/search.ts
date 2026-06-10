@@ -96,8 +96,13 @@ export interface GlobalSearchMeta {
 }
 
 export interface GlobalSearchResponse {
-	products   : GlobalSearchProduct[];
-	kits       : GlobalSearchKit[];
-	mobileLabs : GlobalSearchMobileLab[];
-	meta       : GlobalSearchMeta;
+	products		: GlobalSearchProduct[];
+	kits			: GlobalSearchKit[];
+	mobileLabs		: GlobalSearchMobileLab[];
+	meta			: GlobalSearchMeta;
+	suggestions?	: {
+		products	: GlobalSearchProduct[];
+		kits		: GlobalSearchKit[];
+		mobileLabs	: GlobalSearchMobileLab[];
+	};
 }

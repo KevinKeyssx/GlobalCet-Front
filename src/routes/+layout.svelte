@@ -33,8 +33,8 @@
 	function handleSearch( value: string ): void {
 		$searchStore = value;
 
-        if ( value && page.url.pathname !== '/catalog' ) {
-			goto( '/catalog' );
+		if ( value && page.url.pathname !== '/catalog' ) {
+			goto( `/catalog?query=${ encodeURIComponent( value ) }` );
 		}
 	}
 </script>

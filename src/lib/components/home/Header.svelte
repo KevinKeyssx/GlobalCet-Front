@@ -2,12 +2,15 @@
 	import { fade }         from 'svelte/transition';
     import { navigating }   from '$app/state';
 
-    import { Moon, Search, Sun } from '@lucide/svelte';
+    import { Search } from '@lucide/svelte';
 
 	import { globalLoadingStore } from '$lib/state/loading';
 	import NavigationMenu         from '$lib/components/shared/NavigationMenu.svelte';
+	import ThemeToggle            from '$lib/components/shared/ThemeToggle.svelte';
+	import MenuBar                from './MenuBar.svelte';
 
-	const isLoading = $derived( !!navigating || $globalLoadingStore );
+
+    const isLoading = $derived( !!navigating || $globalLoadingStore );
 
 	interface Props {
 		search   : string;
@@ -16,12 +19,19 @@
 		onToggle : ( ) => void;
 	}
 
-	const { search, darkMode, onSearch, onToggle }: Props = $props();
 
-	let localSearch = $state( '' );
+    const {
+        search,
+        darkMode,
+        onSearch,
+        onToggle
+    }: Props = $props();
+
+
+    let localSearch = $state( '' );
+
 
     let timeoutId: number;
-
 
 	// Keep localSearch in sync if search prop changes from parent (e.g. clearAll)
 	$effect(() => {
@@ -38,8 +48,6 @@
 			onSearch( value );
 		}, 300 );
 	}
-
-
 </script>
 
 <!-- ─── Header Shell ─────────────────────────────────────────────────────────── -->
@@ -51,13 +59,13 @@
 ">
 	<!-- Infinite Marquee glowing loading bar -->
 	{#if ( isLoading ) }
-		<div class="loading-bar" transition:fade={ { duration : 250 } }></div>
+		<div class="loading-bar" transition:fade={{ duration : 250 }}></div>
 	{/if}
-	<div class="mx-auto flex max-w-7xl items-center gap-6 px-6 py-4">
 
+    <div class="mx-auto flex max-w-7xl items-center gap-4 sm:gap-6 px-6 py-4">
 		<!-- Logo -->
-		<a href="/" id="header-logo" class="relative shrink-0 w-24 h-12 group">
-			<div class="absolute -top-3 left-0 z-50 flex size-24 items-center justify-center transition-all duration-300 hover:scale-105">
+		<a href="/" id="header-logo" class="relative shrink-0 w-10 sm:w-14 md:w-18 lg:w-20 xl:w-24 h-12 group">
+			<div class="absolute -top-2 sm:-top-4.5 md:-top-3 -left-5 sm:-left-4 z-50 flex size-16 sm:size-20 md:size-24 lg:size-28 xl:size-32 items-center justify-center transition-all duration-300 hover:scale-105">
 				<!-- Blur glow underneath the logo image for modern depth -->
 				<div class="absolute inset-4 rounded-full bg-brand/20 blur-md opacity-60"></div>
 
@@ -70,7 +78,7 @@
 		<div class="
 			relative flex-1 max-w-xl
 			transition-all duration-500 ease-out
-			focus-within:max-w-2xl focus-within:scale-[ 1.015 ]
+			focus-within:max-w-2xl focus-within:scale-[1.015]
 		">
             <Search class="absolute left-3.5 top-1/2 -translate-y-1/2
 				size-4 text-text-muted
@@ -92,10 +100,12 @@
 					outline-none ring-0
 					transition-all duration-500 ease-out
 					focus:border-brand focus:bg-card focus:ring-4 focus:ring-brand/15
-					focus:shadow-[ 0_0_30px_rgba( 5,150,105,0.15 ) ]
+					focus:shadow-[0_0_30px_rgba( 5,150,105,0.15 )]
 				"
 			/>
 		</div>
+
+        <MenuBar { darkMode } { onToggle } />
 
 		<!-- Nav links -->
 		<nav class="hidden items-center gap-1.5 md:flex">
@@ -103,25 +113,7 @@
 		</nav>
 
 		<!-- Dark Mode Toggle -->
-		<button
-			id="dark-mode-toggle"
-			onclick={onToggle}
-			aria-label="Alternar modo oscuro"
-			class="
-				flex h-9 w-9 shrink-0 items-center justify-center rounded-lg
-				border border-brand/20 bg-brand/10
-				text-brand
-				transition-all duration-300
-				hover:bg-brand/25 hover:scale-105
-			"
-		>
-			{#if darkMode}
-                <Sun class="size-4.5" />
-			{:else}
-                <Moon class="size-4.5"/>
-			{/if}
-		</button>
-
+		<ThemeToggle { darkMode } { onToggle } className="hidden md:flex" />
 	</div>
 </header>
 
@@ -132,7 +124,7 @@
 		left             : 0;
 		right            : 0;
 		height           : 2px;
-		background       : linear-gradient( to right, var( --color-brand ), var( --color-brand-bright ), #00e676, var( --color-brand ) );
+		background       : linear-gradient( to right, var( --color-brand ), var( --color-brand-bright ), #00e676, var( --color-brand ));
 		background-size  : 200% 100%;
 		animation        : loading-marquee 1.5s linear infinite;
 		box-shadow       : 0 1px 8px color-mix( in srgb, var( --color-brand ) 50%, transparent );

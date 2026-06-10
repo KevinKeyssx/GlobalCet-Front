@@ -7,19 +7,21 @@
 	}
 
 	interface Props {
-		items     : Item[];
-		selected  : Set<string>;
-		isLoading : boolean;
-		isError   : boolean;
-		onRetry   : () => void;
+		items		: Item[];
+		selected	: Set<string>;
+		isLoading	: boolean;
+		isError		: boolean;
+		onRetry		: () => void;
+		maxHeight?	: string;
 	}
 
 	let {
-		items     = [],
-		selected  = $bindable( new Set<string>() ),
-		isLoading = false,
-		isError   = false,
+		items		= [],
+		selected	= $bindable( new Set<string>() ),
+		isLoading	= false,
+		isError		= false,
 		onRetry,
+		maxHeight	= 'max-h-72',
 	}: Props = $props();
 
 	// ─── Local State: Search Value ────────────────────────────────────────────────
@@ -85,7 +87,7 @@
 		</div>
 
 		<!-- Scrollable list of categories -->
-		<div class="flex flex-col gap-1.5 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+		<div class="flex flex-col gap-1.5 { maxHeight } overflow-y-auto pr-1 custom-scrollbar">
 			{#each filteredItems as item (item.id)}
 				{@const isChecked = selected.has( item.id )}
 				<button

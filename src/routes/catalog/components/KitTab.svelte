@@ -8,13 +8,15 @@
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
-		selected  : Set<string>;
-		isEnabled : boolean;
+		selected	: Set<string>;
+		isEnabled	: boolean;
+		maxHeight?	: string;
 	}
 
 	let {
-		selected  = $bindable( new Set<string>() ),
-		isEnabled = false,
+		selected	= $bindable( new Set<string>() ),
+		isEnabled	= false,
+		maxHeight,
 	}: Props = $props();
 
 	// ─── Query: Load kit categories ───────────────────────────────────────────────
@@ -46,4 +48,5 @@
 	isLoading={ isLoading }
 	isError={ isError }
 	onRetry={ () => kitCategoriesQuery.refetch() }
+	maxHeight={ maxHeight }
 />

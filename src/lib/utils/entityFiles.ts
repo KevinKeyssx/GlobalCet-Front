@@ -29,14 +29,18 @@ export interface MapEntityParams {
 }
 
 
-export const getMediaTypeFolder = ( type?: string ): string => {
-    const normalized = type?.toUpperCase().trim() ?? 'IMAGE';
+export const getMediaTypeFolder = ( type?: string, url?: string ): string => {
+	const normalized = type?.toUpperCase().trim() ?? 'IMAGE';
 
-    return {
-        VIDEO     : 'video',
-        DOCUMENT  : 'raw',
-        IMAGE     : 'image',
-    }[normalized] || 'image';
+	if ( normalized === 'DOCUMENTS' && url?.toLowerCase().endsWith( '.pdf' ) ) {
+		return 'image';
+	}
+
+	return {
+		VIDEO     : 'video',
+		DOCUMENTS : 'raw',
+		IMAGE     : 'image',
+	}[ normalized ] || 'image';
 };
 
 
@@ -45,7 +49,7 @@ export function mapAttachment({ file, entityId, subfolder }: MapFileParams ): Fi
 		return file;
 	}
 
-	const typeFolder = getMediaTypeFolder( file.attachmentType );
+	const typeFolder = getMediaTypeFolder( file.attachmentType, file.url );
 	const baseUrl    = ENV.FILE_MANAGER.URL.replace( '***', typeFolder );
 	const fileName   = file.url.split( '/' ).pop() || '';
 
@@ -70,14 +74,14 @@ export function mapEntityFiles<T extends EntityWithFiles>({
 	);
 
 	if ( filesMapped.length === 0 ) {
-		filesMapped.push( {
+		filesMapped.push({
 			id             : 'placeholder',
 			url            : placeholderUrl,
 			alt            : entity.name,
 			isMain         : true,
 			order          : 0,
 			attachmentType : 'IMAGE',
-		});
+		})
 	}
 
 	return {

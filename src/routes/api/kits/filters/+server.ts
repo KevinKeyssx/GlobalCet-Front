@@ -29,7 +29,7 @@ export const GET: RequestHandler = async ( { url, fetch } ) => {
 		page          : page,
 		size          : size,
 		includeFiles : 'true',
-	} );
+	});
 
 	categories.forEach( ( id ) => params.append( 'categories', id ) );
 

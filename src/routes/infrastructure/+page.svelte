@@ -90,10 +90,11 @@
 
 	<!-- ─── METRICS & CAPABILITIES SECTION ────────────────────────────────────── -->
 	<section class="relative mx-auto max-w-7xl px-6 py-12 sm:px-8 border-t border-brand/10 mt-16 animate-fade-in-up">
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+		<!-- <div class="grid grid-cols-1 gap-6 sm:grid-cols-3"> -->
+		<div class="flex justify-center">
 			
 			<!-- Metric 1 -->
-			<div class="group relative overflow-hidden rounded-2xl border border-brand/10 bg-card p-6 shadow-card transition-all duration-300 hover:border-brand/35">
+			<!-- <div class="group relative overflow-hidden rounded-2xl border border-brand/10 bg-card p-6 shadow-card transition-all duration-300 hover:border-brand/35">
 				<div class="relative z-10 space-y-2">
 					<span class="block text-3xl font-black text-brand tracking-tight">1,200+ m²</span>
 					<span class="block text-xs font-black uppercase tracking-wider text-text">Superficie Operativa</span>
@@ -103,7 +104,6 @@
 				</div>
 			</div>
 
-			<!-- Metric 2 -->
 			<div class="group relative overflow-hidden rounded-2xl border border-brand/10 bg-card p-6 shadow-card transition-all duration-300 hover:border-brand/35">
 				<div class="relative z-10 space-y-2">
 					<span class="block text-3xl font-black text-brand-bright tracking-tight">99.8%</span>
@@ -112,7 +112,7 @@
 						Procesos sistematizados de picking y empaque de alta seguridad para evitar roturas de material de vidrio.
 					</p>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Metric 3 -->
 			<div class="group relative overflow-hidden rounded-2xl border border-brand/10 bg-card p-6 shadow-card transition-all duration-300 hover:border-brand/35">

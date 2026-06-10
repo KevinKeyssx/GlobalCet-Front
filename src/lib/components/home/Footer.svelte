@@ -1,10 +1,14 @@
+<script>
+	import GitHubButton     from "../buttons/GitHubButton.svelte";
+	import PoweredButton    from "../buttons/PoweredButton.svelte";
+</script>
+
 <footer class="relative overflow-hidden border-t border-brand/10 bg-card/60 px-6 py-12 text-text-muted sm:px-12 backdrop-blur-md">
 	<!-- Decorative grid background background -->
 	<div class="pointer-events-none absolute inset-0 opacity-[0.02] bg-[radial-gradient(var(--color-brand)_1px,transparent_1px)] bg-size-[16px_16px]"></div>
 	<div class="pointer-events-none absolute -bottom-48 left-1/3 h-[400px] w-[400px] rounded-full bg-brand/5 blur-[100px]"></div>
 
 	<div class="relative mx-auto max-w-7xl grid grid-cols-1 gap-8 lg:grid-cols-12">
-		
 		<!-- ─── LEFT PORTION: 3-COLUMN STRUCTURED TEXT & LOGOS (lg:col-span-8) ───── -->
 		<div class="grid grid-cols-1 gap-8 sm:grid-cols-3 lg:col-span-8">
 			<!-- Sub-Col 1: Canales Directos & Redes -->
@@ -172,35 +176,35 @@
 		<!-- ─── RIGHT PORTION: BANNER & QR SCAN (lg:col-span-4) ──────────────────── -->
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1">
 			<!-- Differentiator Banner (Larger & Premium) -->
-			<div class="group relative overflow-hidden rounded-2xl border border-brand/10 bg-input/30 p-1.5 shadow-sm transition-all duration-500 hover:border-brand/20 hover:shadow-card-hover">
-				<div class="relative overflow-hidden rounded-xl bg-white ">
+			<div class="self-start group relative overflow-hidden rounded-2xl border border-brand/10 bg-input/30 p-1.5 shadow-sm transition-all duration-500 hover:border-brand/20 hover:shadow-card-hover">
+				<div class="relative overflow-hidden rounded-xl bg-white">
+                    <!-- src="/logo/global.avif" -->
 					<img
-						src="/logo/global.avif"
+						src="/code-ethics/gotin.avif"
 						alt="GlobalCET - Ciencia, Educación, Tecnología"
 						class="h-auto w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
 					/>
 				</div>
 
-                <div class="p-4 space-y-2">
+                <!-- <div class="p-4 space-y-2">
 					<h5 class="text-xs font-bold text-text tracking-wider uppercase">Ciencia Con Conciencia</h5>
 
                     <p class="text-xs leading-relaxed text-text-muted font-medium">
 						Sistemas integrados de alta pureza diseñados para mitigar el riesgo en investigación científica y docencia académica.
 					</p>
-				</div>
+				</div> -->
 			</div>
 
 			<!-- QR Code, Callout Direct & Layout Balance -->
-			<div class="flex flex-col gap-4">
-				<!-- Compact Somos Directos Callout -->
+			<!-- <div class="flex flex-col gap-4">
 				<div class="rounded-xl border border-brand/10 bg-input/40 p-4 transition-all duration-300">
 					<p class="text-xs font-black text-brand uppercase tracking-wider">¡Somos directos!</p>
 
                     <p class="text-xs text-text-muted mt-1 leading-relaxed font-semibold">¿Proyecta implementar su laboratorio? Llámenos directamente.</p>
-				</div>
+				</div> -->
 
 				<!-- QR Code (Larger QR representation) -->
-				<div class="flex items-center gap-4 rounded-xl border border-brand/10 bg-input/20 p-3">
+				<!-- <div class="flex items-center gap-4 rounded-xl border border-brand/10 bg-input/20 p-3">
 					<div class="shrink-0 overflow-hidden rounded-lg bg-white p-2 border border-brand/10 shadow-sm">
 						<img src="/logo/qr.avif" alt="Contacto WhatsApp QR" class="h-16 w-16 object-contain" />
 					</div>
@@ -210,18 +214,20 @@
 
                         <p class="text-xs leading-snug text-text-muted font-semibold">Enlace de comunicación rápida a soporte técnico y cotizaciones por WhatsApp.</p>
 					</div>
-				</div>
-			</div>
+				</div> -->
+			<!-- </div> -->
 
 		</div>
 	</div>
 
 	<!-- ─── Bottom copyright row ────────────────────────────────────────────────── -->
-	<div class="mx-auto max-w-7xl mt-12 pt-6 border-t border-brand/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-black tracking-widest text-slate-500 dark:text-slate-400 uppercase">
+	<div class="mx-auto max-w-7xl mt-6 pt-3 border-t border-brand/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-black tracking-widest text-slate-500 dark:text-slate-400 uppercase">
 		<p>© { new Date().getFullYear() } CET Chile SpA / GlobalCET. Todos los derechos reservados.</p>
 
-        <p class="flex items-center gap-1.5">
-            <span>Desarrollado por KevinKeyssx</span>
-		</p>
+        <div class="grid sm:flex items-center gap-4">
+            <GitHubButton />
+
+            <PoweredButton />
+        </div>
 	</div>
 </footer>

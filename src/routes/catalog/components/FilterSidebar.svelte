@@ -1,73 +1,47 @@
 <script lang="ts">
-	import { fade, fly } from 'svelte/transition';
-	import { browser }    from '$app/environment';
-	import { Tabs }       from 'bits-ui';
-	import { X, SlidersHorizontal } from '@lucide/svelte';
+	import { fade, fly }    from 'svelte/transition';
+	import { browser }      from '$app/environment';
 
-	import ProductTab           from './ProductTab.svelte';
-	import KitTab               from './KitTab.svelte';
-	import MobileLabTab         from './MobileLabTab.svelte';
-	import type { ProductType } from '$lib/types/product';
+    import { X, SlidersHorizontal } from '@lucide/svelte';
+
+	import ProductTab   from './ProductTab.svelte';
+	import KitTab       from './KitTab.svelte';
+	import MobileLabTab from './MobileLabTab.svelte';
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
-		selectedSubCategories  : Set<string>;
-		selectedMaterials      : Set<string>;
-		selectedKitCategories? : Set<string>;
-		selectedLabCategories? : Set<string>;
-		selectedTypes          : Set<ProductType>;
-		onSubCategoryToggle    : ( id: string ) => void;
-		onMaterialToggle       : ( id: string ) => void;
-		onTypeToggle           : ( type: ProductType ) => void;
-		onClearAll             : () => void;
-		filteredCount          : number;
-		totalCount             : number;
-		types                  : ProductType[];
-		activeTab?             : string;
+		selectedSubCategories	: Set<string>;
+		selectedMaterials		: Set<string>;
+		selectedKitCategories?	: Set<string>;
+		selectedLabCategories?	: Set<string>;
+		onClearAll				: () => void;
+		activeTab?				: string;
 	}
 
 	let {
-		selectedSubCategories = $bindable( new Set<string>() ),
-		selectedMaterials     = $bindable( new Set<string>() ),
-		selectedKitCategories = $bindable( new Set<string>() ),
-		selectedLabCategories = $bindable( new Set<string>() ),
-		selectedTypes,
-		onSubCategoryToggle,
-		onMaterialToggle,
-		onTypeToggle,
+		selectedSubCategories	= $bindable( new Set<string>() ),
+		selectedMaterials		= $bindable( new Set<string>() ),
+		selectedKitCategories	= $bindable( new Set<string>() ),
+		selectedLabCategories	= $bindable( new Set<string>() ),
 		onClearAll,
-		filteredCount,
-		totalCount,
-		types,
-		activeTab             = $bindable( 'productos' ),
+		activeTab				= $bindable( 'productos' ),
 	}: Props = $props();
 
 	// ─── Reactive States ──────────────────────────────────────────────────────────
 	let isDrawerOpen = $state( false );
 
 	// ─── Derived: Has active filters? ─────────────────────────────────────────────
-	const hasActiveFilters: boolean = $derived.by( (): boolean => {
-		if ( activeTab === 'productos' ) {
-			return selectedSubCategories.size > 0 || selectedMaterials.size > 0 || selectedTypes.size > 0;
-		}
-		if ( activeTab === 'kits' ) {
-			return selectedKitCategories.size > 0;
-		}
-		if ( activeTab === 'lab-movil' ) {
-			return selectedLabCategories.size > 0;
-		}
-		return false;
-	} );
+	const hasActiveFilters: boolean = $derived(
+		activeTab !== '' ||
+		selectedSubCategories.size > 0 ||
+		selectedMaterials.size > 0 ||
+		( selectedKitCategories?.size || 0 ) > 0 ||
+		( selectedLabCategories?.size || 0 ) > 0
+	);
 
 	// ─── Handlers ─────────────────────────────────────────────────────────────────
-	function handleClear(): void {
-		if ( activeTab === 'productos' ) {
-			onClearAll();
-		} else if ( activeTab === 'kits' ) {
-			selectedKitCategories = new Set<string>();
-		} else if ( activeTab === 'lab-movil' ) {
-			selectedLabCategories = new Set<string>();
-		}
+	function handleClear( ): void {
+		onClearAll( );
 	}
 
 	// ─── Transition Params ────────────────────────────────────────────────────────
@@ -89,7 +63,7 @@
 				document.body.style.overflow = originalOverflow;
 			};
 		}
-	} );
+	});
 </script>
 
 {#snippet filterContent( isMobile: boolean )}
@@ -138,62 +112,105 @@
 
 	<!-- Categories Section -->
 	<section class="flex flex-col gap-3">
-		<Tabs.Root bind:value={ activeTab } class="w-full flex flex-col gap-4">
-			<Tabs.List class="flex w-full items-center gap-1.5 rounded-xl bg-surface/50 border border-brand/5 p-1 backdrop-blur-md">
-				<Tabs.Trigger
-					value="productos"
-					class="
-						flex-1 flex items-center justify-center rounded-lg py-2 text-[10px] font-black uppercase tracking-wider transition-all duration-300
-						data-[state=active]:bg-brand data-[state=active]:text-surface-dark data-[state=active]:shadow-md
-						data-[state=inactive]:text-text-muted data-[state=inactive]:hover:bg-brand/5 data-[state=inactive]:hover:text-text
+		<div class="w-full flex flex-col gap-4">
+			<div class="flex w-full items-center gap-1.5 rounded-xl bg-surface/50 border border-brand/5 p-1 backdrop-blur-md">
+				<button
+					type    = "button"
+					onclick = { ( ) => activeTab = activeTab === 'productos' ? '' : 'productos' }
+					class   = "
+						flex-1 flex items-center justify-center rounded-lg py-2 text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer
+						{ activeTab === 'productos' ? 'bg-brand text-surface-dark shadow-md' : 'text-text-muted hover:bg-brand/5 hover:text-text' }
 					"
 				>
 					Productos
-				</Tabs.Trigger>
-				<Tabs.Trigger
-					value="kits"
-					class="
-						flex-1 flex items-center justify-center rounded-lg py-2 text-[10px] font-black uppercase tracking-wider transition-all duration-300
-						data-[state=active]:bg-brand data-[state=active]:text-surface-dark data-[state=active]:shadow-md
-						data-[state=inactive]:text-text-muted data-[state=inactive]:hover:bg-brand/5 data-[state=inactive]:hover:text-text
+				</button>
+
+                <button
+					type    = "button"
+					onclick = { ( ) => activeTab = activeTab === 'kits' ? '' : 'kits' }
+					class   = "
+						flex-1 flex items-center justify-center rounded-lg py-2 text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer
+						{ activeTab === 'kits' ? 'bg-brand text-surface-dark shadow-md' : 'text-text-muted hover:bg-brand/5 hover:text-text' }
 					"
 				>
 					Kits
-				</Tabs.Trigger>
-				<Tabs.Trigger
-					value="lab-movil"
-					class="
-						flex-1 flex items-center justify-center rounded-lg py-2 text-[10px] font-black uppercase tracking-wider transition-all duration-300
-						data-[state=active]:bg-brand data-[state=active]:text-surface-dark data-[state=active]:shadow-md
-						data-[state=inactive]:text-text-muted data-[state=inactive]:hover:bg-brand/5 data-[state=inactive]:hover:text-text
+				</button>
+
+                <button
+					type    = "button"
+					onclick = { ( ) => activeTab = activeTab === 'lab-movil' ? '' : 'lab-movil' }
+					class   = "
+						flex-1 flex items-center justify-center rounded-lg py-2 text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer
+						{ activeTab === 'lab-movil' ? 'bg-brand text-surface-dark shadow-md' : 'text-text-muted hover:bg-brand/5 hover:text-text' }
 					"
 				>
 					Lab. Móvil
-				</Tabs.Trigger>
-			</Tabs.List>
+				</button>
+			</div>
 
-			<Tabs.Content value="productos" class="w-full">
-				<ProductTab
-					bind:selectedSubCategories
-					bind:selectedMaterials
-					isEnabled={ activeTab === 'productos' }
-				/>
-			</Tabs.Content>
+			{#if ( activeTab === 'productos' ) }
+				<div class="w-full">
+					<ProductTab
+						bind:selectedSubCategories
+						bind:selectedMaterials
+						isEnabled={ true }
+					/>
+				</div>
+			{:else if ( activeTab === 'kits' ) }
+				<div class="w-full">
+					<KitTab
+						bind:selected={ selectedKitCategories }
+						isEnabled={ true }
+					/>
+				</div>
+			{:else if ( activeTab === 'lab-movil' ) }
+				<div class="w-full">
+					<MobileLabTab
+						bind:selected={ selectedLabCategories }
+						isEnabled={ true }
+					/>
+				</div>
+			{:else}
+				<div class="flex flex-col gap-6 w-full mt-2">
+					<!-- Productos -->
+					<div class="flex flex-col gap-2">
+						<h3 class="text-[10px] font-black uppercase tracking-wider text-brand">Productos</h3>
+						<ProductTab
+							bind:selectedSubCategories
+							bind:selectedMaterials
+							isEnabled={ true }
+							defaultExpanded={ false }
+						/>
+					</div>
 
-			<Tabs.Content value="kits" class="w-full">
-				<KitTab
-					bind:selected={ selectedKitCategories }
-					isEnabled={ activeTab === 'kits' }
-				/>
-			</Tabs.Content>
+					<!-- Divider -->
+					<div class="h-px w-full bg-linear-to-r from-transparent via-brand/10 to-transparent"></div>
 
-			<Tabs.Content value="lab-movil" class="w-full">
-				<MobileLabTab
-					bind:selected={ selectedLabCategories }
-					isEnabled={ activeTab === 'lab-movil' }
-				/>
-			</Tabs.Content>
-		</Tabs.Root>
+					<!-- Kits -->
+					<div class="flex flex-col gap-2">
+						<h3 class="text-[10px] font-black uppercase tracking-wider text-brand">Kits</h3>
+						<KitTab
+							bind:selected={ selectedKitCategories }
+							isEnabled={ true }
+							maxHeight="max-h-40"
+						/>
+					</div>
+
+					<!-- Divider -->
+					<div class="h-px w-full bg-linear-to-r from-transparent via-brand/10 to-transparent"></div>
+
+					<!-- Lab. Móvil -->
+					<div class="flex flex-col gap-2">
+						<h3 class="text-[10px] font-black uppercase tracking-wider text-brand">Lab. Móvil</h3>
+						<MobileLabTab
+							bind:selected={ selectedLabCategories }
+							isEnabled={ true }
+							maxHeight="max-h-40"
+						/>
+					</div>
+				</div>
+			{/if}
+		</div>
 	</section>
 {/snippet}
 

@@ -1,26 +1,37 @@
 <script lang="ts">
-	import { Accordion } from 'bits-ui';
 	import { slide }     from 'svelte/transition';
-	import { createQuery } from '@tanstack/svelte-query';
 
-	import Select from '$lib/components/shared/Select.svelte';
-	import connectRequest, { isApiError }   from '$lib/services/fetch.service';
-	import { INTERNAL_ENDPOINTS }           from '$lib/utils/endpoints';
-	import type { CategoryFilter }          from '$lib/types/category';
-	import type { Material }                from '$lib/types/material';
+    import { Accordion }    from 'bits-ui';
+	import { createQuery }  from '@tanstack/svelte-query';
+
+	import connectRequest, {
+        isApiError
+    }                               from '$lib/services/fetch.service';
+	import Select                   from '$lib/components/shared/Select.svelte';
+	import { INTERNAL_ENDPOINTS }   from '$lib/utils/endpoints';
+	import type { CategoryFilter }  from '$lib/types/category';
+	import type { Material }        from '$lib/types/material';
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
-		selectedSubCategories : Set<string>;
-		selectedMaterials     : Set<string>;
-		isEnabled             : boolean;
+		selectedSubCategories	: Set<string>;
+		selectedMaterials		: Set<string>;
+		isEnabled				: boolean;
+		defaultExpanded?		: boolean;
 	}
 
 	let {
-		selectedSubCategories = $bindable( new Set<string>() ),
-		selectedMaterials     = $bindable( new Set<string>() ),
+		selectedSubCategories	= $bindable( new Set<string>() ),
+		selectedMaterials		= $bindable( new Set<string>() ),
 		isEnabled,
+		defaultExpanded			= true,
 	}: Props = $props();
+
+	let accordionValue = $state<string[]>( [] );
+
+	$effect( () => {
+		accordionValue = defaultExpanded ? [ 'categories', 'materials' ] : [];
+	} );
 
 	// ─── Local State: Category Search ─────────────────────────────────────────────
 	let categorySearch = $state( '' );
@@ -123,8 +134,32 @@
 	</div>
 {:else}
 	<!-- Accordion Roots for Heading Containers -->
-	<Accordion.Root type="multiple" class="flex flex-col gap-4" value={ [ 'categories', 'materials' ] }>
-		<!-- Accordion Item: Categorías -->
+	<Accordion.Root type="multiple" class="flex flex-col gap-4" bind:value={ accordionValue }>
+    <!-- Accordion Item: Materiales -->
+		<Accordion.Item value="materials" class="border border-brand/10 dark:border-brand/5 rounded-xl bg-surface/30 transition-all duration-300 hover:border-brand/20">
+			<Accordion.Header class="flex">
+				<Accordion.Trigger class="group flex-1 flex items-center justify-between px-4 py-3 hover:bg-brand/5 transition-all text-left">
+					<div class="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-widest text-text">
+						<div class="h-1.5 w-1.5 rounded-full bg-brand shadow-[0_0_8px_var(--color-brand)]"></div>
+						Materiales
+					</div>
+					<!-- Chevron indicator -->
+					<svg class="h-4 w-4 text-text-muted transition-transform duration-300 group-data-[state=open]:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+						<polyline points="6 9 12 15 18 9"></polyline>
+					</svg>
+				</Accordion.Trigger>
+			</Accordion.Header>
+
+			<Accordion.Content class="px-4 pb-4 pt-2 border-t border-brand/5 bg-surface/10">
+				<Select
+					options={mappedMaterials}
+					bind:selected={selectedMaterials}
+					placeholder="Buscar materiales..."
+				/>
+			</Accordion.Content>
+		</Accordion.Item>
+
+        <!-- Accordion Item: Categorías -->
 		<Accordion.Item value="categories" class="border border-brand/10 dark:border-brand/5 rounded-xl bg-surface/30 transition-all duration-300 hover:border-brand/20">
 			<Accordion.Header class="flex">
 				<Accordion.Trigger class="group flex-1 flex items-center justify-between px-4 py-3 hover:bg-brand/5 transition-all text-left">
@@ -176,30 +211,6 @@
 						<p class="text-center text-[11px] text-text-muted py-2 italic">Sin resultados</p>
 					{/each}
 				{/if}
-			</Accordion.Content>
-		</Accordion.Item>
-
-		<!-- Accordion Item: Materiales -->
-		<Accordion.Item value="materials" class="border border-brand/10 dark:border-brand/5 rounded-xl bg-surface/30 transition-all duration-300 hover:border-brand/20">
-			<Accordion.Header class="flex">
-				<Accordion.Trigger class="group flex-1 flex items-center justify-between px-4 py-3 hover:bg-brand/5 transition-all text-left">
-					<div class="flex items-center gap-2.5 text-[10px] font-black uppercase tracking-widest text-text">
-						<div class="h-1.5 w-1.5 rounded-full bg-brand shadow-[0_0_8px_var(--color-brand)]"></div>
-						Materiales
-					</div>
-					<!-- Chevron indicator -->
-					<svg class="h-4 w-4 text-text-muted transition-transform duration-300 group-data-[state=open]:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-						<polyline points="6 9 12 15 18 9"></polyline>
-					</svg>
-				</Accordion.Trigger>
-			</Accordion.Header>
-
-			<Accordion.Content class="px-4 pb-4 pt-2 border-t border-brand/5 bg-surface/10">
-				<Select
-					options={mappedMaterials}
-					bind:selected={selectedMaterials}
-					placeholder="Buscar materiales..."
-				/>
 			</Accordion.Content>
 		</Accordion.Item>
 	</Accordion.Root>

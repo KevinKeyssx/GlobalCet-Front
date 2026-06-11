@@ -46,7 +46,7 @@
 				<div class="flex flex-wrap items-center gap-4">
 					<a
 						id="hero-cta-catalog"
-						href="/filters"
+						href="/catalog"
 						class="
 							rounded-xl bg-brand px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-surface-dark
 							shadow-card transition-all duration-300
@@ -131,7 +131,7 @@
 			</div>
 
 			<!-- Features Cards Grid -->
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 				<!-- Pillar 1: Equipos & Reactivos -->
 				<article class="
 					group relative flex flex-col justify-between overflow-hidden rounded-2xl
@@ -155,7 +155,7 @@
 						</div>
 					</div>
 					<div class="mt-8 border-t border-brand/5 pt-4">
-						<a href="/filters" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
+						<a href="/catalog?tab=productos" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
 							Ver Equipos
 							<svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
 								<polyline points="9 18 15 12 9 6"></polyline>
@@ -191,7 +191,7 @@
 					</div>
 
                     <div class="mt-8 border-t border-brand/5 pt-4">
-						<a href="/filters" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand-bright group-hover:underline">
+						<a href="/catalog?tab=kits" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand-bright group-hover:underline">
 							Ver Kits
 							<svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
 								<polyline points="9 18 15 12 9 6"></polyline>
@@ -226,7 +226,7 @@
 					</div>
 
                     <div class="mt-8 border-t border-brand/5 pt-4">
-						<a href="/filters" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
+						<a href="/catalog?tab=lab-movil" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
 							Ver Laboratorios
 
                             <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -261,7 +261,7 @@
 					</div>
 
                     <div class="mt-8 border-t border-brand/5 pt-4">
-						<a href="/filters" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
+						<a href="/catalog?labCategories=01KSDXKN292Y324D0XM197HN15" class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
 							Ver NodoLabs
 
                             <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -292,7 +292,7 @@
 				<div class="flex flex-col sm:flex-row gap-4 lg:col-span-5 lg:justify-end">
 					<a
 						id="cta-search-explore"
-						href="/filters"
+						href="/catalog"
 						class="
 							inline-flex items-center justify-center rounded-xl bg-brand px-6 py-4 text-xs font-black uppercase tracking-wider text-surface-dark
 							shadow-card transition-all duration-300
@@ -303,7 +303,7 @@
 					</a>
 					<a
 						id="cta-search-contact"
-						href="/contacto"
+						href="#app-footer"
 						class="
 							inline-flex items-center justify-center rounded-xl border border-brand/20 bg-surface/30 px-6 py-4 text-xs font-black uppercase tracking-wider text-brand
 							backdrop-blur-sm transition-all duration-300

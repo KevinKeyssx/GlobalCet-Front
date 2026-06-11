@@ -3,7 +3,7 @@
 	import PoweredButton    from "../buttons/PoweredButton.svelte";
 </script>
 
-<footer class="relative overflow-hidden border-t border-brand/10 bg-card/60 px-6 py-12 text-text-muted sm:px-12 backdrop-blur-md">
+<footer id="app-footer" class="relative overflow-hidden border-t border-brand/10 bg-card/60 px-6 py-12 text-text-muted sm:px-12 backdrop-blur-md">
 	<!-- Decorative grid background background -->
 	<div class="pointer-events-none absolute inset-0 opacity-[0.02] bg-[radial-gradient(var(--color-brand)_1px,transparent_1px)] bg-size-[16px_16px]"></div>
 	<div class="pointer-events-none absolute -bottom-48 left-1/3 h-[400px] w-[400px] rounded-full bg-brand/5 blur-[100px]"></div>

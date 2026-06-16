@@ -12,15 +12,22 @@ export function getItemImages( item : GetImageUrlsParams | null | undefined ): A
 	}
 
 	if ( item.files && item.files.length > 0 ) {
-		const filtered = item.files.filter( ( f : FileAttachment ) => {
+		const filtered = item.files.filter(( f : FileAttachment ) => {
 			const typeUpper = ( f.attachmentType || '' ).toUpperCase().trim();
 			return !typeUpper.startsWith( 'DOCUMENT' );
-		} );
+		});
 
 		if ( filtered.length > 0 ) {
-			return filtered.map( ( f : FileAttachment ) => {
+			const sorted = [ ...filtered ].sort(( a : FileAttachment, b : FileAttachment ) => {
+				if ( a.isMain && !b.isMain ) return -1;
+                if ( !a.isMain && b.isMain ) return 1;
+
+                return a.order - b.order;
+			});
+
+			return sorted.map(( f : FileAttachment ) => {
 				return f.url;
-			} );
+			});
 		}
 	}
 

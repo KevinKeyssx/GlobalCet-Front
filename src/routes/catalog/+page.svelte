@@ -348,8 +348,8 @@
 </script>
 
 <svelte:head>
-	<title>Catálogo de Productos - Kits - Laboratorios Móbiles | GlobalCET</title>
-	<meta name="description" content="Explora el catálogo de productos de bioquímica de GlobalCET: material de vidrio, reactivos, kits de laboratorio y sistemas completos." />
+	<title>Catálogo Científico | GlobalCET</title>
+	<meta name="description" content="Explora el catálogo de GlobalCET: reactivos de alta pureza, material de vidrio certificado de borosilicato, kits de laboratorio y laboratorios móviles en Chile." />
 </svelte:head>
 
 <!-- ─── Hero Banner ───────────────────────────────────────────────────────────── -->

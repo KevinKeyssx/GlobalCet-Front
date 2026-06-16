@@ -1,3 +1,10 @@
 # allow crawling everything by default
 User-agent: *
-Disallow:
+Allow: /
+
+# block private endpoints/apis
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+
+Sitemap: https://globalcet.cl/sitemap.xml

@@ -50,7 +50,7 @@ export function mapAttachment({ file, entityId, subfolder }: MapFileParams ): Fi
 	}
 
 	const typeFolder = getMediaTypeFolder( file.attachmentType, file.url );
-	const baseUrl    = ENV.FILE_MANAGER.URL.replace( '***', typeFolder );
+	const baseUrl    = `${ENV.FILE_MANAGER.URL.replace( '***', typeFolder )}${ENV.FILE_MANAGER.FOLDER}/`;
 	const fileName   = file.url.split( '/' ).pop() || '';
 
 	return {

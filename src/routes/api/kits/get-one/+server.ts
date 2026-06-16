@@ -15,21 +15,40 @@ export const GET: RequestHandler = async ( { url, fetch } ) => {
 		return json( { error : 'Missing kit ID' }, { status : 400 } );
 	}
 
-	const response = await connectRequest< GlobalSearchKit >( {
-		endpoint   : `${ EXTERNAL_ENDPOINTS.KITS.BASE }/${ id }?includeFiles=true&includeProducts=true`,
-		isInternal : false,
-		headers    : {
-			'x-secret' : ENV.INTERNAL_SECRET_KEY,
-		},
-		fetch,
-	} );
+	try {
+		const response = await connectRequest< GlobalSearchKit >( {
+			endpoint   : `${ EXTERNAL_ENDPOINTS.KITS.BASE }/${ id }?includeFiles=true&includeProducts=true`,
+			isInternal : false,
+			headers    : {
+				'x-secret' : ENV.INTERNAL_SECRET_KEY,
+			},
+			fetch,
+		} );
 
-	if ( isApiError( response ) ) {
-		return json( { error : response.message }, { status : response.status || 500 } );
+		if ( isApiError( response ) ) {
+			throw response;
+		}
+
+		// Reconstruct media attachments URLs using the entityFiles helper
+		const [ mappedKit ] = mapKits( [ response ] );
+
+		return json( mappedKit );
+	} catch ( error : any ) {
+		const status  = error.status || 500;
+		let message = 'Ocurrió un error inesperado al procesar la solicitud.';
+
+		if ( status === 404 ) {
+			message = 'El kit científico solicitado no existe o no está disponible.';
+		} else if ( status === 400 ) {
+			message = 'La solicitud del kit científico es inválida.';
+		}
+
+		return json(
+			{
+				error : message,
+				code  : error.code || `HTTP_${ status }`
+			},
+			{ status }
+		);
 	}
-
-	// Reconstruct media attachments URLs using the entityFiles helper
-	const [ mappedKit ] = mapKits( [ response ] );
-
-	return json( mappedKit );
 };

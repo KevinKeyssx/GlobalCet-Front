@@ -1,11 +1,28 @@
-<script lang="ts">
-	// ─── GlobalCET Home Page ──────────────────────────────────────────────────────
-	// An elegant, minimalist landing page with strong biochemistry aesthetics.
-</script>
-
 <svelte:head>
 	<title>GlobalCET | Ingeniería & Equipamiento Bioquímico de Precisión</title>
-	<meta name="description" content="Soluciones de vanguardia en bioquímica en Latinoamérica. Suministramos reactivos de alta pureza, material de vidrio certificado, kits de diagnóstico y laboratorios móviles autónomos de alta tecnología." />
+	<meta name="description" content="Suministro de reactivos de alta pureza, material de vidrio certificado y laboratorios móviles en Chile. Soluciones de vanguardia para educación y ciencia." />
+	<script type="application/ld+json">
+		{
+			"@context"    : "https://schema.org",
+			"@type"       : "Organization",
+			"name"        : "GlobalCET",
+			"url"         : "https://globalcet.cl",
+			"logo"        : "https://globalcet.cl/logo/logo2.avif",
+			"description" : "Reactivos de alta pureza, material de vidrio certificado de borosilicato, kits didácticos y laboratorios móviles para educación en Chile.",
+			"address"     : {
+				"@type"           : "PostalAddress",
+				"streetAddress"   : "Primera Transversal N° 6370",
+				"addressLocality" : "San Miguel",
+				"addressRegion"   : "Santiago",
+				"addressCountry"  : "CL"
+			},
+			"contactPoint" : {
+				"@type"       : "ContactPoint",
+				"telephone"   : "+56-9-9784-1809",
+				"contactType" : "ventas"
+			}
+		}
+	</script>
 </svelte:head>
 
 <main class="relative min-h-screen overflow-hidden">
@@ -23,22 +40,29 @@
 				<span class="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-surface px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand backdrop-blur-md shadow-card">
 					<span class="relative flex h-2 w-2">
 						<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
-						<span class="relative inline-flex rounded-full h-2 w-2 bg-brand"></span>
+
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-brand"></span>
 					</span>
-					Innovación Bioquímica
+
+                    Innovación Científica
 				</span>
 
 				<div class="space-y-4">
 					<h1 class="font-display text-4xl font-extrabold tracking-tight text-text sm:text-5xl md:text-6xl lg:text-7xl leading-tight">
 						Ciencia
-						<br />
-						<span class="bg-linear-to-r from-brand via-brand-bright to-emerald-400 bg-clip-text text-transparent drop-shadow-sm">
+
+                        <br />
+
+                        <span class="bg-linear-to-r from-brand via-brand-bright to-emerald-400 bg-clip-text text-transparent drop-shadow-sm">
 							Educación & Tecnología
 						</span>
 					</h1>
-					<p class="max-w-2xl text-base font-medium leading-relaxed text-text-muted sm:text-lg">
+
+                    <p class="max-w-2xl text-base font-medium leading-relaxed text-text-muted sm:text-lg">
 						<!-- En <strong class="text-text font-bold">GlobalCET</strong> proveemos soluciones bioquímicas integrales de alta pureza. Suministramos reactivos avanzados, material de vidrio certificado, kits de diagnóstico especializados y laboratorios móviles autónomos diseñados bajo estándares internacionales. -->
-                        Insumos, Material, instrumentos y equipos para sus laboratorios de ciencias, fisica, química y biologia, entregando soluciones prácticas, científicas con laboratorios móviles y nodolabs, estación descubrimiento móbil para la educación.
+                        <!-- Insumos, Material, instrumentos y equipos para sus laboratorios de ciencias, fisica, química y biologia, entregando soluciones prácticas, científicas con laboratorios móviles y nodolabs, estación descubrimiento móbil para la educación. -->
+                        Completo Equipamiento para sus laboratorios de ciencias: Física, Química, Biología. Con innovación en Laboratorios Móviles, Nodo Lab. Estación Descubrimiento Móvil, dirigidos a Educación Cientifica , Técnica.
+
 					</p>
 				</div>
 
@@ -55,7 +79,8 @@
 					>
 						Explorar Catálogo
 					</a>
-					<a
+
+                    <a
 						id="hero-cta-about"
 						href="#features"
 						class="
@@ -148,9 +173,9 @@
 							</svg>
 						</div>
 						<div class="space-y-2">
-							<h3 class="font-display text-xl font-bold text-text transition-colors duration-200 group-hover:text-brand">Equipos & Reactivos</h3>
+							<h3 class="font-display text-xl font-bold text-text transition-colors duration-200 group-hover:text-brand">Material & Reactivos</h3>
 							<p class="text-sm leading-relaxed text-text-muted">
-								Reactivos técnicos, PA, material de vidrio (Borosilicato 3.3). Instrumentos de medición y análisis, para sus laboratorios.
+								Material de vidrio (Borosilicato 3.3). Instrumentos de medición y análisis, Reactivos Técnicos y PA para sus laboratorios.
 							</p>
 						</div>
 					</div>
@@ -326,10 +351,10 @@
 					<div class="space-y-4">
 						<span class="text-xs font-black uppercase tracking-[0.25em] text-brand-bright">Calidad Sin Concesiones</span>
 						<h2 class="font-display text-3xl font-extrabold tracking-tight text-text sm:text-4xl">
-							El Estándar Científico de GlobalCET
+							El Estándar Científicos de GlobalCET
 						</h2>
 						<p class="text-base leading-relaxed text-text-muted">
-							En el mundo de la bioquímica, la precisión no es opcional. Un mínimo error de pureza en un reactivo o una desviación térmica en un contenedor puede alterar meses de investigación. En GlobalCET, mitigamos el riesgo científico.
+							En el mundo de la ciencia, la precisión no es opcional. Un mínimo error de pureza en un reactivo o una desviación térmica en un contenedor puede alterar meses de investigación. En GlobalCET, mitigamos el riesgo científico.
 						</p>
 					</div>
 
@@ -342,8 +367,8 @@
 								</svg>
 							</div>
 							<div class="space-y-1">
-								<h4 class="font-bold text-text text-sm">Control de Pureza Analítica</h4>
-								<p class="text-xs text-text-muted leading-relaxed">Cada lote de reactivos cuenta con certificación cromatográfica de espectrometría garantizada.</p>
+								<h4 class="font-bold text-text text-sm">Control de Pureza Análisis</h4>
+								<p class="text-xs text-text-muted leading-relaxed">CCada Lote de Reactivos cuenta con su Certificación.</p>
 							</div>
 						</div>
 

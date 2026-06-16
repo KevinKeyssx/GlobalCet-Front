@@ -18,9 +18,9 @@
 
                     <div class="space-y-2 text-sm font-semibold">
 						<!-- Tel -->
-						<a href="tel:+5699670021" class="flex items-center gap-2 text-text transition-colors duration-200 hover:text-brand-bright">
+						<a href="tel:+569697640021" class="flex items-center gap-2 text-text transition-colors duration-200 hover:text-brand-bright">
 							<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-phone"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" /></svg>
-							+56 9 9670021
+							+56 9 697640021
 						</a>
 
                         <!-- WSP 1 -->

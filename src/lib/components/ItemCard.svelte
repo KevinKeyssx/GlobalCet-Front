@@ -216,12 +216,12 @@
 	<!-- Card Body Container -->
 	<div class="flex flex-1 flex-col gap-2 p-4">
 		<!-- Category and SKU Header -->
-		<div class="flex flex-col">
-			<span class="text-[10px] font-black uppercase tracking-widest text-brand/70 truncate">
+		<div class="grid">
+			<span class="text-[11px] font-black uppercase tracking-widest text-brand/70 truncate">
 				{ categoryName }
 			</span>
 
-            <span class="text-[9px] font-mono text-text-muted mt-0.5">
+            <span class="text-[11px] font-mono text-text-muted">
 				SKU: { sku }
 			</span>
 		</div>

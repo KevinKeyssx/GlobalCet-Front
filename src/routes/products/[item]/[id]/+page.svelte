@@ -2,7 +2,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { page }        from '$app/state';
 
-    import { ChevronLeft, ChevronRight, Download, Share2 } from '@lucide/svelte';
+    import { ChevronLeft, ChevronRight, Download, Search, Share2 } from '@lucide/svelte';
 
 	import connectRequest, { isApiError } from '$lib/services/fetch.service';
 	import { INTERNAL_ENDPOINTS }         from '$lib/utils/endpoints';
@@ -15,6 +15,42 @@
 	// ─── Route Params ( Reactive Svelte 5 Kit ) ────────────────────────────────────
 	const itemType = $derived( page.params.item );
 	const itemId   = $derived( page.params.id );
+
+	const itemTypeLabel = $derived.by( ( ) => {
+		if ( itemType === 'product' ) {
+			return 'producto';
+		}
+
+		if ( itemType === 'kit' ) {
+			return 'kit científico';
+		}
+
+		if ( itemType === 'lab' ) {
+			return 'laboratorio móvil';
+		}
+
+		return 'recurso';
+	} );
+
+	const errorTitle = $derived.by( ( ) => {
+		if ( itemType === 'product' ) {
+			return 'Producto no disponible';
+		}
+
+		if ( itemType === 'kit' ) {
+			return 'Kit científico no disponible';
+		}
+
+		if ( itemType === 'lab' ) {
+			return 'Laboratorio móvil no disponible';
+		}
+
+		return 'Recurso no disponible';
+	} );
+
+	const errorMessage = $derived.by( ( ) => {
+		return `Este ${ itemTypeLabel } no existe o ya no está disponible en nuestro catálogo. Por favor, verifica la identificación o explora otras opciones disponibles.`;
+	} );
 
 	// ─── Query: Fetch Detail using server-side proxies ─────────────────────────────
 	const itemQuery = createQuery( ( ) => ( {
@@ -29,23 +65,32 @@
 				endpoint = INTERNAL_ENDPOINTS.LABS.GET_ONE;
 			}
 
-			const response = await connectRequest< any >( {
-				endpoint   : `${ endpoint }?id=${ itemId }`,
-				isInternal : true,
-			} );
+			try {
+				const response = await connectRequest< any >( {
+					endpoint   : `${ endpoint }?id=${ itemId }`,
+					isInternal : true,
+				} );
 
-			if ( isApiError( response ) ) {
-				throw new Error( response.message );
+				if ( isApiError( response ) ) {
+					const error : any = new Error( response.message );
+					error.status      = response.status;
+					throw error;
+				}
+
+				return response;
+			} catch ( err : any ) {
+				const error : any = new Error( err.message || 'Request failed' );
+				error.status      = err.status || 500;
+				throw error;
 			}
-
-			return response;
 		},
-		enabled : !!itemType && !!itemId,
+		enabled  : !!itemType && !!itemId,
 	} ) );
 
 	const item      = $derived( itemQuery.data );
 	const isLoading = $derived( itemQuery.isLoading );
 	const isError   = $derived( itemQuery.isError );
+	const queryErr  = $derived( itemQuery.error as any );
 
 	// ─── Reactivity: Large Carousel State ──────────────────────────────────────────
 	let activeIndex = $state( 0 );
@@ -110,11 +155,72 @@
 		}
 		return item.category?.name || ( itemType === 'kit' ? 'Kit Científico' : 'Laboratorio Móvil' );
 	} );
+
+	const seoTitle = $derived( item ? `${ item.name } | GlobalCET` : 'Detalle de Recurso | GlobalCET' );
+
+	const seoDescription = $derived.by( ( ) => {
+		if ( !item ) {
+			return 'Detalle de producto y equipamiento bioquímico en GlobalCET Chile. Reactivos, vidriería científica y laboratorios.';
+		}
+		const skuPart = item.sku ? ` SKU: ${ item.sku }.` : '';
+		const baseDesc = item.description || 'Detalle del recurso científico disponible en GlobalCET.';
+		const combined = `${ item.name }.${ skuPart } ${ baseDesc }`;
+
+		if ( combined.length > 155 ) {
+			return combined.slice( 0, 152 ) + '...';
+		}
+
+		return combined;
+	} );
+
+	const jsonLd = $derived.by( ( ) => {
+		if ( !item ) {
+			return '';
+		}
+
+		const imgUrl = images.length > 0 ? images[ 0 ] : 'https://globalcet.cl/logo/logo2.avif';
+
+		const schema = {
+			"@context"		: "https://schema.org",
+			"@type"			: "Product",
+			"name"			: item.name,
+			"image"			: imgUrl,
+			"description"	: item.description || 'Detalle del recurso científico disponible en GlobalCET.',
+			"sku"			: item.sku || item.id || '',
+			"brand"			: {
+				"@type"	: "Brand",
+				"name"	: "GlobalCET"
+			},
+			"offers"		: {
+				"@type"			: "Offer",
+				"priceCurrency"	: "CLP",
+				"availability"	: "https://schema.org/InStock",
+				"url"			: `https://globalcet.cl/products/${ itemType }/${ itemId }`
+			}
+		};
+
+		return JSON.stringify( schema );
+	} );
+
+	let smallImages = $state< Record< string, boolean > >( {} );
+
+	function handleImageLoad( event: Event, url: string ): void {
+		const img = event.currentTarget as HTMLImageElement;
+
+		if ( img.naturalWidth < 400 && img.naturalHeight < 400 ) {
+			smallImages[ url ] = true;
+		}
+	}
 </script>
 
-
 <svelte:head>
-	<title>{ item ? item.name : 'Detalle de Producto' } | CET Chile SpA</title>
+	<title>{ seoTitle }</title>
+	<meta name="description" content={ seoDescription } />
+	{#if jsonLd }
+		<script type="application/ld+json">
+			{@html jsonLd }
+		</script>
+	{/if}
 </svelte:head>
 
 <!-- ─── Detail View Shell ────────────────────────────────────────────────────────── -->
@@ -165,24 +271,70 @@
 		</div>
 
 	{:else if isError || !item }
-		<!-- Elegant Error Recovery State -->
-		<div class="flex flex-col items-center justify-center gap-4 py-24 text-center">
-			<span class="text-4xl">⚠️</span>
-			<h1 class="text-xl font-bold text-text">Error al cargar la ficha técnica</h1>
-			<p class="max-w-md text-sm text-text-muted">
-				No pudimos recuperar la información molecular de este elemento. Por favor, verifica el ID o intenta de nuevo más tarde.
-			</p>
-			<a
-				href  = "/catalog"
-				class = "
-					mt-4 rounded-xl bg-brand/10 border border-brand/20 px-6 py-3
-					text-xs font-black uppercase tracking-wider text-brand
-					hover:bg-brand hover:text-surface-dark transition-all duration-300
-				"
-			>
-				Volver al Catálogo
-			</a>
-		</div>
+		{#if queryErr?.status === 404 }
+			<!-- Premium 404 Specific Page -->
+			<div class="flex flex-col items-center justify-center gap-6 py-24 text-center max-w-xl mx-auto">
+				<div class="relative flex items-center justify-center w-24 h-24 rounded-full bg-brand/5 border border-brand/10 shadow-[ 0_0_20px_rgba(0,230,118,0.05) ] animate-pulse mb-2">
+					<Search class="size-10 text-brand-bright" />
+					<div class="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-surface-dark border border-brand/20 text-[ 10px ] font-black text-brand">
+						404
+					</div>
+				</div>
+
+				<div class="space-y-2">
+					<h1 class="text-2xl font-black font-display tracking-tight text-text sm:text-3xl">
+						{ errorTitle }
+					</h1>
+					<p class="text-sm leading-relaxed text-text-muted">
+						{ errorMessage }
+					</p>
+				</div>
+
+				<div class="flex flex-col sm:flex-row gap-3 mt-4 w-full justify-center">
+					<a
+						href  = "/catalog"
+						class = "
+							rounded-xl bg-brand text-surface-dark px-6 py-3
+							text-xs font-black uppercase tracking-wider text-center
+							hover:bg-brand-bright hover:scale-[ 1.03 ] active:scale-95
+							transition-all duration-300 shadow-md shadow-brand/10 cursor-pointer
+						"
+					>
+						Explorar Catálogo
+					</a>
+					<a
+						href  = "/"
+						class = "
+							rounded-xl bg-brand/10 border border-brand/25 text-brand px-6 py-3
+							text-xs font-black uppercase tracking-wider text-center
+							hover:bg-brand hover:text-surface-dark hover:scale-[ 1.03 ] active:scale-95
+							transition-all duration-300 cursor-pointer
+						"
+					>
+						Ir al Inicio
+					</a>
+				</div>
+			</div>
+		{ :else }
+			<!-- Elegant Error Recovery State -->
+			<div class="flex flex-col items-center justify-center gap-4 py-24 text-center">
+				<span class="text-4xl">⚠️</span>
+				<h1 class="text-xl font-bold text-text">Error al cargar la ficha técnica</h1>
+				<p class="max-w-md text-sm text-text-muted">
+					No pudimos recuperar la información molecular de este elemento. Por favor, verifica el ID o intenta de nuevo más tarde.
+				</p>
+				<a
+					href  = "/catalog"
+					class = "
+						mt-4 rounded-xl bg-brand/10 border border-brand/20 px-6 py-3
+						text-xs font-black uppercase tracking-wider text-brand
+						hover:bg-brand hover:text-surface-dark transition-all duration-300
+					"
+				>
+					Volver al Catálogo
+				</a>
+			</div>
+		{ /if }
 
 	{:else}
 		<!-- Unified Detail Page Grid -->
@@ -199,9 +351,13 @@
 					>
 						{#each images as imgUrl ( imgUrl ) }
 							<img
-								src   = { imgUrl }
-								alt   = { item.name }
-								class = "h-full w-full shrink-0 object-cover"
+								src     = { imgUrl }
+								alt     = { item.name }
+								onload  = { ( e ) => handleImageLoad( e, imgUrl ) }
+								class   = "
+									h-full w-full shrink-0 transition-all duration-300
+									{ smallImages[ imgUrl ] ? 'object-scale-down p-8' : 'object-cover' }
+								"
 							/>
 						{/each}
 					</div>

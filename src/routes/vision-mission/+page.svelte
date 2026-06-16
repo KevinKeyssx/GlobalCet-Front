@@ -231,7 +231,6 @@
 	<!-- ─── FOUNDATION & HISTORY REVIEW SECTION ────────────────────────────────── -->
 	<section class="relative mx-auto max-w-7xl px-6 py-16 sm:px-8 border-t border-brand/10 mt-12">
 		<div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16 lg:items-center">
-			
 			<!-- History details text -->
 			<div class="space-y-6 lg:col-span-7 animate-fade-in-left">
 				<span class="text-xs font-black uppercase tracking-[ 0.25em ] text-brand">Nuestra Historia</span>
@@ -287,15 +286,15 @@
 							</div>
 
 							<div class="space-y-3">
-								<span class="inline-block rounded-md bg-brand/10 text-brand px-2.5 py-1 text-[ 9px ] font-black uppercase tracking-widest border border-brand/20">
+								<span class="inline-block rounded-md bg-brand/10 text-brand px-2.5 py-1 text-[9px] font-black uppercase tracking-widest border border-brand/20">
 									Fundadores del Proyecto
 								</span>
 								<h3 class="font-display text-xl font-extrabold text-text">
 									Lorena Vivian García
 								</h3>
-								<p class="text-xs text-brand-bright font-black uppercase tracking-widest">
+								<!-- <p class="text-xs text-brand-bright font-black uppercase tracking-widest">
 									Directora Fundadora CET Chile
-								</p>
+								</p> -->
 								<p class="text-xs text-text-muted leading-relaxed font-medium">
 									Líder en gestión empresarial científica con visión estratégica enfocada en la eficiencia de procesos operativos y la integración de equipos de alto desempeño en el área de la ciencia.
 								</p>

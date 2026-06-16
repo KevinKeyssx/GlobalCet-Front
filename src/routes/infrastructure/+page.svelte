@@ -8,7 +8,7 @@
 
 <svelte:head>
 	<title>Nuestra Infraestructura y Centros de Operación | GlobalCET</title>
-	<meta name="description" content="Explora las instalaciones de última generación de CET Chile SpA / GlobalCET. Almacenamiento certificado, control de calidad científico y logística de alta eficiencia." />
+	<meta name="description" content="Infraestructura de última generación de GlobalCET en Chile: almacenamiento certificado, control de calidad científico y logística avanzada para educación." />
 </svelte:head>
 
 <main class="relative min-h-screen overflow-hidden py-12">

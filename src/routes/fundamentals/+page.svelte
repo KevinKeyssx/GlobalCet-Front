@@ -184,8 +184,8 @@
 </script>
 
 <svelte:head>
-	<title>Ejes Fundamentales e Implementación de Laboratorios | CET Chile SpA / GlobalCET</title>
-	<meta name="description" content="Conozca los ejes fundamentales para la implementación de laboratorios de ciencias y las guías de buenas prácticas de CET Chile SpA." />
+	<title>Ejes Fundamentales | GlobalCET</title>
+	<meta name="description" content="Ejes fundamentales y guías de buenas prácticas. Seguridad, rigor científico y sostenibilidad con GlobalCET Chile." />
 </svelte:head>
 
 <main class="relative min-h-screen overflow-hidden pb-16">

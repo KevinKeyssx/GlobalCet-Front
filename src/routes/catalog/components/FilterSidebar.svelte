@@ -232,7 +232,7 @@
 <button
 	onclick={ () => isDrawerOpen = true }
 	class="
-		fixed bottom-6 right-6 z-40 md:hidden
+		fixed bottom-20 right-6 z-40 md:hidden
 		flex h-12 w-12 items-center justify-center rounded-full
 		bg-brand text-surface-dark border border-brand/35
 		shadow-[0_4px_20px_rgba(0,230,118,0.3)]

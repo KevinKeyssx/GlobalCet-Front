@@ -52,8 +52,8 @@
 </script>
 
 <svelte:head>
-	<title>Código de Ética y Conducta Corporativa | CET Chile SpA / GlobalCET</title>
-	<meta name="description" content="Conozca el Código de Ética y Conducta Corporativa de CET Chile SpA. Pilares fundamentales de integridad, legalidad, responsabilidad social y equidad en ciencia y educación en Chile." />
+	<title>Código de Ética y Conducta Corporativa | GlobalCET</title>
+	<meta name="description" content="Código de Ética y Conducta Corporativa de GlobalCET. Nuestros pilares fundamentales de integridad, legalidad y responsabilidad en educación científica." />
 </svelte:head>
 
 <main class="relative min-h-screen overflow-hidden py-12">

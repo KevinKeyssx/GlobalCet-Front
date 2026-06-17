@@ -18,6 +18,7 @@
 		selectedMaterials		: Set<string>;
 		isEnabled				: boolean;
 		defaultExpanded?		: boolean;
+        maxHeight?                 : string;
 	}
 
 	let {
@@ -25,6 +26,7 @@
 		selectedMaterials		= $bindable( new Set<string>() ),
 		isEnabled,
 		defaultExpanded			= true,
+        maxHeight               = 'max-h-[600px]'
 	}: Props = $props();
 
 	let accordionValue = $state<string[]>( [] );
@@ -195,7 +197,7 @@
 				</div>
 
 				{#if categoriesQuery.data}
-					<div class="max-h-[600px] overflow-y-auto pr-1.5 space-y-4 custom-scrollbar pl-0.5">
+					<div class="{maxHeight} overflow-y-auto pr-1.5 space-y-4 custom-scrollbar pl-0.5">
 						{#each filteredCategories as category (category.id)}
 							<div transition:slide={ { duration: 200 } } class="space-y-1.5">
 								<div class="flex items-center gap-2 pl-1">

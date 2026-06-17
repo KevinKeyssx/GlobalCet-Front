@@ -171,7 +171,7 @@
 					/>
 				</div>
 			{:else}
-				<div class="flex flex-col gap-6 w-full mt-2">
+				<div class="flex flex-col gap-4 w-full mt-2">
 					<!-- Productos -->
 					<div class="flex flex-col gap-2">
 						<h3 class="text-[10px] font-black uppercase tracking-wider text-brand">Productos</h3>
@@ -180,6 +180,7 @@
 							bind:selectedMaterials
 							isEnabled={ true }
 							defaultExpanded={ false }
+                            maxHeight = "max-h-40"
 						/>
 					</div>
 

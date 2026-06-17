@@ -216,7 +216,7 @@
 
 <!-- Desktop Sidebar View (Hidden on mobile) -->
 <aside class="
-	relative z-10
+	sticky top-36 z-10 max-h-[1000px]
 	hidden md:flex w-80 shrink-0 flex-col gap-3
 	rounded-2xl
 	border border-brand/20 dark:border-brand/20

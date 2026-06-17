@@ -123,7 +123,7 @@
 						class="
 							flex items-center gap-1 rounded-lg
 							bg-brand/15 border border-brand/30
-							px-2 py-0.5 text-[10px] font-bold text-brand
+							px-2 py-0.5 text-[11px] font-bold text-brand
 							transition-all duration-200 hover:bg-brand/20
 						"
 					>
@@ -197,7 +197,7 @@
 					<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
 				</svg>
 				<input
-					type="text"
+					type="search"
 					bind:value={searchVal}
 					placeholder="Buscar..."
 					class="

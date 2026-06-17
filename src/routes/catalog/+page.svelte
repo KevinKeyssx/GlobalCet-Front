@@ -25,7 +25,7 @@
 	import FilterSidebar            from './components/FilterSidebar.svelte';
 
 	// ─── Constants ────────────────────────────────────────────────────────────────
-	const DEFAULT_PAGE_SIZE = 48;
+	const DEFAULT_PAGE_SIZE = 9;
 
 	// ─── URL Query Parsing Helper ──────────────────────────────────────────────────
 	function getSetFromParam( paramName: string ): Set<string> {
@@ -90,21 +90,24 @@
 	const backendSortOrder = $derived( ( sortBy === 'name' || sortBy === 'createdAt' ) ? sortOrder : 'asc' );
 
 
-	$effect( () => {
+	$effect( ( ) => {
 		selectedSubCategories;
 		selectedMaterials;
 		selectedKitCategories;
 		selectedLabCategories;
 		activeTab;
+		size;
 
 		if ( isMounted ) {
-			if ( page !== 1 ) {
-				page = 1;
-			}
+			untrack( ( ) => {
+				if ( page !== 1 ) {
+					page = 1;
+				}
+			} );
 		} else {
 			isMounted = true;
 		}
-	});
+	} );
 
 	// ─── Sync local state from URL parameters (on navigation / load) ──────────────
 	$effect( ( ) => {
@@ -139,6 +142,13 @@
 
 			if ( page !== pageParam ) {
 				page = pageParam;
+			}
+
+			// Sync size
+			const sizeParam = Number( searchParams.get( 'size' ) ) || DEFAULT_PAGE_SIZE;
+
+			if ( size !== sizeParam ) {
+				size = sizeParam;
 			}
 
 			// Sync subcategories
@@ -184,6 +194,7 @@
 		const currentSort: string      = sortBy;
 		const currentOrder: string     = sortOrder;
 		const currentPage: number      = page;
+		const currentSize: number      = size;
 		const subCats: Set<string>   = selectedSubCategories;
 		const mats: Set<string>      = selectedMaterials;
 		const kitCats: Set<string>   = selectedKitCategories;
@@ -205,6 +216,10 @@
 
 		if ( currentPage !== 1 ) {
 			params.set( 'page', currentPage.toString( ) );
+		}
+
+		if ( currentSize !== DEFAULT_PAGE_SIZE ) {
+			params.set( 'size', currentSize.toString( ) );
 		}
 
 		if ( subCats.size > 0 ) {
@@ -253,8 +268,7 @@
 		const subcategoriesList = [ ...selectedSubCategories ].join( ',' );
 		const materialsList     = [ ...selectedMaterials ].join( ',' );
 
-		// Si no hay tab seleccionado (vista unificada), la página siempre se fija a 1
-		const queryPage = activeTab === '' ? 1 : page;
+		const queryPage = page;
 
 		const queryParams = new URLSearchParams( {
 			query      : $searchStore,
@@ -324,6 +338,15 @@
 				: ( activeTab === 'lab-movil' )
 					? ( globalSearchQuery.data?.meta?.totalMobileLabs || 0 )
 					: ( ( globalSearchQuery.data?.meta?.totalProducts || 0 ) + ( globalSearchQuery.data?.meta?.totalKits || 0 ) + ( globalSearchQuery.data?.meta?.totalMobileLabs || 0 ) )
+	);
+
+	const hasAnyFilterActive = $derived(
+		activeTab !== '' ||
+		selectedSubCategories.size > 0 ||
+		selectedMaterials.size > 0 ||
+		( selectedKitCategories?.size || 0 ) > 0 ||
+		( selectedLabCategories?.size || 0 ) > 0 ||
+		$searchStore !== ''
 	);
 
 	// ─── Sync global loading store with query loading state ─────────────────────
@@ -453,17 +476,19 @@
 		/>
 
 		<!-- Interlocking Paginated Controls -->
-		{#if ( activeTab && globalSearchQuery.data && !isSearchSuggestion ) }
+		{#if ( hasAnyFilterActive && globalSearchQuery.data && !isSearchSuggestion ) }
 			{@const totalCount = activeTab === 'productos'
 				? globalSearchQuery.data.meta.totalProducts
 				: activeTab === 'kits'
 					? globalSearchQuery.data.meta.totalKits
-					: globalSearchQuery.data.meta.totalMobileLabs
+					: activeTab === 'lab-movil'
+						? globalSearchQuery.data.meta.totalMobileLabs
+						: ( ( globalSearchQuery.data.meta.totalProducts || 0 ) + ( globalSearchQuery.data.meta.totalKits || 0 ) + ( globalSearchQuery.data.meta.totalMobileLabs || 0 ) )
 			}
-			{#if ( totalCount > size ) }
+			{#if ( totalCount > 9 ) }
 				<Pagination
-					count   = { totalCount }
-					perPage = { size }
+					count        = { totalCount }
+					bind:perPage = { size }
 					bind:page
 				/>
 			{/if}

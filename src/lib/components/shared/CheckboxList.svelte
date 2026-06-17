@@ -21,7 +21,7 @@
 		isLoading	= false,
 		isError		= false,
 		onRetry,
-		maxHeight	= 'max-h-72',
+		maxHeight	= 'max-h-[600px]',
 	}: Props = $props();
 
 	// ─── Local State: Search Value ────────────────────────────────────────────────

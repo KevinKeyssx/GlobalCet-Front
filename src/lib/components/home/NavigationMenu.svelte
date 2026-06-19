@@ -2,53 +2,8 @@
 	import { NavigationMenu } from 'bits-ui';
 	import { fade }           from 'svelte/transition';
 
-	// ─── Interfaces ───────────────────────────────────────────────────────────────
-	interface SubMenuItem {
-		title       : string;
-		href        : string;
-		description : string;
-		icon?       : string;
-	}
-
-    // ─── Antecedentes Dropdown Config ─────────────────────────────────────────────
-	const antecedentesItems: Array< SubMenuItem > = [
-		{
-			title		: 'Fundamentos',
-			href		: '/fundamentals',
-			description	: 'Ejes fundamentales para la implementación de laboratorios de ciencias.',
-			icon		: '🧬',
-		},
-		{
-			title		: 'Código de Ética',
-			href		: '/code-ethics',
-			description	: 'Nuestros compromisos normativos, equidad de género y sellos corporativos.',
-			icon		: '🛡️',
-		},
-		{
-			title		: 'Términos Comerciales',
-			href		: '/commercial-terms',
-			description	: 'Términos de servicio, cotizaciones y políticas de entrega.',
-			icon		: '📄',
-		},
-	];
-
-	// ─── Nosotros Dropdown Config ─────────────────────────────────────────────────
-	const nosotrosItems: Array< SubMenuItem > = [
-		{
-			title		: 'Misión & Visión',
-			href		: '/vision-mission',
-			description	: 'Nuestra misión, visión y reseña de trayectoria fundacional.',
-			icon		: '🎯',
-		},
-		{
-			title		: 'Infraestructura',
-			href		: '/infrastructure',
-			description	: 'Conoce las instalaciones y capacidades operativas de GlobalCET.',
-			icon		: '🏢',
-		},
-	];
+    import { navItems, ourItems } from './navItems';
 </script>
-
 
 <NavigationMenu.Root class="relative z-50">
 	<NavigationMenu.List class="flex items-center gap-1.5">
@@ -60,7 +15,7 @@
 				id    = "nav-catalogo"
 				class = "rounded-xl px-4 py-2.5 text-sm font-semibold text-text-muted transition-all duration-300 hover:bg-brand/10 hover:text-brand"
 			>
-				Catálogo
+				Ir a Tienda
 			</NavigationMenu.Link>
 		</NavigationMenu.Item>
 
@@ -97,7 +52,7 @@
 					class           = "nav-dropdown-content"
 				>
 					<div class="grid grid-cols-1 gap-3.5">
-						{#each nosotrosItems as item ( item.title ) }
+						{#each ourItems as item ( item.title ) }
 							<a
 								href  = { item.href }
 								class = "group flex items-start gap-4 rounded-xl p-3.5 hover:bg-brand/5 dark:hover:bg-brand/10 transition-all duration-200"
@@ -169,7 +124,7 @@
 					class           = "nav-dropdown-content"
 				>
 					<div class="grid grid-cols-1 gap-3.5">
-						{#each antecedentesItems as item ( item.title ) }
+						{#each navItems as item ( item.title ) }
 							<a
 								href  = { item.href }
 								class = "group flex items-start gap-4 rounded-xl p-3.5 hover:bg-brand/5 dark:hover:bg-brand/10 transition-all duration-200"

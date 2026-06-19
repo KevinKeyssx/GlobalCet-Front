@@ -89,8 +89,8 @@
 </script>
 
 <svelte:head>
-	<title>Condiciones Comerciales y Términos de Venta | GlobalCET</title>
-	<meta name="description" content="Condiciones comerciales de GlobalCET: políticas de despacho, plazos de entrega, instalación, puesta en marcha y garantías de equipamiento científico en Chile." />
+	<title>Condiciones Comerciales y Términos de Venta | GlobalCET | CET</title>
+	<meta name="description" content="Condiciones comerciales de GlobalCET / CET: políticas de despacho, plazos de entrega, instalación, puesta en marcha y garantías de equipamiento científico en Chile." />
 </svelte:head>
 
 <main class="relative min-h-screen overflow-hidden pb-16">

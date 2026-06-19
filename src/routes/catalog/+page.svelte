@@ -371,8 +371,8 @@
 </script>
 
 <svelte:head>
-	<title>Catálogo Científico | GlobalCET</title>
-	<meta name="description" content="Explora el catálogo de GlobalCET: reactivos de alta pureza, material de vidrio certificado de borosilicato, kits de laboratorio y laboratorios móviles en Chile." />
+	<title>Catálogo Científico | GlobalCET | CET</title>
+	<meta name="description" content="Explora el catálogo de GlobalCET / CET: reactivos de alta pureza, material de vidrio certificado de borosilicato, kits de laboratorio y laboratorios móviles en Chile." />
 </svelte:head>
 
 <!-- ─── Hero Banner ───────────────────────────────────────────────────────────── -->

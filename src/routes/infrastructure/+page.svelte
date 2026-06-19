@@ -1,14 +1,16 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 
+    import Map from '$lib/components/shared/Map.svelte'
+
 	let { data }: { data: PageData } = $props();
 
 	const videoUrl = $derived( data.videoUrl );
 </script>
 
 <svelte:head>
-	<title>Nuestra Infraestructura y Centros de Operación | GlobalCET</title>
-	<meta name="description" content="Infraestructura de última generación de GlobalCET en Chile: almacenamiento certificado, control de calidad científico y logística avanzada para educación." />
+	<title>Nuestra Infraestructura y Centros de Operación | GlobalCET | CET</title>
+	<meta name="description" content="Infraestructura de última generación de GlobalCET / CET en Chile: almacenamiento certificado, control de calidad científico y logística avanzada para educación." />
 </svelte:head>
 
 <main class="relative min-h-screen overflow-hidden py-12">
@@ -187,6 +189,21 @@
 
 		</div>
 	</section>
+
+    <section class="mx-auto grid justify-center p-7 space-y-6">
+        <div class="flex flex-col items-center">
+            <span class="text-xs font-black uppercase tracking-[ 0.25em ] text-brand-bright">Ubicación</span>
+
+            <h2 class="font-display text-3xl font-extrabold tracking-tight text-text sm:text-4xl">
+                Visítanos en Nuestra Sede Principal
+            </h2>
+        </div>
+
+        <Map
+            width   = "1000"
+            height  = "600"
+        />
+    </section>
 </main>
 
 <style>

@@ -184,8 +184,8 @@
 </script>
 
 <svelte:head>
-	<title>Ejes Fundamentales | GlobalCET</title>
-	<meta name="description" content="Ejes fundamentales y guías de buenas prácticas. Seguridad, rigor científico y sostenibilidad con GlobalCET Chile." />
+	<title>Ejes Fundamentales | GlobalCET | CET</title>
+	<meta name="description" content="Ejes fundamentales y guías de buenas prácticas. Seguridad, rigor científico y sostenibilidad con GlobalCET / CET Chile." />
 </svelte:head>
 
 <main class="relative min-h-screen overflow-hidden pb-16">

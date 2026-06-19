@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>Misión, Visión y Reseña Histórica | GlobalCET</title>
+	<title>Misión, Visión y Reseña Histórica | GlobalCET | CET</title>
 	<meta name="description" content="Conoce la misión, visión y reseña histórica de CET Chile SpA / GlobalCET. Más de 20 años de experiencia impulsando la ciencia, educación y tecnología en Chile." />
 </svelte:head>
 

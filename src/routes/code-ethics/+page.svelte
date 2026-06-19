@@ -52,8 +52,8 @@
 </script>
 
 <svelte:head>
-	<title>Código de Ética y Conducta Corporativa | GlobalCET</title>
-	<meta name="description" content="Código de Ética y Conducta Corporativa de GlobalCET. Nuestros pilares fundamentales de integridad, legalidad y responsabilidad en educación científica." />
+	<title>Código de Ética y Conducta Corporativa | GlobalCET | CET</title>
+	<meta name="description" content="Código de Ética y Conducta Corporativa de GlobalCET / CET. Nuestros pilares fundamentales de integridad, legalidad y responsabilidad en educación científica." />
 </svelte:head>
 
 <main class="relative min-h-screen overflow-hidden py-12">

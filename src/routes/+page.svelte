@@ -1,25 +1,31 @@
+<script lang="ts">
+	import { PUBLIC_IMAGE_INDEX_1, PUBLIC_IMAGE_INDEX_2 } from '$env/static/public';
+</script>
+
 <svelte:head>
-	<title>GlobalCET | Ingeniería & Equipamiento Bioquímico de Precisión</title>
-	<meta name="description" content="Suministro de reactivos de alta pureza, material de vidrio certificado y laboratorios móviles en Chile. Soluciones de vanguardia para educación y ciencia." />
+	<title>GlobalCET | CET | Insumos y Material de Laboratorio de Ciencias y Educación</title>
+	<meta name="description" content="Suministro de reactivos de alta pureza, material de vidrio certificado y laboratorios móviles en Chile. Soluciones de vanguardia para educación y ciencia con el respaldo de CET Chile SpA / GlobalCET." />
 	<script type="application/ld+json">
 		{
-			"@context"    : "https://schema.org",
-			"@type"       : "Organization",
-			"name"        : "GlobalCET",
-			"url"         : "https://globalcet.cl",
-			"logo"        : "https://globalcet.cl/logo/logo2.avif",
-			"description" : "Reactivos de alta pureza, material de vidrio certificado de borosilicato, kits didácticos y laboratorios móviles para educación en Chile.",
-			"address"     : {
-				"@type"           : "PostalAddress",
-				"streetAddress"   : "Primera Transversal N° 6370",
-				"addressLocality" : "San Miguel",
-				"addressRegion"   : "Santiago",
-				"addressCountry"  : "CL"
+			"@context"		: "https://schema.org",
+			"@type"			: "Organization",
+			"name"			: "GlobalCET",
+			"alternateName"	: "CET",
+			"legalName"		: "CET Chile SpA",
+			"url"			: "https://globalcet.cl",
+			"logo"			: "https://globalcet.cl/logo/logo2.avif",
+			"description"	: "Reactivos de alta pureza, material de vidrio certificado de borosilicato, kits didácticos y laboratorios móviles para educación en Chile.",
+			"address"		: {
+				"@type"				: "PostalAddress",
+				"streetAddress"		: "Primera Transversal N° 6370",
+				"addressLocality"	: "San Miguel",
+				"addressRegion"		: "Santiago",
+				"addressCountry"	: "CL"
 			},
-			"contactPoint" : {
-				"@type"       : "ContactPoint",
-				"telephone"   : "+56-9-9784-1809",
-				"contactType" : "ventas"
+			"contactPoint"	: {
+				"@type"			: "ContactPoint",
+				"telephone"		: "+56-9-9784-1809",
+				"contactType"	: "ventas"
 			}
 		}
 	</script>
@@ -59,10 +65,7 @@
 					</h1>
 
                     <p class="max-w-2xl text-base font-medium leading-relaxed text-text-muted sm:text-lg">
-						<!-- En <strong class="text-text font-bold">GlobalCET</strong> proveemos soluciones bioquímicas integrales de alta pureza. Suministramos reactivos avanzados, material de vidrio certificado, kits de diagnóstico especializados y laboratorios móviles autónomos diseñados bajo estándares internacionales. -->
-                        <!-- Insumos, Material, instrumentos y equipos para sus laboratorios de ciencias, fisica, química y biologia, entregando soluciones prácticas, científicas con laboratorios móviles y nodolabs, estación descubrimiento móbil para la educación. -->
                         Completo Equipamiento para sus laboratorios de ciencias: Física, Química, Biología. Con innovación en Laboratorios Móviles, Nodo Lab. Estación Descubrimiento Móvil, dirigidos a Educación Cientifica , Técnica.
-
 					</p>
 				</div>
 
@@ -77,7 +80,7 @@
 							hover:-translate-y-0.5 hover:bg-brand-bright hover:shadow-lg
 						"
 					>
-						Explorar Catálogo
+						Ir a la Tienda
 					</a>
 
                     <a
@@ -120,7 +123,7 @@
 			</div>
 
 			<!-- Animated Molecular / Bio Illustration (SVG) -->
-			<div class="flex justify-center lg:col-span-5">
+			<div class="flex justify-center lg:col-span-5 lg:mb-32">
 				<div class="relative w-full max-w-md aspect-square flex items-center justify-center">
 					<!-- Glow behind -->
 					<div class="absolute inset-0 bg-brand/10 rounded-full blur-3xl animate-pulse"></div>
@@ -138,6 +141,124 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</section>
+
+	<!-- ─── Interactive Hero Banner Showcase ─────────────────────────────────── -->
+	<section class="relative mx-auto max-w-7xl px-6 py-6 sm:px-8">
+		<div class="relative overflow-hidden rounded-3xl border border-brand/15 bg-card/40 shadow-card backdrop-blur-md group">
+			<div class="absolute inset-0 bg-black/20 z-10 transition-opacity duration-500 group-hover:bg-black/35"></div>
+			<img src={ PUBLIC_IMAGE_INDEX_1 } alt="Equipamiento Científico Avanzado" class="w-full h-80 sm:h-96 object-cover transition-transform duration-700 group-hover:scale-105" />
+			<div class="absolute inset-0 z-20 flex flex-col justify-end p-8 sm:p-12 space-y-4 max-w-2xl">
+				<span class="self-start rounded-full bg-brand/20 border border-brand/35 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-brand-bright backdrop-blur-md shadow-card">
+					Calidad Certificada
+				</span>
+				<h2 class="font-display text-2xl font-black text-white sm:text-4xl drop-shadow-md leading-tight">
+					Soluciones Científicas para el Aula & Investigación
+				</h2>
+				<p class="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed drop-shadow-sm">
+					Suministros de precisión, reactivos certificados y herramientas didácticas diseñadas para potenciar el aprendizaje técnico profesional.
+				</p>
+				<a href="/catalog" class="self-start rounded-xl bg-brand px-6 py-3.5 text-xs font-black uppercase tracking-wider text-surface-dark shadow-card transition-all duration-300 hover:scale-105 hover:bg-brand-bright">
+					Ver Catálogo Completo
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── Categorías Destacadas Section ──────────────────────────────────────── -->
+	<section class="relative mx-auto max-w-7xl px-6 py-12 sm:px-8">
+		<div class="mx-auto max-w-3xl text-center space-y-4 mb-12">
+			<span class="text-xs font-black uppercase tracking-[0.25em] text-brand-bright">Explora por Categorías</span>
+			<h2 class="font-display text-3xl font-extrabold tracking-tight text-text sm:text-4xl">
+				Equipamiento Científico Destacado
+			</h2>
+			<p class="text-base text-text-muted max-w-xl mx-auto">
+				Selecciona una de nuestras áreas principales para encontrar suministros y materiales específicos de alta calidad.
+			</p>
+		</div>
+
+		<!-- Grid for Categories -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+			<!-- Tarjeta 1: Reactivos -->
+			<a href="/catalog?tab=productos&query=Reactivo" class="group relative block overflow-hidden rounded-3xl border border-brand/10 bg-card h-80 shadow-card transition-all duration-500 hover:scale-[1.02] hover:border-brand/30 hover:shadow-card-hover">
+				<div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/20 to-transparent z-10"></div>
+				<img src="/categories/reactivos.png" alt="Reactivos Químicos" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+				<div class="absolute inset-0 z-20 flex flex-col justify-end p-6 space-y-3">
+					<h3 class="font-display text-xl font-bold text-white group-hover:text-brand transition-colors">
+						Reactivos
+					</h3>
+					<p class="text-xs text-slate-200 leading-relaxed font-medium">
+						Reactivos químicos de alta pureza y grado analítico para laboratorios.
+					</p>
+					<span class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
+						Ir a la categoría
+						<svg class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+							<polyline points="9 18 15 12 9 6"></polyline>
+						</svg>
+					</span>
+				</div>
+			</a>
+
+			<!-- Tarjeta 2: Ácidos -->
+			<a href="/catalog?tab=productos&query=Ácido" class="group relative block overflow-hidden rounded-3xl border border-brand/10 bg-card h-80 shadow-card transition-all duration-500 hover:scale-[1.02] hover:border-brand/30 hover:shadow-card-hover">
+				<div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/20 to-transparent z-10"></div>
+				<img src="/categories/acidos.png" alt="Ácidos Químicos" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+				<div class="absolute inset-0 z-20 flex flex-col justify-end p-6 space-y-3">
+					<h3 class="font-display text-xl font-bold text-white group-hover:text-brand transition-colors">
+						Ácidos
+					</h3>
+					<p class="text-xs text-slate-200 leading-relaxed font-medium">
+						Ácidos de grado analítico PA y reactivos de alta precisión y seguridad.
+					</p>
+					<span class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
+						Ir a la categoría
+						<svg class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+							<polyline points="9 18 15 12 9 6"></polyline>
+						</svg>
+					</span>
+				</div>
+			</a>
+
+			<!-- Tarjeta 3: Vidrio -->
+			<a href="/catalog?tab=productos&query=Vidrio" class="group relative block overflow-hidden rounded-3xl border border-brand/10 bg-card h-80 shadow-card transition-all duration-500 hover:scale-[1.02] hover:border-brand/30 hover:shadow-card-hover">
+				<div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/20 to-transparent z-10"></div>
+				<img src="/categories/vidrio.png" alt="Material de Vidrio" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+				<div class="absolute inset-0 z-20 flex flex-col justify-end p-6 space-y-3">
+					<h3 class="font-display text-xl font-bold text-white group-hover:text-brand transition-colors">
+						Vidrio
+					</h3>
+					<p class="text-xs text-slate-200 leading-relaxed font-medium">
+						Material de vidrio de borosilicato 3.3 resistente a choques térmicos.
+					</p>
+					<span class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
+						Ir a la categoría
+						<svg class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+							<polyline points="9 18 15 12 9 6"></polyline>
+						</svg>
+					</span>
+				</div>
+			</a>
+
+			<!-- Tarjeta 4: Plástico -->
+			<a href="/catalog?tab=productos&query=Plástico" class="group relative block overflow-hidden rounded-3xl border border-brand/10 bg-card h-80 shadow-card transition-all duration-500 hover:scale-[1.02] hover:border-brand/30 hover:shadow-card-hover">
+				<div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/20 to-transparent z-10"></div>
+				<img src="/categories/plastico.png" alt="Material de Plástico" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+				<div class="absolute inset-0 z-20 flex flex-col justify-end p-6 space-y-3">
+					<h3 class="font-display text-xl font-bold text-white group-hover:text-brand transition-colors">
+						Plástico
+					</h3>
+					<p class="text-xs text-slate-200 leading-relaxed font-medium">
+						Materiales y utensilios plásticos graduados de alta resistencia.
+					</p>
+					<span class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-brand group-hover:underline">
+						Ir a la categoría
+						<svg class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+							<polyline points="9 18 15 12 9 6"></polyline>
+						</svg>
+					</span>
+				</div>
+			</a>
 		</div>
 	</section>
 
@@ -326,7 +447,8 @@
 					>
 						Abrir Buscador Inteligente
 					</a>
-					<a
+
+                    <a
 						id="cta-search-contact"
 						href="#app-footer"
 						class="
@@ -335,9 +457,28 @@
 							hover:-translate-y-0.5 hover:bg-brand/10
 						"
 					>
-						Contactar Soporte Técnico
+						Contáctanos
 					</a>
 				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ─── Secondary Showcase Banner ─────────────────────────────────────────── -->
+	<section class="relative mx-auto max-w-7xl px-6 py-6 sm:px-8">
+		<div class="relative overflow-hidden rounded-3xl border border-brand/15 bg-card/40 shadow-card backdrop-blur-md group">
+			<div class="absolute inset-0 bg-black/10 dark:bg-black/40 z-10 transition-opacity duration-500 group-hover:bg-black/35"></div>
+			<img src={ PUBLIC_IMAGE_INDEX_2 } alt="Laboratorios de Vanguardia" class="w-full h-72 sm:h-80 object-cover transition-transform duration-700 group-hover:scale-105" />
+			<div class="absolute inset-0 z-20 flex flex-col justify-end p-8 sm:p-12 space-y-3 max-w-xl">
+				<span class="self-start rounded-full bg-brand/20 border border-brand/35 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-white backdrop-blur-md shadow-card">
+					Sistemas Modulares
+				</span>
+				<h3 class="font-display text-xl font-black text-white sm:text-3xl drop-shadow-md leading-tight">
+					Infraestructura Educativa del Futuro
+				</h3>
+				<p class="text-xs text-slate-200 font-medium leading-relaxed drop-shadow-sm">
+					Transformamos cualquier espacio en un centro de experimentación científica autónomo e interactivo.
+				</p>
 			</div>
 		</div>
 	</section>
@@ -366,9 +507,10 @@
 									<polyline points="20 6 9 17 4 12"></polyline>
 								</svg>
 							</div>
-							<div class="space-y-1">
+
+                            <div class="space-y-1">
 								<h4 class="font-bold text-text text-sm">Control de Pureza Análisis</h4>
-								<p class="text-xs text-text-muted leading-relaxed">CCada Lote de Reactivos cuenta con su Certificación.</p>
+								<p class="text-xs text-text-muted leading-relaxed">Cada Lote de Reactivos cuenta con su Certificación.</p>
 							</div>
 						</div>
 

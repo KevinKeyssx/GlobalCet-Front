@@ -156,14 +156,14 @@
 		return item.category?.name || ( itemType === 'kit' ? 'Kit Científico' : 'Laboratorio Móvil' );
 	} );
 
-	const seoTitle = $derived( item ? `${ item.name } | GlobalCET` : 'Detalle de Recurso | GlobalCET' );
+	const seoTitle = $derived( item ? `${ item.name } | GlobalCET | CET` : 'Detalle de Recurso | GlobalCET | CET' );
 
 	const seoDescription = $derived.by( ( ) => {
 		if ( !item ) {
-			return 'Detalle de producto y equipamiento bioquímico en GlobalCET Chile. Reactivos, vidriería científica y laboratorios.';
+			return 'Detalle de producto y equipamiento bioquímico en GlobalCET / CET Chile. Reactivos, vidriería científica y laboratorios.';
 		}
 		const skuPart = item.sku ? ` SKU: ${ item.sku }.` : '';
-		const baseDesc = item.description || 'Detalle del recurso científico disponible en GlobalCET.';
+		const baseDesc = item.description || 'Detalle del recurso científico disponible en GlobalCET / CET.';
 		const combined = `${ item.name }.${ skuPart } ${ baseDesc }`;
 
 		if ( combined.length > 155 ) {

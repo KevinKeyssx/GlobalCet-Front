@@ -1,6 +1,7 @@
 <script>
 	import GitHubButton     from "../buttons/GitHubButton.svelte";
 	import PoweredButton    from "../buttons/PoweredButton.svelte";
+    import Map              from '$lib/components/shared/Map.svelte'
 </script>
 
 <footer id="app-footer" class="relative overflow-hidden border-t border-brand/10 bg-card/60 px-6 py-12 text-text-muted sm:px-12 backdrop-blur-md">
@@ -82,28 +83,23 @@
 						<div class="flex items-center justify-center rounded-xl border border-brand/10 bg-white p-2.5 transition-all duration-300 hover:border-brand/30 hover:scale-105">
 							<img src="/logo/logo2.avif" alt="CET Chile SpA" class="h-full w-full object-contain" />
 						</div>
-						<!-- <div class="flex items-center justify-center rounded-xl border border-brand/10 bg-white p-2.5 transition-all duration-300 hover:border-brand/30 hover:scale-105">
-                        <img src="/logo/logo.avif" alt="GlobalCET" class="h-full w-full object-contain" />
-						</div> -->
 					</div>
+
                     <h3 class="flex justify-center text-[10px] uppercase font-black tracking-[0.2em] text-brand font-display">Ciencia - Educación - Tecnología</h3>
 				</div>
 			</div>
 
 			<!-- Sub-Col 2: Facturación & Pedido -->
-			<div class="space-y-6">
-				<!-- Legal Info -->
-				<div class="space-y-2">
-					<h4 class="text-xs font-black uppercase tracking-[0.2em] text-brand font-display">Información</h4>
-
-                    <div class="space-y-1 text-sm text-text-muted font-medium leading-relaxed">
-						<p class="text-text font-bold">CET Chile SpA</p>
-						<!-- <p>RUT <strong class="text-text font-bold">76.537.375-6</strong></p> -->
-						<p>Ciencia, Educación y Tecnología</p>
-						<p>Primera Transversal N° 6370</p>
-						<p>San Miguel, Santiago</p>
-					</div>
-				</div>
+			<div class="space-y-2">
+                <div class="self-start group relative overflow-hidden rounded-2xl border border-brand/10 bg-input/30 p-1.5 shadow-sm transition-all duration-500 hover:border-brand/20 hover:shadow-card-hover">
+                    <div class="relative overflow-hidden rounded-xl bg-white">
+                        <img
+                            src="/code-ethics/gotin.avif"
+                            alt="GlobalCET - Ciencia, Educación, Tecnología"
+                            class="h-auto w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                        />
+                    </div>
+                </div>
 
 				<!-- Facturación -->
 				<div class="space-y-2">
@@ -174,25 +170,17 @@
 		</div>
 
 		<!-- ─── RIGHT PORTION: BANNER & QR SCAN (lg:col-span-4) ──────────────────── -->
-		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-1">
+		<div class="grid grid-cols-1 gap-6 lg:col-span-4">
 			<!-- Differentiator Banner (Larger & Premium) -->
-			<div class="self-start group relative overflow-hidden rounded-2xl border border-brand/10 bg-input/30 p-1.5 shadow-sm transition-all duration-500 hover:border-brand/20 hover:shadow-card-hover">
-				<div class="relative overflow-hidden rounded-xl bg-white">
-                    <!-- src="/logo/global.avif" -->
-					<img
-						src="/code-ethics/gotin.avif"
-						alt="GlobalCET - Ciencia, Educación, Tecnología"
-						class="h-auto w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-					/>
+			<div class="shadow-sm space-y-2">
+                <h4 class="text-xs font-black uppercase tracking-[0.2em] text-brand font-display">Información</h4>
+
+				<div class="text-sm font-semibold text-text-muted">
+                    <p class="font-bold">Dirección</p>
+                    <p>📍 Primera Transversal N° 6370, San Miguel, Santiago</p>
 				</div>
 
-                <!-- <div class="p-4 space-y-2">
-					<h5 class="text-xs font-bold text-text tracking-wider uppercase">Ciencia Con Conciencia</h5>
-
-                    <p class="text-xs leading-relaxed text-text-muted font-medium">
-						Sistemas integrados de alta pureza diseñados para mitigar el riesgo en investigación científica y docencia académica.
-					</p>
-				</div> -->
+                <Map height= "390" width="100%" />
 			</div>
 
 			<!-- QR Code, Callout Direct & Layout Balance -->
@@ -216,7 +204,6 @@
 					</div>
 				</div> -->
 			<!-- </div> -->
-
 		</div>
 	</div>
 

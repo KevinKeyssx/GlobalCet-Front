@@ -5,7 +5,7 @@
     import { Search } from '@lucide/svelte';
 
 	import { globalLoadingStore } from '$lib/state/loading';
-	import NavigationMenu         from '$lib/components/shared/NavigationMenu.svelte';
+	import NavigationMenu         from '$lib/components/home/NavigationMenu.svelte';
 	import ThemeToggle            from '$lib/components/shared/ThemeToggle.svelte';
 	import MenuBar                from './MenuBar.svelte';
 

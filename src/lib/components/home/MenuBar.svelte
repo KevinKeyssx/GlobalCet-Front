@@ -1,8 +1,13 @@
 <script lang="ts">
-	import { Menubar } from 'bits-ui';
-	import { Menu } from '@lucide/svelte';
-	import { fade } from 'svelte/transition';
-	import ThemeToggle from '$lib/components/shared/ThemeToggle.svelte';
+	import { Menubar }  from 'bits-ui';
+	import { Menu }     from '@lucide/svelte';
+	import { fade }     from 'svelte/transition';
+
+	import {
+        navItems,
+        ourItems
+    }                   from './navItems';
+    import ThemeToggle  from '$lib/components/shared/ThemeToggle.svelte';
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
@@ -11,52 +16,6 @@
 	}
 
 	const { darkMode, onToggle }: Props = $props();
-
-	// ─── Interfaces ───────────────────────────────────────────────────────────────
-	interface SubMenuItem {
-		title       : string;
-		href        : string;
-		description : string;
-		icon?       : string;
-	}
-
-	// ─── Antecedentes Dropdown Config ─────────────────────────────────────────────
-	const antecedentesItems: Array< SubMenuItem > = [
-		{
-			title       : 'Fundamentos',
-			href        : '/fundamentals',
-			description : 'Ejes fundamentales para la implementación de laboratorios de ciencias.',
-			icon        : '🧬',
-		},
-		{
-			title       : 'Código de Ética',
-			href        : '/code-ethics',
-			description : 'Nuestros compromisos normativos, equidad de género y sellos corporativos.',
-			icon        : '🛡️',
-		},
-		{
-			title       : 'Términos Comerciales',
-			href        : '/commercial-terms',
-			description : 'Términos de servicio, cotizaciones y políticas de entrega.',
-			icon        : '📄',
-		},
-	];
-
-	// ─── Nosotros Dropdown Config ─────────────────────────────────────────────────
-	const nosotrosItems: Array< SubMenuItem > = [
-		{
-			title       : 'Misión & Visión',
-			href        : '/vision-mission',
-			description : 'Nuestra misión, visión y reseña de trayectoria fundacional.',
-			icon        : '🎯',
-		},
-		{
-			title       : 'Infraestructura',
-			href        : '/infrastructure',
-			description : 'Conoce las instalaciones y capacidades operativas de GlobalCET.',
-			icon        : '🏢',
-		},
-	];
 </script>
 
 <Menubar.Root class="md:hidden">
@@ -91,7 +50,7 @@
 						class="group rounded-xl px-4 py-2.5 text-sm font-semibold text-text-muted hover:text-brand transition-all duration-300 focus:bg-brand/10 focus:text-brand focus:outline-none"
 					>
 						<a href="/catalog" class="block w-full text-left">
-							Catálogo
+							Ir a Tienda
 						</a>
 					</Menubar.Item>
 
@@ -103,7 +62,7 @@
 					</div>
 
 					<!-- Nosotros Items -->
-					{#each nosotrosItems as item ( item.title ) }
+					{#each ourItems as item ( item.title ) }
 						<Menubar.Item
 							class="group rounded-xl py-2 pl-6 pr-3 hover:bg-brand/5 dark:hover:bg-brand/10 transition-all duration-200 focus:bg-brand/5 dark:focus:bg-brand/10 focus:outline-none"
 						>
@@ -144,7 +103,7 @@
 					</div>
 
 					<!-- Antecedentes Items -->
-					{#each antecedentesItems as item ( item.title ) }
+					{#each navItems as item ( item.title ) }
 						<Menubar.Item
 							class="group rounded-xl py-2 pl-6 pr-3 hover:bg-brand/5 dark:hover:bg-brand/10 transition-all duration-200 focus:bg-brand/5 dark:focus:bg-brand/10 focus:outline-none"
 						>

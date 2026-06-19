@@ -1,5 +1,12 @@
 <script lang="ts">
-	import { PUBLIC_IMAGE_INDEX_1, PUBLIC_IMAGE_INDEX_2 } from '$env/static/public';
+	import {
+        PUBLIC_IMAGE_INDEX_1,
+        PUBLIC_IMAGE_INDEX_2,
+        PUBLIC_IMAGE_SUB_INDEX_1,
+        PUBLIC_IMAGE_SUB_INDEX_2,
+        PUBLIC_IMAGE_SUB_INDEX_3,
+        PUBLIC_IMAGE_SUB_INDEX_4
+    } from '$env/static/public';
 </script>
 
 <svelte:head>
@@ -183,7 +190,7 @@
 			<!-- Tarjeta 1: Reactivos -->
 			<a href="/catalog?tab=productos&query=Reactivo" class="group relative block overflow-hidden rounded-3xl border border-brand/10 bg-card h-80 shadow-card transition-all duration-500 hover:scale-[1.02] hover:border-brand/30 hover:shadow-card-hover">
 				<div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/20 to-transparent z-10"></div>
-				<img src="/categories/reactivos.png" alt="Reactivos Químicos" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+				<img src={PUBLIC_IMAGE_SUB_INDEX_1} alt="Reactivos Químicos" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 				<div class="absolute inset-0 z-20 flex flex-col justify-end p-6 space-y-3">
 					<h3 class="font-display text-xl font-bold text-white group-hover:text-brand transition-colors">
 						Reactivos
@@ -203,7 +210,7 @@
 			<!-- Tarjeta 2: Ácidos -->
 			<a href="/catalog?tab=productos&query=Ácido" class="group relative block overflow-hidden rounded-3xl border border-brand/10 bg-card h-80 shadow-card transition-all duration-500 hover:scale-[1.02] hover:border-brand/30 hover:shadow-card-hover">
 				<div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/20 to-transparent z-10"></div>
-				<img src="/categories/acidos.png" alt="Ácidos Químicos" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+				<img src={PUBLIC_IMAGE_SUB_INDEX_2} alt="Ácidos Químicos" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 				<div class="absolute inset-0 z-20 flex flex-col justify-end p-6 space-y-3">
 					<h3 class="font-display text-xl font-bold text-white group-hover:text-brand transition-colors">
 						Ácidos
@@ -223,7 +230,7 @@
 			<!-- Tarjeta 3: Vidrio -->
 			<a href="/catalog?tab=productos&query=Vidrio" class="group relative block overflow-hidden rounded-3xl border border-brand/10 bg-card h-80 shadow-card transition-all duration-500 hover:scale-[1.02] hover:border-brand/30 hover:shadow-card-hover">
 				<div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/20 to-transparent z-10"></div>
-				<img src="/categories/vidrio.png" alt="Material de Vidrio" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+				<img src={PUBLIC_IMAGE_SUB_INDEX_3} alt="Material de Vidrio" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 				<div class="absolute inset-0 z-20 flex flex-col justify-end p-6 space-y-3">
 					<h3 class="font-display text-xl font-bold text-white group-hover:text-brand transition-colors">
 						Vidrio
@@ -243,7 +250,7 @@
 			<!-- Tarjeta 4: Plástico -->
 			<a href="/catalog?tab=productos&query=Plástico" class="group relative block overflow-hidden rounded-3xl border border-brand/10 bg-card h-80 shadow-card transition-all duration-500 hover:scale-[1.02] hover:border-brand/30 hover:shadow-card-hover">
 				<div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/20 to-transparent z-10"></div>
-				<img src="/categories/plastico.png" alt="Material de Plástico" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+				<img src={PUBLIC_IMAGE_SUB_INDEX_4} alt="Material de Plástico" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
 				<div class="absolute inset-0 z-20 flex flex-col justify-end p-6 space-y-3">
 					<h3 class="font-display text-xl font-bold text-white group-hover:text-brand transition-colors">
 						Plástico

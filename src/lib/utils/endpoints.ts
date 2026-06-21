@@ -27,6 +27,9 @@ export const INTERNAL_ENDPOINTS = {
 	GLOBAL_SEARCH  : {
 		BASE : 'global-search',
 	},
+	QUOTES         : {
+		CREATE : 'quote/create',
+	},
 };
 
 export const EXTERNAL_ENDPOINTS = {
@@ -53,6 +56,9 @@ export const EXTERNAL_ENDPOINTS = {
 		CATEGORIES : {
 			GET_ALL : '/lab-categories',
 		},
+	},
+	QUOTES        : {
+		BASE : '/quotes',
 	}
 };
 

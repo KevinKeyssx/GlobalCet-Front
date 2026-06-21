@@ -41,8 +41,7 @@
 </script>
 
 
-<div class="space-y-4">
-
+<div class="space-y-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
 	<!-- Dimensions specifications sheet -->
 	<div class="rounded-2xl border border-brand/10 bg-card p-5 space-y-3">
 		<div class="flex items-center gap-2">
@@ -60,18 +59,17 @@
 	</div>
 
 	<!-- Equipment & Modules sheet -->
-	<div class="rounded-2xl border border-brand/10 bg-card p-5 space-y-4">
+	<div class="rounded-2xl border border-brand/10 bg-card p-5 space-y-3">
 		<div class="flex items-center gap-2">
 			<span class="text-lg">🔬</span>
 			<div class="flex flex-col">
-				<span class="text-[9px] font-black uppercase tracking-wider text-brand">Sistemas de Instrumentación</span>
+				<span class="text-[10px] font-black uppercase tracking-wider text-brand">Sistemas de Instrumentación</span>
 				<h5 class="text-sm font-bold text-text">Equipamiento e Insumos</h5>
 			</div>
 		</div>
 
 		{#if totalKits > 0 || totalProducts > 0 }
 			<div class="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
-
 				<!-- Associated Kits list -->
 				{#each lab.kits as lk ( lk.id ) }
 					<a
@@ -145,10 +143,9 @@
 						</svg>
 					</a>
 				{/each}
-
 			</div>
 		{:else}
-			<p class="text-xs italic text-text-muted py-8 text-center">
+			<p class="text-sm italic text-text-muted py-2 text-center">
 				No se han definido kits científicos ni reactivos adicionales en la configuración base de este laboratorio móvil.
 			</p>
 		{/if}

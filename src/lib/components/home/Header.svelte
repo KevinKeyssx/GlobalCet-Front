@@ -2,9 +2,10 @@
 	import { fade }         from 'svelte/transition';
     import { navigating }   from '$app/state';
 
-    import { Search } from '@lucide/svelte';
+    import { Search, FileText }   from '@lucide/svelte';
 
 	import { globalLoadingStore } from '$lib/state/loading';
+	import { quoteStore }         from '$lib/state/quote';
 	import NavigationMenu         from '$lib/components/home/NavigationMenu.svelte';
 	import ThemeToggle            from '$lib/components/shared/ThemeToggle.svelte';
 	import MenuBar                from './MenuBar.svelte';
@@ -112,8 +113,36 @@
 			<NavigationMenu />
 		</nav>
 
-		<!-- Dark Mode Toggle -->
-		<ThemeToggle { darkMode } { onToggle } className="hidden md:flex" />
+        <div class="flex items-center gap-3">
+            <!-- Dark Mode Toggle -->
+            <ThemeToggle { darkMode } { onToggle } className="hidden md:flex" />
+
+            <!-- Quote Cart Icon Button -->
+            <a
+                href  = "/quote"
+                id    = "header-quote-cart"
+                class = "
+                    relative flex h-9.5 w-9.5 items-center justify-center rounded-lg
+                    border border-brand/20 bg-brand/10 text-brand
+                    transition-all duration-300
+                    hover:bg-brand hover:text-surface-dark hover:scale-105 active:scale-95
+                    cursor-pointer shrink-0
+                "
+                title = "Ver mi cotización"
+            >
+                <FileText class="size-5" />
+
+                {#if ( $quoteStore.length > 0 )}
+                    <span class="
+                        absolute -top-1.5 -right-1.5
+                        flex h-5 w-5 items-center justify-center rounded-full
+                        bg-emerald-500 text-[10px] font-black text-white shadow-[0_0_8px_rgba(16,185,129,0.5)]
+                    ">
+                        { $quoteStore.length }
+                    </span>
+                {/if}
+            </a>
+        </div>
 	</div>
 </header>
 

@@ -3,9 +3,9 @@ import type {
 	GlobalSearchKit,
 	GlobalSearchMobileLab,
 	FileAttachment,
-}               from '$lib/types/search';
-import { ENV }  from '$lib/utils/env.server';
-
+}                       from '$lib/types/search';
+import { ENV }          from '$lib/utils/env.server';
+import { formatCLP }    from './price';
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
 export interface MapFileParams {
@@ -92,33 +92,39 @@ export function mapEntityFiles<T extends EntityWithFiles>({
 
 // ─── Shared Entity List Mappers ───────────────────────────────────────────────
 export function mapProducts( products: GlobalSearchProduct[] ): GlobalSearchProduct[] {
-	return products.map(( p ) =>
-		mapEntityFiles<GlobalSearchProduct>({
+	return products.map( ( p ) => {
+		const mapped = mapEntityFiles<GlobalSearchProduct>( {
 			entity         : p,
 			subfolder      : 'products',
 			placeholderUrl : 'https://res.cloudinary.com/dbgzsikcs/image/upload/v1779666295/globalcet/13665029439565267830.jpg',
-		})
-	);
+		} );
+		mapped.formattedPrice = formatCLP( p.currentPrice );
+		return mapped;
+	} );
 }
 
 
 export function mapKits( kits: GlobalSearchKit[] ): GlobalSearchKit[] {
-	return kits.map(( k ) =>
-		mapEntityFiles<GlobalSearchKit>({
+	return kits.map( ( k ) => {
+		const mapped = mapEntityFiles<GlobalSearchKit>( {
 			entity         : k,
 			subfolder      : 'kits',
 			placeholderUrl : 'https://res.cloudinary.com/dbgzsikcs/image/upload/v1779666295/globalcet/13665029439565267830.jpg',
-		})
-	);
+		} );
+		mapped.formattedPrice = formatCLP( k.currentPrice );
+		return mapped;
+	} );
 }
 
 
 export function mapLabs( labs: GlobalSearchMobileLab[] ): GlobalSearchMobileLab[] {
-	return labs.map(( l ) =>
-		mapEntityFiles<GlobalSearchMobileLab>({
+	return labs.map( ( l ) => {
+		const mapped = mapEntityFiles<GlobalSearchMobileLab>( {
 			entity         : l,
 			subfolder      : 'labs',
 			placeholderUrl : 'https://res.cloudinary.com/dbgzsikcs/image/upload/v1779666295/globalcet/13665029439565267830.jpg',
-		})
-	);
+		} );
+		mapped.formattedPrice = formatCLP( l.currentPrice );
+		return mapped;
+	} );
 }

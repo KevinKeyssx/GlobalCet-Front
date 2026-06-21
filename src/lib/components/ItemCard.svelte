@@ -9,6 +9,8 @@
 	import type { Product }     from '$lib/types/product';
 	import { getItemImages }    from '$lib/utils/image';
 	import { stripHtml }        from '$lib/utils/string';
+	import { formatCLP }        from '$lib/utils/price';
+	import { quoteStore }       from '$lib/state/quote';
 
 	// ─── Interfaces ───────────────────────────────────────────────────────────────
 	export interface SubProduct {
@@ -22,6 +24,15 @@
 	}
 
 	const { itemType, item }: Props = $props();
+
+	const isAdded = $derived( $quoteStore.some( ( i ) => i.id === item.id ) );
+	const displayPrice = $derived( ( item as any ).formattedPrice || ( ( item as any ).currentPrice ? formatCLP( ( item as any ).currentPrice ) : '' ) );
+
+	function handleAddToQuote( e : Event ): void {
+		e.preventDefault();
+		e.stopPropagation();
+		quoteStore.addItem( item, itemType, 1 );
+	}
 
 	// ─── Reactivity: Carousel State ───────────────────────────────────────────────
 	let activeIndex = $state( 0 );
@@ -318,6 +329,40 @@
 							<span class="text-xs text-text-muted italic">Configuración base sin kits</span>
 						{/if}
 					</div>
+				</div>
+			{/if}
+		</div>
+
+		<!-- Price and Cotización Button -->
+		<div class="mt-2.5 pt-2.5 border-t border-brand/10">
+			{#if ( displayPrice )}
+				<div class="flex items-center justify-between mb-2">
+					<span class="text-[10px] uppercase font-bold text-text-muted">Precio:</span>
+					<span class="text-xs font-black text-brand-bright font-mono">{ displayPrice }</span>
+				</div>
+			{/if}
+
+			{#if ( !isAdded )}
+				<button
+					onclick    = { handleAddToQuote }
+					class      = "
+						w-full rounded-xl py-2 px-3
+						border border-brand/20 bg-brand/5 text-brand
+						text-xs font-black uppercase tracking-wider text-center
+						transition-all duration-300
+						hover:bg-brand hover:text-surface-dark hover:scale-[ 1.02 ] active:scale-95
+						cursor-pointer shadow-sm
+					"
+				>
+					Añadir a Cotización
+				</button>
+			{:else}
+				<div class="
+					w-full rounded-xl py-2 px-3
+					border border-emerald-500/10 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400
+					text-xs font-black uppercase tracking-wider text-center
+				">
+					Agregado a Cotización
 				</div>
 			{/if}
 		</div>

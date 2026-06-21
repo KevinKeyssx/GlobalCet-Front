@@ -3,10 +3,11 @@
 	import { dev, browser } from '$app/environment';
 	import { page }         from '$app/state';
 	import { goto }         from '$app/navigation';
-	import { ArrowUp }      from '@lucide/svelte';
 
-	import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
-	import { QueryClientProvider } from '@tanstack/svelte-query';
+	import { SvelteQueryDevtools }  from '@tanstack/svelte-query-devtools';
+	import { QueryClientProvider }  from '@tanstack/svelte-query';
+	import { Toaster }              from 'svelte-french-toast';
+	import { ArrowUp }              from '@lucide/svelte';
 
     import Header           from '$lib/components/home/Header.svelte';
     import Footer           from '$lib/components/home/Footer.svelte';
@@ -93,6 +94,13 @@
 
 		<Footer />
 	</main>
+
+	<Toaster
+		toastOptions={ {
+			style : 'background: var( --color-card ); color: var( --color-text ); border: 1px solid color-mix( in srgb, var( --color-brand ) 20%, transparent ); font-family: var( --font-sans ); font-size: 0.875rem; border-radius: 1rem; box-shadow: var( --shadow-card-hover );'
+		} }
+        position= "bottom-right"
+	/>
 
 	{#if dev }
 		<SvelteQueryDevtools initialIsOpen={ false } />

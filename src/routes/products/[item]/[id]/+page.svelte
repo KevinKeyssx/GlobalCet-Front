@@ -10,7 +10,10 @@
 	import ProductSpecs                   from './components/ProductSpecs.svelte';
 	import KitSpecs                       from './components/KitSpecs.svelte';
 	import LabSpecs                       from './components/LabSpecs.svelte';
+	import { formatCLP }                  from '$lib/utils/price';
+	import { quoteStore }                 from '$lib/state/quote';
 	import ShareDialog                    from '$lib/components/shared/ShareDialog.svelte';
+	import InputNumber                    from '$lib/components/shared/inputs/InputNumber.svelte';
 
 	// ─── Route Params ( Reactive Svelte 5 Kit ) ────────────────────────────────────
 	const itemType = $derived( page.params.item );
@@ -209,6 +212,17 @@
 
 		if ( img.naturalWidth < 400 && img.naturalHeight < 400 ) {
 			smallImages[ url ] = true;
+		}
+	}
+
+	let selectQty = $state( 1 );
+
+	const isAdded = $derived( item ? $quoteStore.some( ( i ) => i.id === item.id ) : false );
+	const displayPrice = $derived( item ? ( item.formattedPrice || ( item.currentPrice ? formatCLP( item.currentPrice ) : '' ) ) : '' );
+
+	function handleAddToQuote(): void {
+		if ( item ) {
+			quoteStore.addItem( item, itemType as any, selectQty );
 		}
 	}
 </script>
@@ -497,6 +511,61 @@
 							{ isDescriptionExpanded ? 'Leer menos' : 'Leer más...' }
 						</button>
 					{/if}
+				</div>
+
+				<!-- Quote Cart Actions Card -->
+				<div class="rounded-2xl border border-brand/15 bg-card p-6 shadow-card space-y-4">
+					<div class="flex items-center justify-between">
+						<div>
+							<h4 class="text-[10px] font-black uppercase tracking-widest text-brand">Cotización</h4>
+							<p class="text-xs text-text-muted mt-0.5">Agrega este recurso a tu lista de cotización</p>
+						</div>
+
+						{#if ( displayPrice )}
+							<div class="text-right">
+								<span class="block text-[9px] uppercase font-bold text-text-muted">Precio Estimado</span>
+								<span class="text-2xl font-black text-brand-bright font-mono">{ displayPrice }</span>
+							</div>
+						{:else}
+							<div class="text-right">
+								<span class="block text-[9px] uppercase font-bold text-text-muted">Precio</span>
+								<span class="text-xs font-black text-text-muted">Por Cotizar</span>
+							</div>
+						{/if}
+					</div>
+
+					<div class="flex items-center gap-4">
+						{#if ( !isAdded )}
+							<!-- Quantity Selector -->
+							<InputNumber
+								bind:value  = { selectQty }
+								min         = { 1 }
+								max         = { 9999 }
+								class       = "shrink-0"
+								width       = "w-12"
+							/>
+
+							<button
+								onclick = { handleAddToQuote }
+								class   = "
+									flex-1 rounded-xl bg-brand text-surface-dark py-2 px-6
+									text-xs font-black uppercase tracking-wider text-center
+									hover:bg-brand-bright hover:scale-[ 1.02 ] active:scale-95
+									transition-all duration-300 shadow-md shadow-brand/10 cursor-pointer
+								"
+							>
+								Añadir a Cotización
+							</button>
+						{:else}
+							<div class="
+								w-full rounded-xl py-3 px-6
+								border border-emerald-500/20 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400
+								text-xs font-black uppercase tracking-wider text-center
+							">
+								Este elemento ya se encuentra en tu lista de cotización
+							</div>
+						{/if}
+					</div>
 				</div>
 
 			</section>

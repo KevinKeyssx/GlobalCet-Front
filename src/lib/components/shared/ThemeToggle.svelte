@@ -2,10 +2,10 @@
 	import { Moon, Sun } from '@lucide/svelte';
 
 	interface Props {
-		darkMode : boolean;
-		onToggle : ( ) => void;
-		variant? : 'icon' | 'menuitem';
-        className? : string;
+		darkMode    : boolean;
+		onToggle    : ( ) => void;
+		variant?    : 'icon' | 'menuitem';
+        className?  : string;
 	}
 
 	const {

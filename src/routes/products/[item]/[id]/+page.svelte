@@ -479,16 +479,18 @@
 										href        = { doc.url }
 										download    = ""
 										target      = "_blank"
-                                        title       = { doc.alt || ( "Archivo " + ( i + 1 ))}
+                                        title       = { "Descargar Ficha Técnica " + (i + 1) }
+                                        // title       = { doc.alt || ( "Archivo " + ( i + 1 ))}
 										class       = "
 											inline-flex items-center gap-1.5 rounded-md
-											bg-brand/10 border border-brand/20 px-2.5 py-1 text-[10px] font-bold text-brand
+											bg-brand/10 border border-brand/20 px-2.5 py-1 text-[11px] font-bold text-brand
 											hover:bg-brand hover:text-surface-dark transition-all duration-300 w-full sm:w-auto
 										"
 									>
-										<Download class="size-3.5" />
+										<Download class="size-4" />
 										<span class="truncate max-w-[300px] sm:max-w-[200px] md:max-w-[150px]">
-											{ doc.alt || ( "Archivo " + ( i + 1 ) ) }
+											<!-- { doc.alt || ( "Archivo " + ( i + 1 ) ) } -->
+											{  ( "Descargar Ficha Técnica " + (i + 1)) }
 										</span>
 									</a>
 								{/each}

@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { Menubar }  from 'bits-ui';
-	import { Menu }     from '@lucide/svelte';
-	import { fade }     from 'svelte/transition';
+	import { Menubar }             from 'bits-ui';
+	import { Menu, ArrowRight }    from '@lucide/svelte';
+	import { fade }                from 'svelte/transition';
 
 	import {
         navItems,
         ourItems
-    }                   from './navItems';
-    import ThemeToggle  from '$lib/components/shared/ThemeToggle.svelte';
+    }                       from './navItems';
+    import ThemeToggle      from '$lib/components/shared/ThemeToggle.svelte';
+	import { quoteStore }   from '$lib/state/quote';
 
 	// ─── Props ────────────────────────────────────────────────────────────────────
 	interface Props {
@@ -47,10 +48,55 @@
 				>
 					<!-- 1. Catálogo -->
 					<Menubar.Item
-						class="group rounded-xl px-4 py-2.5 text-sm font-semibold text-text-muted hover:text-brand transition-all duration-300 focus:bg-brand/10 focus:text-brand focus:outline-none"
+						class="group rounded-xl py-2 pl-4 pr-3 hover:bg-brand/5 dark:hover:bg-brand/10 transition-all duration-200 focus:bg-brand/5 dark:focus:bg-brand/10 focus:outline-none"
 					>
-						<a href="/catalog" class="block w-full text-left">
-							Ir a Tienda
+						<a
+							href  = "/catalog"
+							class = "group flex items-center justify-between w-full"
+						>
+							<div class="flex items-center gap-3">
+								<div class="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-lg border border-brand/10 bg-brand/5 text-base group-hover:border-brand/20 group-hover:bg-brand/15 transition-all duration-200">
+									🛍️
+								</div>
+								<div class="flex items-center gap-1.5 text-sm font-semibold text-text group-hover:text-brand transition-colors">
+									Ir a Tienda
+									<!-- Sliding mini arrow -->
+									<ArrowRight
+										class = "h-3.5 w-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-brand"
+									/>
+								</div>
+							</div>
+						</a>
+					</Menubar.Item>
+
+					<!-- Cotización -->
+					<Menubar.Item
+						class="group rounded-xl py-2 pl-4 pr-3 hover:bg-brand/5 dark:hover:bg-brand/10 transition-all duration-200 focus:bg-brand/5 dark:focus:bg-brand/10 focus:outline-none"
+					>
+						<a
+							href  = "/quote"
+							class = "group flex items-center justify-between w-full"
+						>
+							<div class="flex items-center gap-3">
+								<div class="flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-lg border border-brand/10 bg-brand/5 text-base group-hover:border-brand/20 group-hover:bg-brand/15 transition-all duration-200">
+									📄
+								</div>
+								<div class="flex items-center gap-1.5 text-sm font-semibold text-text group-hover:text-brand transition-colors">
+									Mi Cotización
+									<!-- Sliding mini arrow -->
+									<ArrowRight
+										class = "h-3.5 w-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-brand"
+									/>
+								</div>
+							</div>
+							{#if ( $quoteStore.length > 0 )}
+								<span class="
+									flex h-5 w-5 items-center justify-center rounded-full
+									bg-emerald-500 text-[10px] font-black text-white shadow-[0_0_8px_rgba(16,185,129,0.5)]
+								">
+									{ $quoteStore.length }
+								</span>
+							{/if}
 						</a>
 					</Menubar.Item>
 
@@ -79,17 +125,9 @@
 								<div class="flex items-center gap-1.5 text-sm font-semibold text-text group-hover:text-brand transition-colors">
 									{ item.title }
 									<!-- Sliding mini arrow -->
-									<svg
-										class          = "h-3.5 w-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-brand"
-										viewBox        = "0 0 24 24"
-										fill           = "none"
-										stroke         = "currentColor"
-										stroke-width   = "3"
-										stroke-linecap = "round"
-									>
-										<line x1="5" y1="12" x2="19" y2="12"></line>
-										<polyline points="12 5 19 12 12 19"></polyline>
-									</svg>
+									<ArrowRight
+										class = "h-3.5 w-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-brand"
+									/>
 								</div>
 							</a>
 						</Menubar.Item>
@@ -120,17 +158,9 @@
 								<div class="flex items-center gap-1.5 text-sm font-semibold text-text group-hover:text-brand transition-colors">
 									{ item.title }
 									<!-- Sliding mini arrow -->
-									<svg
-										class          = "h-3.5 w-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-brand"
-										viewBox        = "0 0 24 24"
-										fill           = "none"
-										stroke         = "currentColor"
-										stroke-width   = "3"
-										stroke-linecap = "round"
-									>
-										<line x1="5" y1="12" x2="19" y2="12"></line>
-										<polyline points="12 5 19 12 12 19"></polyline>
-									</svg>
+									<ArrowRight
+										class = "h-3.5 w-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-brand"
+									/>
 								</div>
 							</a>
 						</Menubar.Item>

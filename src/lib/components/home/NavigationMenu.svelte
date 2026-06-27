@@ -118,10 +118,10 @@
 				</svg>
 			</NavigationMenu.Trigger>
 
-			<NavigationMenu.Content class=" absolute left-1/2 top-full z-50 mt-3 w-max -translate-x-1/2 ">
+			<NavigationMenu.Content class=" absolute right-0 top-full z-50 mt-3 w-max ">
 				<div
 					transition:fade = { { duration : 150 } }
-					class           = "nav-dropdown-content"
+					class           = "nav-dropdown-content align-right"
 				>
 					<div class="grid grid-cols-1 gap-3.5">
 						{#each navItems as item ( item.title ) }
@@ -184,6 +184,13 @@
 		animation        : nav-slide-in 0.3s cubic-bezier( 0.16, 1, 0.3, 1 );
 	}
 
+	.nav-dropdown-content.align-right {
+		left             : auto;
+		right            : 0;
+		transform        : none;
+		animation        : nav-slide-in-right 0.3s cubic-bezier( 0.16, 1, 0.3, 1 );
+	}
+
 	@keyframes nav-slide-in {
 		0% {
 			opacity   : 0;
@@ -192,6 +199,17 @@
 		100% {
 			opacity   : 1;
 			transform : translate( -50%, 0 );
+		}
+	}
+
+	@keyframes nav-slide-in-right {
+		0% {
+			opacity   : 0;
+			transform : translateY( -8px );
+		}
+		100% {
+			opacity   : 1;
+			transform : translateY( 0 );
 		}
 	}
 </style>

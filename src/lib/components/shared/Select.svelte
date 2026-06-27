@@ -78,9 +78,44 @@
         selected = next;
 	}
 
+	let dropdownEl = $state<HTMLElement | null>( null );
+
+	function portalAndPosition( node: HTMLElement ) {
+		if ( !container ) return;
+
+		document.body.appendChild( node );
+
+		function update() {
+			if ( !container ) return;
+			const rect = container.getBoundingClientRect();
+			node.style.position = 'fixed';
+			node.style.top      = `${ rect.bottom + 4 }px`;
+			node.style.left     = `${ rect.left }px`;
+			node.style.width    = `${ rect.width }px`;
+			node.style.zIndex   = '9999';
+		}
+
+		update();
+
+		window.addEventListener( 'resize', update );
+		window.addEventListener( 'scroll', update, true );
+
+		return {
+			destroy() {
+				node.remove();
+				window.removeEventListener( 'resize', update );
+				window.removeEventListener( 'scroll', update, true );
+			}
+		};
+	}
+
 	// ─── Click Outside Listener ───────────────────────────────────────────────────
 	function handleOutsideClick( event: MouseEvent ) {
-		if ( isOpen && container && !container.contains( event.target as Node ) ) {
+		const target = event.target as Node;
+		const clickedInsideTrigger = container && container.contains( target );
+		const clickedInsideDropdown = dropdownEl && dropdownEl.contains( target );
+
+		if ( isOpen && !clickedInsideTrigger && !clickedInsideDropdown ) {
 			isOpen = false;
 		}
 	}
@@ -111,7 +146,7 @@
 			px-4 py-2.5 text-xs text-text
 			shadow-[0_2px_10px_rgba(0,0,0,0.02)]
 			outline-none transition-all duration-300 select-none
-			{isOpen ? 'ring-2 ring-brand border-brand/40 shadow-[0_0_12px_rgba(0,230,118,0.1)]' : ''}
+			{ isOpen ? 'ring-2 ring-inset ring-brand border-brand/40 shadow-[0_0_12px_rgba(0,230,118,0.1)]' : '' }
 		"
 	>
 		<div class="flex flex-wrap gap-1.5 max-w-[90%] items-center">
@@ -121,17 +156,17 @@
 				{#each selectedItems.slice( 0, 2 ) as item}
 					<span
 						class="
-							flex items-center gap-1 rounded-lg
+							flex max-w-full items-center gap-1 rounded-lg
 							bg-brand/15 border border-brand/30
 							px-2 py-0.5 text-[11px] font-bold text-brand
 							transition-all duration-200 hover:bg-brand/20
 						"
 					>
-						{item.name}
+						<span class="truncate max-w-[70px] sm:max-w-[100px]">{ item.name }</span>
 						<button
 							type="button"
 							onclick={ ( e ) => removeOption( item.id, e ) }
-							class="hover:text-red-400 transition-colors p-0.5 ml-0.5"
+							class="hover:text-red-400 transition-colors p-0.5 ml-0.5 shrink-0"
 							title="Eliminar"
 							aria-label="Eliminar"
 						>
@@ -182,9 +217,11 @@
 	<!-- Popover Dropdown Card -->
 	{#if isOpen}
 		<div
-			transition:slide={{ duration: 250 }}
+			bind:this={ dropdownEl }
+			use:portalAndPosition
+			transition:slide={ { duration : 250 } }
 			class="
-				absolute left-0 right-0 z-50 mt-2 flex flex-col gap-2 rounded-2xl
+				absolute left-0 right-0 z-50 flex flex-col gap-2 rounded-2xl
 				border border-brand/20 dark:border-brand/10
 				bg-surface/95 backdrop-blur-2xl p-3
 				shadow-[0_20px_50px_rgba(0,0,0,0.35)] ring-1 ring-white/5
@@ -228,7 +265,7 @@
 								}
 							"
 						>
-							<div class="flex items-center gap-3">
+							<div class="flex-1 min-w-0 flex items-center gap-3">
 								<!-- Checkbox Visualizer -->
 								<div
 									class="
@@ -246,8 +283,8 @@
 										</svg>
 									{/if}
 								</div>
-								<div class="flex flex-col">
-									<span class="text-xs leading-tight">{opt.name}</span>
+								<div class="flex flex-col min-w-0 flex-1">
+									<span class="text-xs leading-tight block truncate">{ opt.name }</span>
 									<!-- Detailed option meta details (Autoclave, Temperature, Chemical Resistance) -->
 									{#if opt.meta}
 										<div class="flex flex-wrap items-center gap-2 mt-1 text-[9px] font-bold text-text-muted/70 tracking-wider">

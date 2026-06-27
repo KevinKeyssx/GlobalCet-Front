@@ -63,7 +63,7 @@
 		<div class="loading-bar" transition:fade={{ duration : 250 }}></div>
 	{/if}
 
-    <div class="mx-auto flex max-w-7xl items-center gap-4 sm:gap-6 px-6 py-4">
+    <div class="mx-auto flex max-w-7xl items-center gap-2 sm:gap-4 lg:gap-8 px-3 ml-5 sm:ml-auto sm:px-6 py-4 justify-center">
 		<!-- Logo -->
 		<a href="/" id="header-logo" class="relative shrink-0 w-10 sm:w-14 md:w-18 lg:w-20 xl:w-24 h-12 group">
 			<div class="absolute -top-2 sm:-top-4.5 md:-top-3 -left-5 sm:-left-4 z-50 flex size-16 sm:size-20 md:size-24 lg:size-28 xl:size-32 items-center justify-center transition-all duration-300 hover:scale-105">
@@ -121,14 +121,14 @@
             <a
                 href  = "/quote"
                 id    = "header-quote-cart"
+                title = "Ver mi cotización"
                 class = "
-                    relative flex h-9.5 w-9.5 items-center justify-center rounded-lg
+                    relative hidden md:flex h-9.5 w-9.5 items-center justify-center rounded-lg
                     border border-brand/20 bg-brand/10 text-brand
                     transition-all duration-300
                     hover:bg-brand hover:text-surface-dark hover:scale-105 active:scale-95
                     cursor-pointer shrink-0
                 "
-                title = "Ver mi cotización"
             >
                 <FileText class="size-5" />
 

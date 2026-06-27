@@ -1,10 +1,5 @@
 <script lang="ts">
-	import {
-        FileText,
-        Trash2,
-        Send,
-        CircleCheckBig
-    }               from '@lucide/svelte';
+	import { FileText, Trash2, CircleCheckBig } from '@lucide/svelte';
 	import confetti from 'canvas-confetti';
 
 	import connectRequest, { isApiError }   from '$lib/services/fetch.service';
@@ -13,6 +8,7 @@
 	import { formatCLP }                    from '$lib/utils/price';
 	import { INTERNAL_ENDPOINTS }           from '$lib/utils/endpoints';
 	import InputNumber                      from '$lib/components/shared/inputs/InputNumber.svelte';
+	import DataForm                         from './components/DataForm.svelte';
 
 	// Form bindings
 	let companyName = $state( '' );
@@ -36,10 +32,8 @@
 		return $quoteStore.some( ( item ) => !!item.currentPrice && item.currentPrice > 0 );
 	});
 
-	async function handleSubmit( e: Event ): Promise<void> {
-		e.preventDefault();
-
-        if ( $quoteStore.length === 0 ) {
+	async function handleSubmit( ): Promise<void> {
+		if ( $quoteStore.length === 0 ) {
 			submitError = 'No hay elementos en tu lista de cotización.';
 			return;
 		}
@@ -56,15 +50,15 @@
 			}));
 
 		const kits = $quoteStore
-			.filter(( item ) => item.type === 'kit' )
-			.map(( item ) => ( {
+			.filter( ( item ) => item.type === 'kit' )
+			.map( ( item ) => ( {
 				id       : item.id,
 				quantity : item.quantity,
 			}));
 
 		const mobileLabs = $quoteStore
-			.filter(( item ) => item.type === 'lab' )
-			.map(( item ) => ( {
+			.filter( ( item ) => item.type === 'lab' )
+			.map( ( item ) => ( {
 				id       : item.id,
 				quantity : item.quantity,
 			}));
@@ -90,9 +84,9 @@
 				method     : 'POST' as any,
 				body       : requestBody,
 				isInternal : true,
-			});
+			} );
 
-			if ( isApiError( response )) {
+			if ( isApiError( response ) ) {
 				throw response;
 			}
 
@@ -104,7 +98,7 @@
 				particleCount : 100,
 				spread        : 70,
 				origin        : { y : 0.6 },
-			});
+			} );
 
 			createdQuote = response;
 		} catch ( err: any ) {
@@ -308,155 +302,18 @@
 				</h3>
 
 				<div class="rounded-3xl border border-brand/15 bg-card p-6 shadow-card space-y-6 backdrop-blur-xs">
-					<!-- Form Container -->
-					<form onsubmit={ handleSubmit } class="space-y-4">
-						<!-- Razón Social -->
-						<div class="space-y-1">
-							<label for="companyName" class="block text-[10px] font-black uppercase tracking-wider text-text-muted">
-								Razón Social *
-							</label>
-							<input
-								id="companyName"
-								type="text"
-								placeholder="Ej: Empresa GlobalCet S.A."
-								bind:value={ companyName }
-								required
-								class="
-									w-full rounded-xl border border-brand/20 bg-input px-4 py-2.5
-									text-xs text-text outline-none transition-all duration-300
-									focus:border-brand focus:bg-card focus:ring-4 focus:ring-brand/10
-								"
-							/>
-						</div>
-
-						<!-- RUT -->
-						<div class="space-y-1">
-							<label for="rut" class="block text-[10px] font-black uppercase tracking-wider text-text-muted">
-								RUT *
-							</label>
-							<input
-								id="rut"
-								type="text"
-								placeholder="Ej: 77.777.777-7"
-								bind:value={ rut }
-								required
-								class="
-									w-full rounded-xl border border-brand/20 bg-input px-4 py-2.5
-									text-xs text-text outline-none transition-all duration-300
-									focus:border-brand focus:bg-card focus:ring-4 focus:ring-brand/10
-								"
-							/>
-						</div>
-
-						<!-- Nombre Contacto -->
-						<div class="space-y-1">
-							<label for="contactName" class="block text-[10px] font-black uppercase tracking-wider text-text-muted">
-								Nombre de Contacto *
-							</label>
-							<input
-								id="contactName"
-								type="text"
-								placeholder="Ej: Juan Pérez"
-								bind:value={ contactName }
-								required
-								class="
-									w-full rounded-xl border border-brand/20 bg-input px-4 py-2.5
-									text-xs text-text outline-none transition-all duration-300
-									focus:border-brand focus:bg-card focus:ring-4 focus:ring-brand/10
-								"
-							/>
-						</div>
-
-						<!-- Correo Electrónico -->
-						<div class="space-y-1">
-							<label for="email" class="block text-[10px] font-black uppercase tracking-wider text-text-muted">
-								Correo Electrónico *
-							</label>
-							<input
-								id="email"
-								type="email"
-								placeholder="Ej: contacto@globalcet.cl"
-								bind:value={ email }
-								required
-								class="
-									w-full rounded-xl border border-brand/20 bg-input px-4 py-2.5
-									text-xs text-text outline-none transition-all duration-300
-									focus:border-brand focus:bg-card focus:ring-4 focus:ring-brand/10
-								"
-							/>
-						</div>
-
-						<!-- Dirección -->
-						<div class="space-y-1">
-							<label for="address" class="block text-[10px] font-black uppercase tracking-wider text-text-muted">
-								Dirección *
-							</label>
-							<input
-								id="address"
-								type="text"
-								placeholder="Ej: Av. Providencia 1234, Oficina 501"
-								bind:value={ address }
-								required
-								class="
-									w-full rounded-xl border border-brand/20 bg-input px-4 py-2.5
-									text-xs text-text outline-none transition-all duration-300
-									focus:border-brand focus:bg-card focus:ring-4 focus:ring-brand/10
-								"
-							/>
-						</div>
-
-						<!-- Quote Totals Breakdown -->
-						<div class="mt-6 pt-4 border-t border-brand/15 space-y-2">
-							{#if ( hasSomePrice )}
-								<div class="flex items-center justify-between">
-									<span class="text-xs font-semibold text-text-muted">Total Estimado:</span>
-									<span class="text-xl font-black text-brand-bright font-mono">
-										{ formatCLP( estimatedTotal ) }
-									</span>
-								</div>
-								<p class="text-[9px] text-text-muted leading-relaxed">
-									* El total estimado solo suma los productos que tienen precio asignado. No incluye los elementos marcados "Por Cotizar".
-								</p>
-							{:else}
-								<div class="flex items-center justify-between">
-									<span class="text-xs font-semibold text-text-muted">Total:</span>
-									<span class="text-sm font-bold text-text-muted italic">Por Cotizar</span>
-								</div>
-								<p class="text-[9px] text-text-muted leading-relaxed">
-									* Todos los elementos seleccionados requieren validación de precio. El total final te será enviado por correo.
-								</p>
-							{/if}
-						</div>
-
-						<!-- Submit error message -->
-						{#if ( submitError )}
-							<div class="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-xs font-semibold text-red-700 dark:text-red-400">
-								{ submitError }
-							</div>
-						{/if}
-
-						<!-- Submit Button -->
-						<button
-							type="submit"
-							disabled={ isSubmitting }
-							class="
-								w-full rounded-xl bg-brand text-surface-dark py-3 px-6 mt-4
-								text-xs font-black uppercase tracking-wider text-center
-								hover:bg-brand-bright hover:scale-[1.01] active:scale-95
-								disabled:opacity-50 disabled:cursor-not-allowed
-								transition-all duration-300 shadow-md shadow-brand/10 cursor-pointer
-								flex items-center justify-center gap-2
-							"
-						>
-							{#if ( isSubmitting )}
-								<span class="h-4 w-4 animate-spin rounded-full border-2 border-surface-dark border-t-transparent"></span>
-								<span>Procesando...</span>
-							{:else}
-								<Send class="size-3.5" />
-								<span>Enviar Solicitud de Cotización</span>
-							{/if}
-						</button>
-					</form>
+					<DataForm
+						bind:companyName = { companyName }
+						bind:rut         = { rut }
+						bind:contactName = { contactName }
+						bind:email       = { email }
+						bind:address     = { address }
+						isSubmitting     = { isSubmitting }
+						submitError      = { submitError }
+						hasSomePrice     = { hasSomePrice }
+						estimatedTotal   = { estimatedTotal }
+						onsubmit         = { handleSubmit }
+					/>
 				</div>
 			</div>
 		</div>

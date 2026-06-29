@@ -140,6 +140,7 @@ export interface CreateQuoteClientData {
 	address     : string;
 	email       : string;
 	contactName : string;
+	phoneNumber : string;
 }
 
 export interface CreateQuoteRequest {

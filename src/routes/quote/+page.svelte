@@ -11,11 +11,12 @@
 	import DataForm                         from './components/DataForm.svelte';
 
 	// Form bindings
-	let companyName = $state( '' );
-	let rut         = $state( '' );
-	let address     = $state( '' );
-	let email       = $state( '' );
-	let contactName = $state( '' );
+	let companyName  = $state( '' );
+	let rut          = $state( '' );
+	let address      = $state( '' );
+	let email        = $state( '' );
+	let contactName  = $state( '' );
+	let phoneNumber  = $state( '' );
 	let isSubmitting = $state( false );
 	let createdQuote = $state<CreateQuoteResponse | null>( null );
 	let submitError  = $state( '' );
@@ -70,6 +71,7 @@
 				address     : address,
 				email       : email,
 				contactName : contactName,
+				phoneNumber : phoneNumber,
 			},
 			items      : {
 				products   : products,
@@ -307,6 +309,7 @@
 						bind:rut         = { rut }
 						bind:contactName = { contactName }
 						bind:email       = { email }
+						bind:phoneNumber = { phoneNumber }
 						bind:address     = { address }
 						isSubmitting     = { isSubmitting }
 						submitError      = { submitError }

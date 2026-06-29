@@ -5,32 +5,35 @@
 	import { formatCLP } from '$lib/utils/price';
 
 	interface FormErrors {
-		companyName : string;
-		rut         : string;
-		contactName : string;
-		email       : string;
-		address     : string;
+		companyName	: string;
+		rut			: string;
+		contactName	: string;
+		email		: string;
+		address		: string;
+		phoneNumber	: string;
 	}
 
 	interface DataFormProps {
-		companyName    : string;
-		rut            : string;
-		contactName    : string;
-		email          : string;
-		address        : string;
-		isSubmitting   : boolean;
-		submitError    : string;
-		hasSomePrice   : boolean;
-		estimatedTotal : number;
-		onsubmit       : ( ) => void;
+		companyName		: string;
+		rut				: string;
+		contactName		: string;
+		email			: string;
+		address			: string;
+		phoneNumber		: string;
+		isSubmitting	: boolean;
+		submitError		: string;
+		hasSomePrice	: boolean;
+		estimatedTotal	: number;
+		onsubmit		: ( ) => void;
 	}
 
 	let {
-		companyName    = $bindable( '' ),
-		rut            = $bindable( '' ),
-		contactName    = $bindable( '' ),
-		email          = $bindable( '' ),
-		address        = $bindable( '' ),
+		companyName		= $bindable( '' ),
+		rut				= $bindable( '' ),
+		contactName		= $bindable( '' ),
+		email			= $bindable( '' ),
+		address			= $bindable( '' ),
+		phoneNumber		= $bindable( '' ),
 		isSubmitting,
 		submitError,
 		hasSomePrice,
@@ -39,11 +42,12 @@
 	} : DataFormProps = $props();
 
 	let errors = $state<FormErrors>( {
-		companyName : '',
-		rut         : '',
-		contactName : '',
-		email       : '',
-		address     : '',
+		companyName	: '',
+		rut			: '',
+		contactName	: '',
+		email		: '',
+		address		: '',
+		phoneNumber	: '',
 	} );
 
 	function validateEmail( emailVal: string ): boolean {
@@ -151,6 +155,20 @@
 			return true;
 		}
 
+		if ( field === 'phoneNumber' ) {
+			if ( !phoneNumber.trim() ) {
+				errors.phoneNumber = 'El teléfono de contacto es requerido';
+				return false;
+			}
+			const phoneRegex = /^[2-9]\d{8}$/;
+			if ( !phoneRegex.test( phoneNumber.trim() ) ) {
+				errors.phoneNumber = 'El teléfono debe tener 9 dígitos (ej: 912345678)';
+				return false;
+			}
+			errors.phoneNumber = '';
+			return true;
+		}
+
 		if ( field === 'address' ) {
 			if ( !address.trim() ) {
 				errors.address = 'La dirección es requerida';
@@ -178,9 +196,10 @@
 		const isRutValid     = validateField( 'rut' );
 		const isContactValid = validateField( 'contactName' );
 		const isEmailValid   = validateField( 'email' );
+		const isPhoneValid   = validateField( 'phoneNumber' );
 		const isAddressValid = validateField( 'address' );
 
-		if ( isCompanyValid && isRutValid && isContactValid && isEmailValid && isAddressValid ) {
+		if ( isCompanyValid && isRutValid && isContactValid && isEmailValid && isPhoneValid && isAddressValid ) {
 			onsubmit();
 		}
 	}
@@ -291,6 +310,33 @@
 		{#if ( errors.email )}
 			<p transition:slide={ { duration : 200 } } class="text-red-400 text-[10px] font-bold mt-1 uppercase tracking-wider">
 				{ errors.email }
+			</p>
+		{/if}
+	</div>
+
+	<!-- Teléfono de Contacto -->
+	<div class="space-y-1">
+		<label for="phoneNumber" class="block text-[10px] font-black uppercase tracking-wider text-text-muted">
+			Teléfono de Contacto *
+		</label>
+		<input
+			id="phoneNumber"
+			type="tel"
+			placeholder="Ej: 912345678"
+			bind:value={ phoneNumber }
+			oninput={ ( ) => handleInput( 'phoneNumber' ) }
+			onblur={ ( ) => handleBlur( 'phoneNumber' ) }
+			class="
+				w-full rounded-xl border px-4 py-2.5 text-xs text-text outline-none transition-all duration-300
+				{ errors.phoneNumber
+					? 'border-red-500 bg-red-500/5 focus:border-red-500 focus:ring-4 focus:ring-red-500/10'
+					: 'border-brand/20 bg-input focus:border-brand focus:bg-card focus:ring-4 focus:ring-brand/10'
+				}
+			"
+		/>
+		{#if ( errors.phoneNumber )}
+			<p transition:slide={ { duration : 200 } } class="text-red-400 text-[10px] font-bold mt-1 uppercase tracking-wider">
+				{ errors.phoneNumber }
 			</p>
 		{/if}
 	</div>

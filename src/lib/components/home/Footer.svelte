@@ -146,6 +146,7 @@
 						<h4 class="text-xs font-black uppercase tracking-[0.2em] text-brand font-display">Forma de Pago</h4>
 						<div class="text-sm text-text-muted leading-relaxed font-semibold">
 							<p class="text-text font-bold">Transferencia Electrónica</p>
+							<p class="text-text font-bold">CET Chile SpA.</p>
 							<p>Banco Estado — Chequera Electrónica</p>
 							<p class="text-brand font-mono">N° 35770890118</p>
                             <p>RUT <strong class="text-text font-bold">76.537.375-6</strong></p>

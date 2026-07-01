@@ -195,7 +195,7 @@
             <span class="text-xs font-black uppercase tracking-[ 0.25em ] text-brand-bright">Ubicación</span>
 
             <h2 class="font-display text-3xl font-extrabold tracking-tight text-text sm:text-4xl">
-                Visítanos en Nuestra Sede Principal
+                Visítanos en Nuestra Oficina Central
             </h2>
         </div>
 

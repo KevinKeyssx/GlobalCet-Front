@@ -12,6 +12,7 @@
     import Header           from '$lib/components/home/Header.svelte';
     import Footer           from '$lib/components/home/Footer.svelte';
 	import { searchStore }  from '$lib/state/search';
+	import NotPay           from '$lib/components/NotPay.svelte';
 
 	// ─── Dark Mode State ──────────────────────────────────────────────────────────
 	const initialDark = browser ? ( localStorage.getItem( 'theme' ) === 'dark' || ( !localStorage.getItem( 'theme' ) && window.matchMedia( '(prefers-color-scheme: dark)' ).matches ) ) : false;
@@ -83,7 +84,7 @@
 
 	<!-- ─── App Shell ─────────────────────────────────────────────────────────────── -->
 	<main class="min-h-screen bg-surface text-text transition-colors duration-300 font-sans">
-		<Header
+		<!-- <Header
 			search={ $searchStore }
 			{ darkMode }
 			onSearch={ handleSearch }
@@ -92,7 +93,8 @@
 
 		{@render children()}
 
-		<Footer />
+		<Footer /> -->
+		<NotPay />
 	</main>
 
 	<Toaster

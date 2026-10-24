@@ -2,7 +2,7 @@
     const text = 'KevinsKeyssx';
 
     function handleNavigate() {
-        window.open('https://www.kevinkeyssx-profile.dev/', '_blank');
+        window.open('https://kevinkeyssx-profile.vercel.app', '_blank');
     }
 </script>
 

@@ -4,7 +4,7 @@
 
     let stars = $state<number>( 0 );
 
-    const url = 'https://github.com/KevinKeyssx/GlobalCetAdmin-Front';
+    const url = 'https://github.com/KevinKeyssx/GlobalCet-Front';
 
     onMount(async () => {
         try {
